@@ -333,7 +333,7 @@ const voskes: EntryCollection = {
       media_folder: '/public/voske',
       public_folder: '/voske',
       media_libraries: { default: { config: { max_file_size: 20 * MB } } },
-      hint: 'Maximaal 20 MB.',
+      hint: 'Maximaal 20 MB. Te groot? Exporteer de PDF opnieuw in een kleiner formaat, zie de handleiding.',
     },
     image('cover', 'Voorpagina', 'Een afbeelding van de voorpagina (optioneel).'),
   ],

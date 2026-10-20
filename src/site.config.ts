@@ -42,8 +42,8 @@ export const membership = {
 export const rental = {
   maxPeople: 50,
   email: 'vzwjeugdwerkingvosselaar@gmail.com' as Maybe,
-  phone: undefined as Maybe,
-  calendarUrl: undefined as Maybe,
+  phone: '+32 14 60 08 43' as Maybe,
+  calendarUrl: 'https://jeugdlokalenvosselaar.be/beschikbaarheid' as Maybe,
   kampasUrl: 'https://www.kampas.be',
 };
 
