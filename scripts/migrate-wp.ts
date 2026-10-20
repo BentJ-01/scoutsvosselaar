@@ -34,7 +34,7 @@ import {
   scoutYearLabel,
   slugify,
   stripTags,
-  truncate,
+  summarize,
   wpDate,
   type FoundLink,
 } from './migrate/convert.ts';
@@ -220,7 +220,8 @@ async function migratePosts(): Promise<Record<string, string>> {
     }
 
     markdown = fixText(await upgradeLinks(markdown));
-    const excerpt = truncate(fixText(stripTags(post.excerpt.rendered)) || stripTags(post.content.rendered));
+    // WordPress cuts its excerpts at 55 words, often mid-sentence; build one from the text instead.
+    const excerpt = summarize(fixText(stripTags(post.content.rendered)));
 
     const data: Record<string, unknown> = { title, date, excerpt };
     if (coverImage) data.coverImage = relative(coverImage);

@@ -11,6 +11,8 @@ import {
   scoutYearLabel,
   slugify,
   truncate,
+  summarize,
+  unwrapLink,
   wpDate,
   youtubeUrl,
 } from '../scripts/migrate/convert';
@@ -82,5 +84,30 @@ describe('helpers', () => {
     ]);
     expect(findImages('<img src="https://x.be/a-150x150.jpg"><img data-src="https://x.be/a.jpg">')).toEqual(['https://x.be/a.jpg']);
     expect(slugify("'t Voske: Één & twee")).toBe('t-voske-een-twee');
+  });
+});
+
+describe('cleanup of WordPress content', () => {
+  it('keeps emoji instead of downloading them as images', () => {
+    const r = convertPostHtml('<p>Top <img class="wp-smiley emoji" alt="🔥" src="https://s.w.org/images/core/emoji/15.0.3/svg/1f525.svg"></p>');
+    expect(r.markdown).toBe('Top 🔥');
+    expect(r.inlineImages).toEqual([]);
+  });
+
+  it('unwraps Facebook and Messenger links', () => {
+    const href = 'https://l.messenger.com/l.php?u=https%3A%2F%2Fforms.gle%2FLQFN%3Ffbclid%3Dabc&h=AT1';
+    expect(unwrapLink(href)).toBe('https://forms.gle/LQFN');
+    expect(convertPostHtml(`<p><a href="${href}">${href}</a></p>`).markdown).toBe('[https://forms.gle/LQFN](https://forms.gle/LQFN)');
+  });
+
+  it('joins hard line breaks inside a sentence', () => {
+    expect(convertPostHtml('<p>We brengen jullie op de hoogte van<br>een aantal dingen.<br>Tot zondag!</p>').markdown).toBe(
+      'We brengen jullie op de hoogte van een aantal dingen.  \nTot zondag!',
+    );
+  });
+
+  it('summarizes with whole sentences', () => {
+    const text = 'Beste ouders, op zaterdag 29 juni is onze barbecue. Vanaf 13u is er een fietstocht. ' + 'Daarna eten we samen en is er een groot vuur voor iedereen die blijft. '.repeat(3);
+    expect(summarize(text)).toBe('Beste ouders, op zaterdag 29 juni is onze barbecue. Vanaf 13u is er een fietstocht. Daarna eten we samen en is er een groot vuur voor iedereen die blijft.');
   });
 });
