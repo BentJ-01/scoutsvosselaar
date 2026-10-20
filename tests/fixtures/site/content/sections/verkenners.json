@@ -1,0 +1,13 @@
+{
+  "name": "Verkenners",
+  "ageRange": "14 tot 16 jaar",
+  "color": "#8c1d2c",
+  "order": 5,
+  "shortDescription": "Testtekst voor de verkenners: spelen, ravotten en samen op avontuur.",
+  "who": "De **verkenners** zijn een testgroep.\n\nDit is voorbeeldtekst.",
+  "what": "Elke zondag spelen we buiten:\n\n- bosspelen\n- hutten bouwen\n- tochten",
+  "camp": "In de zomer gaan we tien dagen op kamp.",
+  "meetingTime": "Zondag 14u tot 16u30",
+  "email": "verkenners@scoutsvosselaar.be",
+  "leaderLabel": "Leiding"
+}

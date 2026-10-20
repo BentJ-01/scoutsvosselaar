@@ -1,0 +1,13 @@
+{
+  "name": "Akabe",
+  "ageRange": "Vanaf 6 jaar",
+  "color": "#6d4f8a",
+  "order": 7,
+  "shortDescription": "Testtekst voor de akabe: spelen, ravotten en samen op avontuur.",
+  "who": "De **akabe** zijn een testgroep.\n\nDit is voorbeeldtekst.",
+  "what": "Elke zondag spelen we buiten:\n\n- bosspelen\n- hutten bouwen\n- tochten",
+  "camp": "In de zomer gaan we tien dagen op kamp.",
+  "meetingTime": "Zondag 14u tot 16u30",
+  "email": "akabe@scoutsvosselaar.be",
+  "leaderLabel": "Leiding"
+}

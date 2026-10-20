@@ -1,25 +1,121 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import CampfireScene from '@/components/CampfireScene.astro';
+import EventList from '@/components/EventList.astro';
+import PostCard from '@/components/PostCard.astro';
+import SectionTiles from '@/components/SectionTiles.astro';
 import { site } from '@/site.config';
-import { getCurrentYear, getEvents, getPosts, getSections, getYearOverview } from '@/lib/content';
+import { url } from '@/lib/paths';
+import { getCurrentYear, getPosts, getSectionMap, getSections, getUpcomingEvents } from '@/lib/content';
+import { pinnedPost } from '@/lib/content-core';
 
-// Temporary overview page for fase 1. Replaced by the real home page in fase 5.
-const [sections, posts, events, year] = await Promise.all([getSections(), getPosts(), getEvents(), getCurrentYear()]);
-const overview = year ? await getYearOverview(year) : undefined;
+const [sections, sectionMap, posts, events, year] = await Promise.all([
+  getSections(),
+  getSectionMap(),
+  getPosts(),
+  getUpcomingEvents(),
+  getCurrentYear(),
+]);
+const pinned = pinnedPost(posts);
+const latest = posts.filter((p) => p !== pinned).slice(0, 6);
+const groupPhoto = year?.data.groupPhotos[0];
 ---
 
-<BaseLayout>
-  <h1 class="text-3xl font-bold">{site.name}</h1>
-  <p class="mt-2 text-lg text-muted">{site.slogan}</p>
-
-  <section class="mt-8">
-    <h2 class="text-xl font-bold">Fundament (tijdelijke pagina)</h2>
-    <ul class="mt-2 list-disc pl-5">
-      <li>Takken: {sections.length}</li>
-      <li>Berichten: {posts.length}</li>
-      <li>Evenementen: {events.length}</li>
-      <li>Actief werkjaar: {overview?.year.data.label ?? 'geen'}</li>
-      <li>Groepsleiding: {overview?.groupLeaders.map((l) => l.data.firstName).join(', ') || 'geen'}</li>
-    </ul>
+<BaseLayout description={`${site.name}: ${site.slogan} Nieuws, kalender en info over onze takken.`}>
+  <section class="relative overflow-hidden bg-night text-cream topo">
+    <div class="wrap grid items-center gap-10 py-12 sm:py-20 md:grid-cols-[1.05fr_1fr]">
+      <div>
+        <p class="font-hand text-2xl text-glow">Welkom bij {site.shortName}!</p>
+        <h1 class="mt-2 text-5xl font-extrabold tracking-tight sm:text-7xl">
+          Scouting?<br /><em class="font-semibold text-[#ffb565]">DAS Goesting!</em>
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-cream-muted">
+          Spelen, ravotten en samen op avontuur in Vosselaar. Bij {site.name} is er plaats voor iedereen van 6 tot 17 jaar.
+        </p>
+        <p class="mt-7 flex flex-wrap gap-3">
+          <a class="btn" href={url('/kalender/')}>Bekijk de kalender</a>
+          <a class="btn btn-outline" href={url('/inschrijven/')}>Word lid</a>
+        </p>
+      </div>
+      <figure class="polaroid mx-auto w-full max-w-lg">
+        {
+          groupPhoto ? (
+            <Image
+              src={groupPhoto}
+              alt={`Groepsfoto van ${site.name}, werkjaar ${year?.data.label}`}
+              widths={[400, 600, 900, 1200]}
+              sizes="(min-width: 768px) 32rem, 92vw"
+              loading="eager"
+              fetchpriority="high"
+              class="aspect-[4/3] w-full object-cover"
+            />
+          ) : (
+            <CampfireScene class="aspect-[4/3] w-full" />
+          )
+        }
+        <figcaption class="polaroid-caption">{year ? `Werkjaar ${year.data.label}` : site.slogan}</figcaption>
+      </figure>
+    </div>
   </section>
+
+  <div class="wrap space-y-16 py-12 sm:py-16">
+    {
+      pinned && (
+        <section aria-labelledby="vastgepind" class="card topo-light relative border-l-[6px] border-l-brand p-6 sm:p-9">
+          <p class="text-xs font-extrabold tracking-[0.14em] text-brand uppercase">Vastgepind</p>
+          <h2 id="vastgepind" class="section-title mt-2">{pinned.data.title}</h2>
+          <p class="mt-3 max-w-3xl text-lg">{pinned.data.excerpt}</p>
+          <p class="mt-5 flex flex-wrap gap-3">
+            <a class="btn btn-dark" href={url(`/berichten/${pinned.id}/`)}>
+              Lees meer<span class="sr-only"> over {pinned.data.title}</span>
+            </a>
+            {pinned.data.buttonUrl && pinned.data.buttonLabel && (
+              <a class="btn" href={pinned.data.buttonUrl}>
+                {pinned.data.buttonLabel}
+              </a>
+            )}
+          </p>
+        </section>
+      )
+    }
+
+    <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
+      <section aria-labelledby="binnenkort">
+        <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+          <h2 id="binnenkort" class="section-title">Binnenkort</h2>
+          <a class="font-bold text-brand" href={url('/kalender/')}>Volledige kalender</a>
+        </div>
+        <EventList events={events} sections={sectionMap} limit={5} upcoming />
+      </section>
+
+      <section aria-labelledby="nieuws">
+        <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+          <h2 id="nieuws" class="section-title">Nieuws</h2>
+          <a class="font-bold text-brand" href={url('/berichten/')}>Alle berichten</a>
+        </div>
+        {
+          latest.length > 0 ? (
+            <div class="grid gap-4">
+              {latest.map((post) => (
+                <PostCard post={post} sections={sectionMap} />
+              ))}
+            </div>
+          ) : (
+            <p class="card p-4 text-muted">Nog geen berichten.</p>
+          )
+        }
+      </section>
+    </div>
+
+    <div class="trail" role="presentation"></div>
+
+    <section aria-labelledby="takken">
+      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+        <h2 id="takken" class="section-title">Onze takken</h2>
+        <a class="font-bold text-brand" href={url('/takken/')}>Meer over de takken</a>
+      </div>
+      <SectionTiles sections={sections} />
+    </section>
+  </div>
 </BaseLayout>

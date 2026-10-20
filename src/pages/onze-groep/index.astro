@@ -1,0 +1,50 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import InfoBlock from '@/components/InfoBlock.astro';
+import LeaderCard from '@/components/LeaderCard.astro';
+import { getCurrentYear, getSections, getYearOverview } from '@/lib/content';
+import { site } from '@/site.config';
+
+const [sections, year] = await Promise.all([getSections(), getCurrentYear()]);
+const overview = year ? await getYearOverview(year) : undefined;
+const address = [site.address.street, `${site.address.postalCode} ${site.address.city}`].filter(Boolean).join(', ');
+const mapUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(address)}`;
+---
+
+<ContentPage title="Onze groep" eyebrow="Wie zijn we?" description={`${site.name}, groep ${site.groupNumber} van ${site.federation}.`}>
+  <InfoBlock title="Scouts Don Bosco Vosselaar">
+    <p>
+      We zijn groep <strong>{site.groupNumber}</strong> van {site.federation}, in {site.gouw}, {site.district}.
+    </p>
+    <p>
+      {address} · <a href={mapUrl}>Open in kaart</a>
+    </p>
+  </InfoBlock>
+
+  <InfoBlock title="Vergadermomenten">
+    <ul>
+      {
+        sections.map((s) => (
+          <li>
+            <strong>{s.data.name}</strong>: {s.data.meetingTime}
+          </li>
+        ))
+      }
+    </ul>
+  </InfoBlock>
+
+  {
+    overview && overview.groupLeaders.length > 0 && (
+      <section aria-labelledby="groepsleiding" class="card p-6 sm:p-8">
+        <h2 id="groepsleiding" class="text-2xl font-bold sm:text-3xl">
+          Groepsleiding {overview.year.data.label}
+        </h2>
+        <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
+          {overview.groupLeaders.map((leader) => (
+            <LeaderCard leader={leader} showContact />
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</ContentPage>

@@ -1,0 +1,9 @@
+---
+import PostsPage from '@/components/PostsPage.astro';
+import { getPosts } from '@/lib/content';
+import { paginate, POSTS_PER_PAGE } from '@/lib/pagination';
+
+const pages = paginate(await getPosts(), POSTS_PER_PAGE);
+---
+
+<PostsPage posts={pages[0] ?? []} page={1} pages={pages.length} />

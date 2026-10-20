@@ -1,0 +1,51 @@
+---
+// Voorlopige tekst: vervangen door de tekst uit docs/huidige-site/inhoud.md (§2 en §7) zodra die er is.
+import ContentPage from '@/layouts/ContentPage.astro';
+import InfoBlock from '@/components/InfoBlock.astro';
+import { getSections } from '@/lib/content';
+import { extra, site } from '@/site.config';
+
+const sections = (await getSections()).filter((s) => s.data.email);
+---
+
+<ContentPage title="Praktisch" eyebrow="Goed om te weten" description={`Praktische info over ${site.name}: uniform, verzekering, lokalen en contact.`}>
+  <InfoBlock title="Uniform">
+    <p>Op elke vergadering draag je het scoutshemd en de das van de groep.</p>
+  </InfoBlock>
+
+  <InfoBlock title="Ongeval en verzekering">
+    <p>Alle leden zijn verzekerd via Scouts en Gidsen Vlaanderen. Gebeurt er een ongeval, neem dan contact op met de leiding van je tak.</p>
+  </InfoBlock>
+
+  <InfoBlock title="Lokalen">
+    {
+      site.address.street ? (
+        <p>
+          Onze lokalen liggen in de {site.address.street}, {site.address.postalCode} {site.address.city}.
+        </p>
+      ) : (
+        <p>Onze lokalen liggen in {site.address.city}.</p>
+      )
+    }
+  </InfoBlock>
+
+  <InfoBlock title="Mailadressen">
+    <ul>
+      <li>Algemeen: <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      {
+        sections.map((s) => (
+          <li>
+            {s.data.name}: <a href={`mailto:${s.data.email}`}>{s.data.email}</a>
+          </li>
+        ))
+      }
+      {
+        extra.smoutebollenbakEmail && (
+          <li>
+            Smoutebollenbak: <a href={`mailto:${extra.smoutebollenbakEmail}`}>{extra.smoutebollenbakEmail}</a>
+          </li>
+        )
+      }
+    </ul>
+  </InfoBlock>
+</ContentPage>

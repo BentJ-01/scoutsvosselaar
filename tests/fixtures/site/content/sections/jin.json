@@ -1,0 +1,13 @@
+{
+  "name": "Jin",
+  "ageRange": "17 jaar",
+  "color": "#b2461b",
+  "order": 6,
+  "shortDescription": "Testtekst voor de jin: spelen, ravotten en samen op avontuur.",
+  "who": "De **jin** zijn een testgroep.\n\nDit is voorbeeldtekst.",
+  "what": "Elke zondag spelen we buiten:\n\n- bosspelen\n- hutten bouwen\n- tochten",
+  "camp": "In de zomer gaan we tien dagen op kamp.",
+  "meetingTime": "Zondag 14u tot 16u30",
+  "email": "jins@scoutsvosselaar.be",
+  "leaderLabel": "Begeleiding"
+}

@@ -1,0 +1,87 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getImage, Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Gallery from '@/components/Gallery.astro';
+import { getPosts, getSectionMap, sectionsOf, type Post } from '@/lib/content';
+import { formatLongDate } from '@/lib/dates';
+import { url } from '@/lib/paths';
+
+export const getStaticPaths = (async () => (await getPosts()).map((post) => ({ params: { slug: post.id }, props: { post } }))) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const sections = sectionsOf(post.data.sections, await getSectionMap());
+const cover = post.data.coverImage;
+const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg' })).src : undefined;
+---
+
+<BaseLayout title={post.data.title} description={post.data.excerpt} image={ogImage} type="article">
+  <article>
+    <header class="bg-night text-cream topo">
+      <div class="wrap max-w-4xl py-10 sm:py-14">
+        <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
+          <a href={url('/')} class="underline">Home</a> / <a href={url('/berichten/')} class="underline">Berichten</a>
+        </nav>
+        <p class="mt-4 text-cream-muted">{post.data.date && <time datetime={post.data.date.date}>{formatLongDate(post.data.date)}</time>}</p>
+        <h1 class="mt-2 text-4xl font-extrabold sm:text-5xl">{post.data.title}</h1>
+        {
+          sections.length > 0 && (
+            <p class="mt-4 flex flex-wrap gap-1.5">
+              {sections.map((s) => (
+                <a class="chip no-underline" style={`--chip:${s.data.color}`} href={url(`/takken/${s.id}/`)}>
+                  {s.data.name}
+                </a>
+              ))}
+            </p>
+          )
+        }
+      </div>
+    </header>
+
+    <div class="wrap max-w-4xl py-10">
+      {
+        cover && (
+          <Image src={cover} alt="" widths={[480, 800, 1200]} sizes="(min-width: 56rem) 56rem, 92vw" loading="eager" class="-mt-20 mb-10 w-full rounded-[var(--radius-card)] shadow-[0_24px_40px_-20px_rgb(0_0_0/0.5)]" />
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        (post.data.buttonUrl || post.data.videoUrl) && (
+          <p class="mt-8 flex flex-wrap gap-3">
+            {post.data.buttonUrl && (
+              <a class="btn" href={post.data.buttonUrl}>
+                {post.data.buttonLabel ?? 'Meer info'}
+              </a>
+            )}
+            {post.data.videoUrl && (
+              <a class="btn btn-dark" href={post.data.videoUrl}>
+                Bekijk de video op YouTube
+              </a>
+            )}
+          </p>
+        )
+      }
+
+      {
+        post.data.gallery.length > 0 && (
+          <section aria-labelledby="fotos" class="mt-12">
+            <h2 id="fotos" class="section-title mb-5">
+              Foto's
+            </h2>
+            <Gallery images={post.data.gallery} label={post.data.title} />
+          </section>
+        )
+      }
+
+      <p class="mt-12"><a class="font-bold text-brand" href={url('/berichten/')}>Alle berichten</a></p>
+    </div>
+  </article>
+</BaseLayout>

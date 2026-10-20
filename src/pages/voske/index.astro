@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import { getVoskes } from '@/lib/content';
+import { formatDate } from '@/lib/dates';
+import { url } from '@/lib/paths';
+
+const [latest, ...older] = await getVoskes();
+const fileName = (pdf: string) => pdf.split('/').pop();
+---
+
+<BaseLayout title="'t Voske" description="'t Voske, het ledenblad van Scouts Don Bosco Vosselaar.">
+  <PageIntro title="'t Voske" eyebrow="Ons ledenblad" />
+  <div class="wrap space-y-14 py-12">
+    {!latest && <p class="card p-4 text-muted">Er staat nog geen editie online.</p>}
+    {
+      latest && (
+        <section aria-labelledby="nieuwste" class="card topo-light grid items-center gap-8 p-6 sm:grid-cols-[14rem_1fr] sm:p-9">
+          <div class="polaroid mx-auto w-48 sm:w-full">
+            {latest.data.cover ? (
+              <Image src={latest.data.cover} alt={`Voorpagina van ${latest.data.title}`} widths={[240, 480]} sizes="14rem" class="aspect-[3/4] w-full object-cover" />
+            ) : (
+              <div class="grid aspect-[3/4] place-items-center bg-night font-display text-3xl font-extrabold text-glow">'t Voske</div>
+            )}
+          </div>
+          <div>
+            <p class="text-xs font-extrabold tracking-[0.14em] text-brand uppercase">Nieuwste editie</p>
+            <h2 id="nieuwste" class="section-title mt-2">
+              {latest.data.title}
+            </h2>
+            {latest.data.date && <p class="mt-1 text-muted">{formatDate(latest.data.date)}</p>}
+            <p class="mt-6 flex flex-wrap gap-3">
+              <a class="btn" href={url(latest.data.pdf!)}>
+                Lezen<span class="sr-only"> (PDF)</span>
+              </a>
+              <a class="btn btn-dark" href={url(latest.data.pdf!)} download={fileName(latest.data.pdf!)}>
+                Downloaden<span class="sr-only"> (PDF)</span>
+              </a>
+            </p>
+          </div>
+        </section>
+      )
+    }
+    {
+      older.length > 0 && (
+        <section aria-labelledby="oudere">
+          <h2 id="oudere" class="section-title">Oudere edities</h2>
+          <ul class="mt-5 divide-y divide-line overflow-hidden rounded-[var(--radius-card)] border border-line bg-card">
+            {older.map((v) => (
+              <li class="flex flex-wrap items-center justify-between gap-3 p-4">
+                <span class="font-display text-lg font-bold">{v.data.title}</span>
+                <span class="flex gap-4">
+                  <a class="font-bold text-brand" href={url(v.data.pdf!)}>
+                    Lezen<span class="sr-only"> {v.data.title} (PDF)</span>
+                  </a>
+                  <a class="font-bold text-brand" href={url(v.data.pdf!)} download={fileName(v.data.pdf!)}>
+                    Downloaden<span class="sr-only"> {v.data.title} (PDF)</span>
+                  </a>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

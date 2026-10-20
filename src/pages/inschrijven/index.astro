@@ -1,0 +1,51 @@
+---
+// Voorlopige tekst: vervangen door de tekst uit docs/huidige-site/inhoud.md (§2 en §7) zodra die er is.
+import ContentPage from '@/layouts/ContentPage.astro';
+import InfoBlock from '@/components/InfoBlock.astro';
+import { membership, site } from '@/site.config';
+---
+
+<ContentPage title="Inschrijven" eyebrow="Word lid" description={`Lid worden van ${site.name}: lidgeld, betaling, UiTPAS en de medische fiche.`}>
+  <Fragment slot="intro">Welkom! Hier lees je hoe je je kind inschrijft voor het werkjaar.</Fragment>
+
+  {
+    membership.registrationUrl && (
+      <p>
+        <a class="btn" href={membership.registrationUrl}>
+          Naar het inschrijfformulier
+        </a>
+      </p>
+    )
+  }
+
+  <InfoBlock title="Lidgeld">
+    <ul>
+      <li>Het lidgeld is <strong>{membership.fee} euro</strong> per jaar.</li>
+      <li>Met een UiTPAS en recht op verminderd tarief betaal je <strong>{membership.reducedFee} euro</strong>.</li>
+      <li>Word je lid na {membership.lateFrom}, dan betaal je <strong>{membership.lateFee} euro</strong>.</li>
+    </ul>
+    {
+      membership.bankAccount && (
+        <p>
+          Stort het lidgeld op rekeningnummer <strong>{membership.bankAccount}</strong>
+          {membership.paymentReference && (
+            <>
+              {' '}
+              met als mededeling <strong>{membership.paymentReference}</strong>
+            </>
+          )}
+          .
+        </p>
+      )
+    }
+  </InfoBlock>
+
+  <InfoBlock title="UiTPAS Kempen">
+    <p>Met een UiTPAS Kempen spaar je punten bij elke activiteit. Heb je recht op verminderd tarief, dan betaal je een lager lidgeld.</p>
+  </InfoBlock>
+
+  <InfoBlock title="Medische fiche">
+    <p>De medische fiche vul je in via de groepsadministratie van Scouts en Gidsen Vlaanderen. Zo heeft de leiding de juiste info bij de hand, op vergaderingen en op kamp.</p>
+    {membership.medicalInstructionsUrl && <p><a href={membership.medicalInstructionsUrl}>Bekijk de uitleg stap voor stap</a></p>}
+  </InfoBlock>
+</ContentPage>

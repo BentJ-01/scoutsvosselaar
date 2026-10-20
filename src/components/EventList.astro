@@ -1,0 +1,91 @@
+---
+/**
+ * A list of events with date stamps. With `upcoming`, a small script removes
+ * events that ended after the build and keeps at most `limit` visible.
+ */
+import { eventEndsAt } from '@/lib/content-core';
+import { stampParts, timeLabel } from '@/lib/events';
+import { sectionsOf, type CalendarEvent, type Section } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+interface Props {
+  events: CalendarEvent[];
+  sections: Map<string, Section>;
+  limit?: number;
+  upcoming?: boolean;
+  emptyText?: string;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { events, sections, limit, upcoming = false, emptyText = 'Er staan nog geen evenementen gepland.', headingLevel = 'h3' } = Astro.props;
+// Extra items, so there is still enough to show once past ones are removed.
+const shown = limit === undefined ? events : events.slice(0, limit + 10);
+const Heading = headingLevel;
+---
+
+<div data-event-list data-limit={limit} data-upcoming={upcoming ? '' : undefined}>
+  <ul class="grid gap-3">
+    {
+      shown.map((event, i) => {
+        const { start } = event.data;
+        const stamp = stampParts(start);
+        const forSections = sectionsOf(event.data.sections, sections);
+        return (
+          <li
+            data-ends={eventEndsAt(event.data).toISOString()}
+            hidden={limit !== undefined && i >= limit}
+            class:list={['card relative flex items-center gap-4 p-3 sm:p-4', event.data.cancelled && 'bg-line/40']}
+          >
+            <div class="stamp" aria-hidden="true">
+              <span class="stamp-weekday">{stamp.weekday}</span>
+              <span class="stamp-day">{stamp.day}</span>
+              <span class="stamp-month">{stamp.month}</span>
+            </div>
+            <div class="min-w-0">
+              <Heading class="text-lg font-bold">
+                <a href={url(`/kalender/${event.id}/`)} class="no-underline after:absolute after:inset-0 hover:underline">
+                  <span class="sr-only">{`${stamp.weekday} ${stamp.day} ${stamp.month}: `}</span>
+                  {event.data.cancelled ? <s>{event.data.title}</s> : event.data.title}
+                </a>
+              </Heading>
+              <p class="text-sm text-muted">
+                {event.data.cancelled && <strong class="mr-1 font-bold text-brand uppercase">Geannuleerd</strong>}
+                {timeLabel(event.data)}
+                {event.data.location && ` · ${event.data.location}`}
+                {event.data.price && ` · ${event.data.price}`}
+              </p>
+              <p class="mt-2 flex flex-wrap gap-1.5">
+                {forSections.length === 0 && <span class="chip">Hele groep</span>}
+                {forSections.map((s) => (
+                  <span class="chip" style={`--chip:${s.data.color}`}>
+                    {s.data.name}
+                  </span>
+                ))}
+                {event.data.forLeaders && <span class="chip">Leiding</span>}
+              </p>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+  <p class="card p-4 text-muted" data-empty hidden={shown.length > 0}>{emptyText}</p>
+</div>
+
+<script>
+  for (const list of document.querySelectorAll<HTMLElement>('[data-event-list][data-upcoming]')) {
+    const now = Date.now();
+    const limit = Number(list.dataset.limit ?? Infinity);
+    let visible = 0;
+    for (const item of list.querySelectorAll<HTMLElement>('[data-ends]')) {
+      if (Date.parse(item.dataset.ends ?? '') <= now) {
+        item.remove();
+        continue;
+      }
+      item.hidden = visible >= limit;
+      visible++;
+    }
+    const empty = list.querySelector<HTMLElement>('[data-empty]');
+    if (empty) empty.hidden = visible > 0;
+  }
+</script>
