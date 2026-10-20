@@ -5,7 +5,7 @@ import InfoBlock from '@/components/InfoBlock.astro';
 import { rental, site } from '@/site.config';
 ---
 
-<ContentPage title="Verhuur" eyebrow="Onze lokalen huren" description={`De lokalen van ${site.name} huren voor een weekend of kamp, tot ${rental.maxPeople} personen.`}>
+<ContentPage title="Verhuur" description={`De lokalen van ${site.name} huren voor een weekend of kamp, tot ${rental.maxPeople} personen.`}>
   <Fragment slot="intro">Onze lokalen zijn te huur voor weekends en kampen van jeugdbewegingen.</Fragment>
 
   <InfoBlock title="Wat huur je?">

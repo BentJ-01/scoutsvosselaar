@@ -17,44 +17,40 @@ interface Props {
   headingLevel?: 'h2' | 'h3';
 }
 
-const { events, sections, limit, upcoming = false, emptyText = 'Er staan nog geen evenementen gepland.', headingLevel = 'h3' } = Astro.props;
+const { events, sections, limit, upcoming = false, emptyText = 'Er staat nog niets gepland. Kijk binnenkort nog eens.', headingLevel = 'h3' } = Astro.props;
 // Extra items, so there is still enough to show once past ones are removed.
 const shown = limit === undefined ? events : events.slice(0, limit + 10);
 const Heading = headingLevel;
 ---
 
 <div data-event-list data-limit={limit} data-upcoming={upcoming ? '' : undefined}>
-  <ul class="grid gap-3">
+  <ul class="divide-y-2 divide-dotted divide-rule border-y-2 border-ink">
     {
       shown.map((event, i) => {
         const { start } = event.data;
         const stamp = stampParts(start);
         const forSections = sectionsOf(event.data.sections, sections);
         return (
-          <li
-            data-ends={eventEndsAt(event.data).toISOString()}
-            hidden={limit !== undefined && i >= limit}
-            class:list={['card relative flex items-center gap-4 p-3 sm:p-4', event.data.cancelled && 'bg-line/40']}
-          >
+          <li data-ends={eventEndsAt(event.data).toISOString()} hidden={limit !== undefined && i >= limit} class="relative flex items-center gap-4 py-4">
             <div class="stamp" aria-hidden="true">
               <span class="stamp-weekday">{stamp.weekday}</span>
               <span class="stamp-day">{stamp.day}</span>
               <span class="stamp-month">{stamp.month}</span>
             </div>
             <div class="min-w-0">
-              <Heading class="text-lg font-bold">
+              <Heading class="text-xl leading-tight">
                 <a href={url(`/kalender/${event.id}/`)} class="no-underline after:absolute after:inset-0 hover:underline">
                   <span class="sr-only">{`${stamp.weekday} ${stamp.day} ${stamp.month}: `}</span>
                   {event.data.cancelled ? <s>{event.data.title}</s> : event.data.title}
                 </a>
               </Heading>
-              <p class="text-sm text-muted">
-                {event.data.cancelled && <strong class="mr-1 font-bold text-brand uppercase">Geannuleerd</strong>}
+              <p class="text-[0.95rem] text-muted">
+                {event.data.cancelled && <span class="label mr-2 text-brand">Geannuleerd</span>}
                 {timeLabel(event.data)}
-                {event.data.location && ` · ${event.data.location}`}
-                {event.data.price && ` · ${event.data.price}`}
+                {event.data.location && `, ${event.data.location}`}
+                {event.data.price && `, ${event.data.price}`}
               </p>
-              <p class="mt-2 flex flex-wrap gap-1.5">
+              <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1">
                 {forSections.length === 0 && <span class="chip">Hele groep</span>}
                 {forSections.map((s) => (
                   <span class="chip" style={`--chip:${s.data.color}`}>
@@ -69,7 +65,7 @@ const Heading = headingLevel;
       })
     }
   </ul>
-  <p class="card p-4 text-muted" data-empty hidden={shown.length > 0}>{emptyText}</p>
+  <p class="border-b-2 border-ink py-4 text-muted" data-empty hidden={shown.length > 0}>{emptyText}</p>
 </div>
 
 <script>

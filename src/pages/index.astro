@@ -4,7 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import CampfireScene from '@/components/CampfireScene.astro';
 import EventList from '@/components/EventList.astro';
 import PostCard from '@/components/PostCard.astro';
-import SectionTiles from '@/components/SectionTiles.astro';
+import SectionList from '@/components/SectionList.astro';
 import { site } from '@/site.config';
 import { url } from '@/lib/paths';
 import { getCurrentYear, getPosts, getSectionMap, getSections, getUpcomingEvents } from '@/lib/content';
@@ -22,100 +22,101 @@ const latest = posts.filter((p) => p !== pinned).slice(0, 6);
 const groupPhoto = year?.data.groupPhotos[0];
 ---
 
-<BaseLayout description={`${site.name}: ${site.slogan} Nieuws, kalender en info over onze takken.`}>
-  <section class="relative overflow-hidden bg-night text-cream topo">
-    <div class="wrap grid items-center gap-10 py-12 sm:py-20 md:grid-cols-[1.05fr_1fr]">
+<BaseLayout description={`${site.name}: wat er de komende zondagen op het programma staat, nieuws van de groep en info over de takken.`}>
+  <section class="border-b-2 border-ink topo-paper">
+    <div class="wrap grid gap-x-14 gap-y-8 pt-8 pb-12 sm:pt-12 lg:grid-cols-[18rem_1fr]">
       <div>
-        <p class="font-hand text-2xl text-glow">Welkom bij {site.shortName}!</p>
-        <h1 class="mt-2 text-5xl font-extrabold tracking-tight sm:text-7xl">
-          Scouting?<br /><em class="font-semibold text-[#ffb565]">DAS Goesting!</em>
-        </h1>
-        <p class="mt-5 max-w-xl text-lg text-cream-muted">
-          Spelen, ravotten en samen op avontuur in Vosselaar. Bij {site.name} is er plaats voor iedereen van 6 tot 17 jaar.
-        </p>
-        <p class="mt-7 flex flex-wrap gap-3">
-          <a class="btn" href={url('/kalender/')}>Bekijk de kalender</a>
-          <a class="btn btn-outline" href={url('/inschrijven/')}>Word lid</a>
-        </p>
+        <h1 class="text-4xl sm:text-5xl">Op het programma</h1>
+        <p class="mt-3 text-lg">Elke zondagnamiddag is het scouts. Hier zie je wat er de komende weken gepland staat.</p>
+        <p class="mt-4"><a class="link" href={url('/kalender/')}>Volledige kalender</a></p>
+
+        <figure class="polaroid relative z-10 mt-10 hidden max-w-xs [--tape-tilt:5deg] [--tape:18%] [--tilt:-2.5deg] lg:mb-[-9rem] lg:block">
+          {
+            groupPhoto ? (
+              <Image
+                src={groupPhoto}
+                alt={`Groepsfoto, werkjaar ${year?.data.label}`}
+                widths={[320, 480, 640]}
+                sizes="18rem"
+                class="aspect-[4/3] w-full object-cover"
+              />
+            ) : (
+              <CampfireScene class="aspect-[4/3] w-full" />
+            )
+          }
+          <figcaption class="polaroid-caption">{year ? `Werkjaar ${year.data.label}` : site.slogan}</figcaption>
+        </figure>
       </div>
-      <figure class="polaroid mx-auto w-full max-w-lg">
-        {
-          groupPhoto ? (
-            <Image
-              src={groupPhoto}
-              alt={`Groepsfoto van ${site.name}, werkjaar ${year?.data.label}`}
-              widths={[400, 600, 900, 1200]}
-              sizes="(min-width: 768px) 32rem, 92vw"
-              loading="eager"
-              fetchpriority="high"
-              class="aspect-[4/3] w-full object-cover"
-            />
-          ) : (
-            <CampfireScene class="aspect-[4/3] w-full" />
-          )
-        }
-        <figcaption class="polaroid-caption">{year ? `Werkjaar ${year.data.label}` : site.slogan}</figcaption>
-      </figure>
+
+      <div>
+        <h2 class="sr-only">Komende activiteiten</h2>
+        <EventList events={events} sections={sectionMap} limit={5} upcoming />
+      </div>
     </div>
   </section>
 
-  <div class="wrap space-y-16 py-12 sm:py-16">
+  <div class="wrap pt-14 lg:pl-[22rem]">
     {
       pinned && (
-        <section aria-labelledby="vastgepind" class="card topo-light relative border-l-[6px] border-l-brand p-6 sm:p-9">
-          <p class="text-xs font-extrabold tracking-[0.14em] text-brand uppercase">Vastgepind</p>
-          <h2 id="vastgepind" class="section-title mt-2">{pinned.data.title}</h2>
-          <p class="mt-3 max-w-3xl text-lg">{pinned.data.excerpt}</p>
-          <p class="mt-5 flex flex-wrap gap-3">
-            <a class="btn btn-dark" href={url(`/berichten/${pinned.id}/`)}>
-              Lees meer<span class="sr-only"> over {pinned.data.title}</span>
-            </a>
+        <section aria-labelledby="mededeling" class="panel relative -rotate-[0.6deg] p-6 sm:p-8">
+          <span aria-hidden="true" class="absolute -top-3 right-10 h-6 w-24 rotate-[4deg] bg-[#e8d6a0]/90" />
+          <p class="label text-brand">Mededeling</p>
+          <h2 id="mededeling" class="mt-3 text-3xl">
+            {pinned.data.title}
+          </h2>
+          <p class="mt-2 max-w-2xl text-lg">{pinned.data.excerpt}</p>
+          <p class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
             {pinned.data.buttonUrl && pinned.data.buttonLabel && (
               <a class="btn" href={pinned.data.buttonUrl}>
                 {pinned.data.buttonLabel}
               </a>
             )}
+            <a class="link" href={url(`/berichten/${pinned.id}/`)}>
+              Lees het hele bericht<span class="sr-only">: {pinned.data.title}</span>
+            </a>
           </p>
         </section>
       )
     }
-
-    <div class="grid gap-12 lg:grid-cols-[1fr_1.1fr]">
-      <section aria-labelledby="binnenkort">
-        <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-          <h2 id="binnenkort" class="section-title">Binnenkort</h2>
-          <a class="font-bold text-brand" href={url('/kalender/')}>Volledige kalender</a>
-        </div>
-        <EventList events={events} sections={sectionMap} limit={5} upcoming />
-      </section>
-
-      <section aria-labelledby="nieuws">
-        <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-          <h2 id="nieuws" class="section-title">Nieuws</h2>
-          <a class="font-bold text-brand" href={url('/berichten/')}>Alle berichten</a>
-        </div>
-        {
-          latest.length > 0 ? (
-            <div class="grid gap-4">
-              {latest.map((post) => (
-                <PostCard post={post} sections={sectionMap} />
-              ))}
-            </div>
-          ) : (
-            <p class="card p-4 text-muted">Nog geen berichten.</p>
-          )
-        }
-      </section>
-    </div>
-
-    <div class="trail" role="presentation"></div>
-
-    <section aria-labelledby="takken">
-      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="takken" class="section-title">Onze takken</h2>
-        <a class="font-bold text-brand" href={url('/takken/')}>Meer over de takken</a>
-      </div>
-      <SectionTiles sections={sections} />
-    </section>
   </div>
+
+  <div class="wrap mt-16 grid gap-x-14 gap-y-16 lg:grid-cols-[1fr_20rem]">
+    <section aria-labelledby="nieuws">
+      <h2 id="nieuws" class="text-3xl sm:text-4xl">Nieuws</h2>
+      {
+        latest.length > 0 ? (
+          <div class="mt-4 divide-y-2 divide-dotted divide-rule border-y-2 border-ink">
+            {latest.map((post) => (
+              <PostCard post={post} sections={sectionMap} />
+            ))}
+          </div>
+        ) : (
+          <p class="mt-4 border-y-2 border-ink py-4 text-muted">Nog geen berichten.</p>
+        )
+      }
+      <p class="mt-4"><a class="link" href={url('/berichten/')}>Oudere berichten</a></p>
+    </section>
+
+    <aside aria-labelledby="lid-worden" class="self-start border-l-4 border-brand pl-5">
+      <h2 id="lid-worden" class="text-2xl">Lid worden?</h2>
+      <p class="mt-2">Hoe je inschrijft en hoeveel het lidgeld is, lees je op de pagina Inschrijven.</p>
+      <p class="mt-3"><a class="link" href={url('/inschrijven/')}>Zo schrijf je in</a></p>
+      <p class="mt-6 text-muted">Vragen? Mail naar <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.</p>
+    </aside>
+  </div>
+
+  <section aria-labelledby="takken" class="wrap mt-20">
+    <h2 id="takken" class="text-3xl sm:text-4xl">Van kapoenen tot jin</h2>
+    <p class="mt-2 mb-5 max-w-2xl">In welke tak je kind zit, hangt af van de leeftijd. Elke tak heeft zijn eigen leiding en zijn eigen kamp.</p>
+    <SectionList sections={sections} />
+  </section>
+
+  {
+    groupPhoto && (
+      <figure class="polaroid mx-auto mt-14 w-[85%] max-w-sm [--tape:55%] [--tilt:2deg] lg:hidden">
+        <Image src={groupPhoto} alt={`Groepsfoto, werkjaar ${year?.data.label}`} widths={[320, 480, 640]} sizes="85vw" class="aspect-[4/3] w-full object-cover" />
+        <figcaption class="polaroid-caption">Werkjaar {year?.data.label}</figcaption>
+      </figure>
+    )
+  }
 </BaseLayout>

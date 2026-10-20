@@ -14,15 +14,14 @@ const patterns = redirectPatterns.map(([prefix, target]) => [base + prefix, url(
       if (location.pathname.startsWith(prefix)) location.replace(target);
     }
   </script>
-  <section class="bg-night text-cream topo">
-    <div class="wrap py-20 text-center">
-      <p class="font-hand text-3xl text-glow">Oei, verdwaald in het bos?</p>
-      <h1 class="mt-2 text-5xl font-extrabold sm:text-6xl">Pagina niet gevonden</h1>
-      <p class="mx-auto mt-4 max-w-xl text-lg text-cream-muted">Deze pagina bestaat niet (meer). Misschien vind je wat je zoekt via een van deze paden.</p>
-      <p class="mt-8 flex flex-wrap justify-center gap-3">
+  <section class="bg-forest text-cream topo">
+    <div class="wrap py-16">
+      <h1 class="text-5xl sm:text-6xl">Deze pagina bestaat niet</h1>
+      <p class="mt-4 max-w-xl text-lg text-cream-muted">Misschien is ze verhuisd naar de nieuwe site. Begin bij de homepagina of de kalender.</p>
+      <p class="mt-8 flex flex-wrap gap-3">
         <a class="btn" href={url('/')}>Naar de homepagina</a>
-        <a class="btn btn-outline" href={url('/kalender/')}>Kalender</a>
-        <a class="btn btn-outline" href={url('/takken/')}>Takken</a>
+        <a class="btn btn-line" href={url('/kalender/')}>Kalender</a>
+        <a class="btn btn-line" href={url('/takken/')}>Takken</a>
       </p>
     </div>
   </section>

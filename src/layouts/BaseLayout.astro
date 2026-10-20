@@ -4,6 +4,10 @@ import SiteHeader from '@/components/SiteHeader.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import { site } from '@/site.config';
 import { url } from '@/lib/paths';
+// Preloaded so headings and text do not jump when the fonts arrive.
+import slabBold from '@fontsource/zilla-slab/files/zilla-slab-latin-700-normal.woff2?url';
+import slabMedium from '@fontsource/zilla-slab/files/zilla-slab-latin-500-normal.woff2?url';
+import sans from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url';
 
 interface Props {
   /** Page title, without the group name. Leave out on the home page. */
@@ -26,6 +30,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
+    {[slabBold, slabMedium, sans].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />

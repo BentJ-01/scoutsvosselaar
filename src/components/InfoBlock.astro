@@ -6,7 +6,7 @@ interface Props {
 const { title, id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') } = Astro.props;
 ---
 
-<section aria-labelledby={id} class="card p-6 sm:p-8">
-  <h2 id={id} class="text-2xl font-bold sm:text-3xl">{title}</h2>
-  <div class="prose mt-4"><slot /></div>
+<section aria-labelledby={id} class="grid gap-x-10 gap-y-2 border-t-2 border-ink pt-5 md:grid-cols-[14rem_1fr]">
+  <h2 id={id} class="text-2xl sm:text-3xl">{title}</h2>
+  <div class="prose"><slot /></div>
 </section>
