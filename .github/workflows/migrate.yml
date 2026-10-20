@@ -35,7 +35,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Migratie draaien
-        run: pnpm migrate --site "${{ inputs.site }}"
+        run: |
+          set -o pipefail
+          pnpm migrate --site "${{ inputs.site }}" 2>&1 | tee migrate.log
+
+      # Makes the error readable from the run overview (annotations).
+      - name: Fout tonen
+        if: failure()
+        run: |
+          tail -n 25 migrate.log | sed 's/%/%25/g' | awk 'BEGIN{ORS="%0A"} {print}' | sed 's/^/::error title=Migratie::/'
+          echo
 
       # The result is pushed even if the build fails, so it can be inspected.
       - name: Controle met een build

@@ -37,6 +37,38 @@ export function truncate(text: string, max = MAX_EXCERPT): string {
   return `${atWord.replace(/[\s,.;:]+$/, '')}…`;
 }
 
+/** The real address behind an l.facebook.com or l.messenger.com link. */
+export function unwrapLink(href: string): string {
+  try {
+    const url = new URL(href);
+    if (/^l\.(facebook|messenger)\.com$/.test(url.hostname)) {
+      const target = new URL(url.searchParams.get('u') ?? '');
+      target.searchParams.delete('fbclid');
+      return target.href;
+    }
+  } catch {
+    // not a valid URL: keep it
+  }
+  return href;
+}
+
+/**
+ * A summary from the text of a post: whole sentences up to `max` characters,
+ * or the text cut at a word when the first sentence is already too long.
+ */
+export function summarize(text: string, max = MAX_EXCERPT): string {
+  const clean = text.replace(/\s+/g, ' ').trim();
+  if (clean.length <= max) return clean;
+  // A sentence ends at . ! or ? followed by a space or the end (so "16.30" is not an end).
+  const sentences = clean.match(/.+?[.!?]+["')\]]*(?=\s|$)\s*/g) ?? [];
+  let out = '';
+  for (const sentence of sentences) {
+    if ((out + sentence).trim().length > max) break;
+    out += sentence;
+  }
+  return out.trim().length >= 40 ? out.trim() : truncate(clean, max);
+}
+
 /** WordPress `date` is local site time, e.g. `2023-04-12T10:00:00`. */
 export function wpDate(date: string): string {
   const m = /^(\d{4}-\d{2}-\d{2})/.exec(date);
@@ -122,9 +154,15 @@ export function convertPostHtml(html: string): ConvertedPost {
   td.addRule('image', {
     filter: 'img',
     replacement: (_content, node) => {
+      const el = node as HTMLElement;
+      // WordPress replaces emoji by small images; keep the emoji itself.
+      // Facebook pastes them as tiny images from its emoji service.
+      if (/\bemoji\b/.test(el.getAttribute('class') ?? '') || /s\.w\.org\/images\/core\/emoji|fbcdn\.net\/images\/emoji|emoji\.php/.test(el.getAttribute('src') ?? '')) {
+        return el.getAttribute('alt') ?? '';
+      }
       // Gallery images are collected by the gallery rule.
-      if (inGallery(node as HTMLElement)) return '';
-      const url = imageUrl(node as HTMLElement);
+      if (inGallery(el)) return '';
+      const url = imageUrl(el);
       if (!url) return '';
       const alt = decodeHtml((node as HTMLElement).getAttribute('alt') ?? '').replace(/[[\]]/g, '');
       let index = result.inlineImages.indexOf(url);
@@ -166,10 +204,22 @@ export function convertPostHtml(html: string): ConvertedPost {
     },
   });
 
+  // Links wrapped by Facebook or Messenger: link to the real address.
+  td.addRule('trackedLink', {
+    filter: (node) => node.nodeName === 'A' && /^https?:\/\/l\.(facebook|messenger)\.com\/l\.php\?/.test(node.getAttribute('href') ?? ''),
+    replacement: (content, node) => {
+      const target = unwrapLink((node as HTMLElement).getAttribute('href') ?? '');
+      const text = content.trim();
+      return text && !/^https?:\/\/l\./.test(text) ? `[${text}](${target})` : `[${target}](${target})`;
+    },
+  });
+
   td.remove(['script', 'style', 'noscript']);
 
   result.markdown = td
     .turndown(html)
+    // A hard line break inside a sentence (pasted text): join the lines.
+    .replace(/ {2}\n(?=[a-zà-ÿ(])/g, ' ')
     .replace(/\n{3,}/g, '\n\n')
     // Collapse repeated video notes (e.g. a figure that contains a video element).
     .replace(new RegExp(`(${escapeRegExp(VIDEO_UNAVAILABLE)}\\s*){2,}`, 'g'), `${VIDEO_UNAVAILABLE}\n\n`)

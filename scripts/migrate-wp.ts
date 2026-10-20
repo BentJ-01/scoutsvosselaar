@@ -34,7 +34,7 @@ import {
   scoutYearLabel,
   slugify,
   stripTags,
-  truncate,
+  summarize,
   wpDate,
   type FoundLink,
 } from './migrate/convert.ts';
@@ -177,7 +177,9 @@ async function migratePosts(): Promise<Record<string, string>> {
     }
 
     const date = wpDate(post.date);
-    const id = `${date}-${slugify(post.slug) || slugify(title)}`;
+    // Some WordPress slugs are just numbers (e.g. "1311-2"); use the title then.
+    const slugBase = /^[\d-]+$/.test(post.slug) ? slugify(title) : slugify(post.slug) || slugify(title);
+    const id = `${date}-${slugBase}`;
     const converted = convertPostHtml(post.content.rendered);
     const imageDir = 'src/assets/uploads/posts';
     const imagePath = (n: number) => `${imageDir}/${id}-${n}.webp`;
@@ -200,6 +202,8 @@ async function migratePosts(): Promise<Record<string, string>> {
     if (!coverImage && inline[0]) {
       coverImage = inline[0];
       markdown = removeLeadingImage(markdown, 0);
+      // Shown as cover already: leave it out of the text.
+      markdown = markdown.replace(new RegExp(`\\n*!\\[[^\\]]*\\]\\(${imagePlaceholder(0).replace(/[{}]/g, '\\$&')}\\)\\n*`, 'g'), '\n\n').trim();
     }
 
     for (const [i, path] of inline.entries()) {
@@ -218,7 +222,8 @@ async function migratePosts(): Promise<Record<string, string>> {
     }
 
     markdown = fixText(await upgradeLinks(markdown));
-    const excerpt = truncate(fixText(stripTags(post.excerpt.rendered)) || stripTags(post.content.rendered));
+    // WordPress cuts its excerpts at 55 words, often mid-sentence; build one from the text instead.
+    const excerpt = summarize(fixText(stripTags(post.content.rendered)));
 
     const data: Record<string, unknown> = { title, date, excerpt };
     if (coverImage) data.coverImage = relative(coverImage);
@@ -274,7 +279,35 @@ async function migratePages() {
         report.push(`  - **Nakijken:** Office-bestand, niet gedownload (open vraag: publiek houden?).`);
       }
     }
+
+    // PDFs that are embedded (viewer plugins, iframes, shortcodes) instead of linked.
+    const html = page.content.rendered.replace(/\\\//g, '/');
+    for (const m of html.matchAll(/https?:\/\/[^"'\s<>()]+?\.pdf/gi)) {
+      const href = decodeHtml(m[0]);
+      if (isOwnUpload(href) && ![...pdfs.keys()].some((k) => k.split('?')[0] === href)) {
+        pdfs.set(href, { href, text: '', page: title });
+        report.push(`- Ingebedde PDF: ${href}`);
+      }
+    }
     report.push('');
+
+    // The text of every old page, for reference when writing the new fixed pages.
+    const converted = convertPostHtml(page.content.rendered);
+    let text = converted.markdown;
+    converted.inlineImages.forEach((src, i) => (text = text.replaceAll(imagePlaceholder(i), src)));
+    write(`docs/huidige-site/paginas/${slugify(page.slug) || page.id}.md`, `# ${title}\n\nOude URL: \`/${page.slug}/\`\n\n${fixText(text)}\n`);
+  }
+
+  // Editions of 't Voske that are embedded without a visible URL: look them up in the media library.
+  const media = await getAll<{ source_url: string; title: { rendered: string } }>('/wp-json/wp/v2/media?mime_type=application/pdf').catch((error: Error) => {
+    warn(`Mediabibliotheek niet beschikbaar (${error.message}).`);
+    return [];
+  });
+  for (const item of media) {
+    const known = [...pdfs.keys()].map((k) => basename(k.split('?')[0]!));
+    if (/voske/i.test(`${item.source_url} ${item.title.rendered}`) && !known.includes(basename(item.source_url))) {
+      pdfs.set(item.source_url, { href: item.source_url, text: decodeHtml(item.title.rendered), page: 'mediabibliotheek' });
+    }
   }
 
   // 't Voske and other PDFs of the group.

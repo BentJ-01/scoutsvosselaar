@@ -1,37 +1,61 @@
 ---
-// Voorlopige tekst: vervangen door de tekst uit docs/huidige-site/inhoud.md (§2 en §7) zodra die er is.
+// Tekst: oude pagina's "Informatie" en "Lid worden" (docs/huidige-site/paginas/), opgeschoond.
 import ContentPage from '@/layouts/ContentPage.astro';
 import InfoBlock from '@/components/InfoBlock.astro';
 import { getSections } from '@/lib/content';
-import { extra, site } from '@/site.config';
+import { extra, rental, site } from '@/site.config';
 
 const sections = (await getSections()).filter((s) => s.data.email);
 ---
 
-<ContentPage title="Praktisch" description={`Praktische info over ${site.name}: uniform, verzekering, lokalen en contact.`}>
+<ContentPage title="Praktisch" description={`Praktische info over ${site.name}: uniform, ongevallen, lokalen en mailadressen.`}>
   <InfoBlock title="Uniform">
-    <p>Op elke vergadering draag je het bordeaux T-shirt en de das van de groep.</p>
+    <p>Spelen vinden we belangrijker dan een perfect uniform, dus we zijn er vrij soepel in. We verwachten enkel dat het bovenste deel in orde is:</p>
+    <ul>
+      <li>Alle leden: ons eigen bordeaux scouts-T-shirt, aangevuld met de uniformtrui.</li>
+      <li>Vanaf de jongverkenners: het beige scoutshemd en de bruine trui.</li>
+      <li>De scoutsdas is verplicht voor iedereen.</li>
+    </ul>
+    <p>
+      Hemd en trui koop je in een Hopper-winkel (adressen op <a href="https://www.hopper.be">hopper.be</a>, ook met webshop) of bij de Trapper in Herentals. Voor
+      het bordeaux T-shirt en de das kan je elke zondag terecht bij iemand van de leiding.
+    </p>
+    <p>Kleed je scout ook op het weer. We gaan niet binnen zitten als het sneeuwt: de natuur is ons speelterrein, ook bij regen of sneeuw.</p>
   </InfoBlock>
 
-  <InfoBlock title="Ongeval en verzekering">
-    <p>Alle leden zijn verzekerd via Scouts en Gidsen Vlaanderen. Gebeurt er een ongeval, neem dan contact op met de leiding van je tak.</p>
+  <InfoBlock title="Ongeval">
+    <p>
+      Gebeurt er een ongeval, dan gaat iemand van de leiding met je zoon of dochter naar de dokter of het ziekenhuis. We nemen zo snel mogelijk contact met je op.
+    </p>
+    <p>
+      De dokter vult een medisch attest in en ondertekent het. Dat gaat naar Ethias, waar een verzekeringsdossier wordt geopend. De rekeningen die je daarna
+      krijgt, betaal je gewoon. Bij je ziekenfonds krijg je een deel terug. Het bewijs van het remgeld, de rekening van de apotheker en dergelijke breng je
+      binnen bij de groepsleiding. Die stuurt alles door naar Ethias, zodat alle kosten worden terugbetaald.
+    </p>
+    <p>
+      Merk je thuis dat er iets niet in orde is en ligt de oorzaak bij de scouts? Neem dan contact op met de leiding van de tak. Voor verdere vragen over de
+      verzekering kan je bij de groepsleiding terecht.
+    </p>
   </InfoBlock>
 
   <InfoBlock title="Lokalen">
-    {
-      site.address.street ? (
-        <p>
-          Onze lokalen liggen in de {site.address.street}, {site.address.postalCode} {site.address.city}.
-        </p>
-      ) : (
-        <p>Onze lokalen liggen in {site.address.city}.</p>
-      )
-    }
+    <p>
+      Onze lokalen liggen aan het <strong>{site.address.street}</strong>, {site.address.postalCode} {site.address.city}. We hebben geen brievenbus: wil je
+      ons iets bezorgen, contacteer dan de groepsleiding.
+    </p>
+    <p>
+      De lokalen liggen op een 100 meter van het centrum en op dezelfde afstand van de Antwerpsesteenweg. Op een minuutje wandelen ligt de Konijnenberg, ideaal
+      voor een bosspel. Steek je die over, dan sta je aan het Geiteblak, met ruimte genoeg voor pleinspelen.
+    </p>
+    <p>
+      Sinds 2006 hebben de meeste takken nieuwe houten lokalen, verdeeld over twee verdiepingen. Er is een keuken met al het kookmateriaal, drie toiletten en een
+      ruime douche. Het materiaal stockeren we in twee aangrenzende materiaalkoten.
+    </p>
   </InfoBlock>
 
   <InfoBlock title="Mailadressen">
     <ul>
-      <li>Algemeen: <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      <li>Algemene vragen, voor de groepsleiding: <a href={`mailto:${site.email}`}>{site.email}</a></li>
       {
         sections.map((s) => (
           <li>
@@ -39,10 +63,11 @@ const sections = (await getSections()).filter((s) => s.data.email);
           </li>
         ))
       }
+      {rental.email && <li>Verhuur van de lokalen: <a href={`mailto:${rental.email}`}>{rental.email}</a></li>}
       {
         extra.smoutebollenbakEmail && (
           <li>
-            Smoutebollenbak: <a href={`mailto:${extra.smoutebollenbakEmail}`}>{extra.smoutebollenbakEmail}</a>
+            Meewerken aan de smoutebollenbak: <a href={`mailto:${extra.smoutebollenbakEmail}`}>{extra.smoutebollenbakEmail}</a>
           </li>
         )
       }
