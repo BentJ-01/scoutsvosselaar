@@ -8,5 +8,123 @@
     "annemijn-de-vries",
     "daan-scheyltjens"
   ],
-  "sectionTeams": []
+  "sectionTeams": [
+    {
+      "section": "kapoenen",
+      "leaders": [
+        "mathias-borghmans",
+        "kobe-van-hasselt",
+        "fiene-peeters",
+        "oscar-ennekens",
+        "dries-wijnen",
+        "iza-van-gelder",
+        "fien-van-dyck",
+        "joannes-van-lommel",
+        "tim-mertens"
+      ],
+      "sectionLeads": [
+        "fiene-peeters",
+        "dries-wijnen"
+      ]
+    },
+    {
+      "section": "welpen",
+      "leaders": [
+        "lauren-freyne",
+        "gerben-peeters",
+        "tijl-proost",
+        "daan-scheyltjens",
+        "lore-raeves",
+        "alexander-van-herk",
+        "annabel-hermans",
+        "hannes-van-looveren",
+        "flor-van-dyck"
+      ],
+      "sectionLeads": [
+        "lauren-freyne",
+        "gerben-peeters",
+        "daan-scheyltjens"
+      ]
+    },
+    {
+      "section": "wolven",
+      "leaders": [
+        "alexine-cabanier",
+        "jules-van-lommel",
+        "axelle-van-gerven",
+        "warre-joppen",
+        "kobe-scheyltjens",
+        "flip-augustyns",
+        "timo-van-bael",
+        "daan-wynen"
+      ],
+      "sectionLeads": [
+        "alexine-cabanier",
+        "axelle-van-gerven",
+        "kobe-scheyltjens"
+      ]
+    },
+    {
+      "section": "jongverkenners",
+      "leaders": [
+        "flor-woestenborghs",
+        "neil-scheltjens",
+        "lander-peeters",
+        "annemijn-de-vries",
+        "tuur-van-looveren",
+        "loes-raeves",
+        "hanne-ossenblok",
+        "nore-naert"
+      ],
+      "sectionLeads": [
+        "annemijn-de-vries",
+        "nore-naert"
+      ]
+    },
+    {
+      "section": "verkenners",
+      "leaders": [
+        "lotte-ossenblok",
+        "daan-van-den-heuvel",
+        "klaas-jansen",
+        "thijs-joppen",
+        "noor-de-groof",
+        "margot-dheedene",
+        "jens-peeraer"
+      ],
+      "sectionLeads": [
+        "lotte-ossenblok",
+        "klaas-jansen",
+        "thijs-joppen",
+        "noor-de-groof"
+      ]
+    },
+    {
+      "section": "jin",
+      "leaders": [
+        "cas-proost",
+        "mathijs-de-vries",
+        "lars-jacobs",
+        "joppe-adriaensen",
+        "kate-ottevaere"
+      ],
+      "sectionLeads": [
+        "lars-jacobs",
+        "joppe-adriaensen"
+      ]
+    },
+    {
+      "section": "akabe",
+      "leaders": [
+        "michiel-van-hees",
+        "fien-vervoort",
+        "alexine-cabanier",
+        "cas-smet",
+        "hanne-ossenblok"
+      ],
+      "sectionLeads": [
+        "alexine-cabanier"
+      ]
+    }
+  ]
 }
