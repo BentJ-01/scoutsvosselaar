@@ -295,6 +295,15 @@ async function migratePages() {
     write(`docs/huidige-site/paginas/${slugify(page.slug) || page.id}.md`, `# ${title}\n\nOude URL: \`/${page.slug}/\`\n\n${fixText(text)}\n`);
   }
 
+  // Editions of 't Voske that are embedded without a visible URL: look them up in the media library.
+  const media = await getAll<{ source_url: string; title: { rendered: string } }>('/wp-json/wp/v2/media?mime_type=application/pdf');
+  for (const item of media) {
+    const known = [...pdfs.keys()].map((k) => basename(k.split('?')[0]!));
+    if (/voske/i.test(`${item.source_url} ${item.title.rendered}`) && !known.includes(basename(item.source_url))) {
+      pdfs.set(item.source_url, { href: item.source_url, text: decodeHtml(item.title.rendered), page: 'mediabibliotheek' });
+    }
+  }
+
   // 't Voske and other PDFs of the group.
   report.push(`## PDF's\n`);
   for (const [href, link] of pdfs) {
