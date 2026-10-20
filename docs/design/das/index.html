@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home | Mockup Das</title>
+<style>
+
+      @font-face { font-family: 'Bricolage Grotesque'; src: url(../fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2'); font-weight: 200 800; font-display: swap; }
+      @font-face { font-family: 'Nunito'; src: url(../fonts/nunito-latin-wght-normal.woff2) format('woff2'); font-weight: 200 1000; font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; line-height: 1.55; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.1; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+:focus-visible { outline: 3px solid #f2b92c; outline-offset: 2px; }
+.wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+.stack > * + * { margin-top: clamp(40px, 6vw, 72px); }
+.stack { padding-block: clamp(32px, 5vw, 64px); }
+.mock-banner { margin: 0; padding: 8px 16px; font: 600 13px/1.4 system-ui, sans-serif; background: #111; color: #fff; text-align: center; }
+.site-header { position: sticky; top: 0; z-index: 10; }
+.header-row { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.brand { text-decoration: none; margin-right: auto; }
+.nav.desktop { display: none; }
+.nav ul { display: flex; gap: 2px; flex-wrap: wrap; }
+.nav a { display: block; padding: 8px 10px; text-decoration: none; border-radius: 6px; }
+.quick { display: flex; gap: 8px; align-items: center; }
+.menu-btn { width: 40px; height: 40px; border: 0; border-radius: 10px; background: rgb(127 127 127 / .18); color: inherit; font-size: 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; text-decoration: none; }
+.btn.small { min-height: 38px; padding: 6px 14px; font-size: .9rem; }
+@media (min-width: 1100px) { .nav.desktop { display: block; } .quick { display: none; } }
+.hero { position: relative; padding-block: clamp(36px, 7vw, 96px); overflow-x: clip; }
+main { overflow-x: clip; }
+.hero-grid { position: relative; display: grid; gap: 32px; align-items: center; }
+@media (min-width: 860px) { .hero-grid { grid-template-columns: 1.05fr 1fr; } }
+.hero-text > * + * { margin-top: 18px; }
+.hero p { max-width: 34em; font-size: 1.1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-photo { position: relative; overflow: visible; }
+.hero-photo svg { width: 100%; height: auto; aspect-ratio: 10 / 7; border-radius: inherit; }
+.hero-photo.small svg { aspect-ratio: 16 / 10; }
+.pinned { padding: clamp(20px, 4vw, 36px); }
+.pinned > * + * { margin-top: 12px; }
+.label { font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
+.two-col { display: grid; gap: 48px; }
+@media (min-width: 960px) { .two-col { grid-template-columns: 1fr 1.1fr; } }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.section-head a { font-weight: 700; }
+.events { display: grid; gap: 14px; }
+.event { display: flex; gap: 16px; padding: 14px; align-items: center; }
+.date-badge { flex: none; width: 68px; display: grid; justify-items: center; padding: 8px 4px; line-height: 1; }
+.date-badge .wd, .date-badge .m { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.date-badge .d { font-size: 1.9rem; font-weight: 800; margin-block: 2px; }
+.event h3 { font-size: 1.2rem; }
+.meta { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { font-size: .78rem; font-weight: 700; padding: 3px 10px; background: color-mix(in srgb, var(--c) 16%, white); color: color-mix(in srgb, var(--c) 75%, black); }
+.posts { display: grid; gap: 18px; }
+.post { display: grid; grid-template-columns: 120px 1fr; }
+.post .cover svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.card-body { padding: 14px 16px; }
+.card-body h3 { font-size: 1.1rem; margin-top: 2px; }
+.card-body p:last-child { margin-top: 6px; font-size: .95rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (min-width: 600px) { .post { grid-template-columns: 180px 1fr; } }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 700px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1100px) { .tiles { grid-template-columns: repeat(7, 1fr); } }
+.tile { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; min-height: 130px; padding: 16px; background: var(--c); text-decoration: none; }
+.tile-name { font-weight: 800; font-size: 1.2rem; line-height: 1.1; }
+.tile-age { font-size: .85rem; opacity: .92; }
+.leaders { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px; }
+@media (min-width: 700px) { .leaders { grid-template-columns: repeat(4, 1fr); } .leaders.big { grid-template-columns: repeat(6, 1fr); } }
+.leader { display: grid; justify-items: center; align-content: start; text-align: center; gap: 4px; position: relative; }
+.avatar { width: 88px; height: 88px; display: grid; place-items: center; background: var(--c); color: #fff; font-size: 1.6rem; font-weight: 800; }
+.leader .name { font-weight: 700; }
+.leader .totem { color: var(--muted); font-style: italic; font-size: .92rem; }
+.lead-badge { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; background: var(--ink); color: #fff; }
+.site-footer { padding-block: 40px; margin-top: 24px; }
+.footer-grid { display: grid; gap: 20px; }
+@media (min-width: 700px) { .footer-grid { grid-template-columns: 2fr 1.5fr 1fr; } }
+.section-hero { padding-block: 28px 44px; background: var(--c) !important; color: #fff; }
+.theme-veldgids .section-hero { background: linear-gradient(transparent 0 0) !important; color: var(--ink); border-bottom: 6px solid var(--c); }
+.crumbs { font-size: .9rem; opacity: .85; margin-bottom: 18px; }
+.section-hero h1 { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 800; }
+.section-hero-grid { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 860px) { .section-hero-grid { grid-template-columns: 1fr 1fr; } }
+.facts { display: grid; gap: 10px; margin: 20px 0 0; }
+.facts div { display: grid; grid-template-columns: 110px 1fr; gap: 8px; }
+.facts dt { font-weight: 800; text-transform: uppercase; font-size: .8rem; letter-spacing: .08em; opacity: .85; padding-top: 3px; }
+.facts dd { margin: 0; font-size: 1.1rem; font-weight: 600; }
+.blocks { display: grid; gap: 18px; }
+@media (min-width: 860px) { .blocks { grid-template-columns: repeat(3, 1fr); } }
+.block { padding: 22px; border-top: 6px solid var(--c) !important; }
+.block p { margin-top: 10px; }
+.theme-veldgids .tile-name { font-family: 'Barlow Condensed'; text-transform: uppercase; font-size: 1.5rem; }
+.theme-das .tile-name { font-family: 'Bricolage Grotesque'; font-size: 1.35rem; }
+.theme-kampvuur .tile-name { font-family: 'Fraunces', serif; font-size: 1.35rem; }
+
+
+      :root { --ink: #1c1418; --muted: #5d4d55; --paper: #fffaf6; --card: #ffffff; --line: #f0dfe2; --brand: #7d1428; --brand-2: #a3203a; --sun: #f2b92c; --radius: 22px; }
+      body { font-family: 'Nunito', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+      h1, h2, h3, .brand, .date-badge { font-family: 'Bricolage Grotesque', system-ui, sans-serif; letter-spacing: -0.02em; }
+      h2 { font-size: clamp(1.8rem, 3.6vw, 2.8rem); font-weight: 800; }
+      .site-header { background: var(--paper); color: var(--ink); border-bottom: 1px solid var(--line); }
+      .brand { font-weight: 800; font-size: 1.2rem; line-height: 1; color: var(--brand); }
+      .brand small { display: block; font-family: 'Nunito'; font-weight: 700; font-size: .72rem; color: var(--muted); letter-spacing: .02em; }
+      .nav a { color: var(--ink); font-weight: 700; border-radius: 999px; } .nav a[aria-current] { background: var(--brand); color: #fff; }
+      .btn { background: var(--brand); color: #fff; border-radius: 999px; font-weight: 800; }
+      .btn.ghost { background: #fff; color: var(--brand); box-shadow: inset 0 0 0 2px var(--brand); }
+      .hero { background: var(--brand); color: #fff; overflow: hidden; }
+      .hero::before { content: ''; position: absolute; inset: auto -10% -60px -10%; height: 140px; background: repeating-linear-gradient(-12deg, var(--sun) 0 22px, transparent 22px 44px); transform: rotate(-4deg); opacity: .9; }
+      .hero h1 { font-size: clamp(2.8rem, 8vw, 5.6rem); font-weight: 800; line-height: .9; }
+      .hero h1 em { font-style: normal; background: var(--sun); color: var(--brand); padding: 0 .15em; border-radius: .2em; display: inline-block; transform: rotate(-2deg); }
+      .hero p { color: #fde5ea; }
+      .hero-photo { border-radius: 36px; transform: rotate(-2deg); box-shadow: 0 24px 50px -18px rgb(0 0 0 / .5); }
+      .hero-photo::after { content: 'Zondag = scoutsdag'; position: absolute; right: 4px; top: -18px; width: 110px; height: 110px; display: grid; place-items: center; text-align: center; background: var(--sun); color: var(--brand); border-radius: 50%; font-family: 'Bricolage Grotesque'; font-weight: 800; font-size: .95rem; line-height: 1; padding: 10px; transform: rotate(12deg); box-shadow: 0 6px 14px rgb(0 0 0 / .2); }
+      .hero .btn { background: var(--sun); color: var(--brand); }
+      .hero .btn.ghost { background: transparent; color: #fff; box-shadow: inset 0 0 0 2px #fff; }
+      .site-footer .brand { color: #fff; }
+      .pinned { background: var(--sun); border-radius: var(--radius); }
+      .pinned .label { color: var(--brand); }
+      .pinned .btn { background: var(--ink); }
+      .event { background: var(--card); border-radius: var(--radius); box-shadow: 0 1px 0 var(--line), 0 10px 24px -16px rgb(125 20 40 / .35); }
+      .date-badge { background: var(--brand); color: #fff; border-radius: 16px; }
+      .card { background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: 0 12px 28px -18px rgb(125 20 40 / .45); }
+      .tile { border-radius: var(--radius); color: #fff; }
+      .tile:nth-child(odd) { transform: rotate(-1deg); } .tile:nth-child(even) { transform: rotate(1deg); }
+      .chip { border-radius: 999px; }
+      .site-footer { background: var(--ink); color: #e8d9dd; }
+      .section-hero { color: #fff; }
+      .block { background: var(--card); border-radius: var(--radius); box-shadow: 0 12px 28px -20px rgb(125 20 40 / .5); }
+      .block h2 { font-size: 1.7rem; color: var(--brand); }
+      .leader .avatar { border-radius: 30% 70% 60% 40% / 40% 40% 60% 60%; font-family: 'Bricolage Grotesque'; font-weight: 800; }
+      .divider { height: 22px; background: repeating-linear-gradient(-45deg, var(--brand) 0 8px, transparent 8px 16px) center / 100% 10px no-repeat; }
+    
+</style>
+</head>
+<body class="theme-das">
+<p class="mock-banner">Mockup richting <strong>Das</strong>: Bordeaux van de das, grote letters en stickers: fris en eigenzinnig. Teksten zijn voorbeeldtekst.</p>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html">Scouts Don Bosco<br>Vosselaar<small>Scouting? DAS Goesting!</small></a>
+    <nav class="nav desktop" aria-label="Hoofdmenu"><ul><li><a href="index.html" aria-current="page">Home</a></li><li><a href="index.html">Kalender</a></li><li><a href="tak.html">Takken</a></li><li><a href="index.html">Leiding</a></li><li><a href="index.html">Foto's</a></li><li><a href="index.html">'t Voske</a></li><li><a href="index.html">Inschrijven</a></li><li><a href="index.html">Praktisch</a></li><li><a href="index.html">Verhuur</a></li><li><a href="index.html">Onze groep</a></li></ul></nav>
+    <div class="quick"><a class="btn small" href="#kalender">Kalender</a><a class="btn small ghost" href="#">Inschrijven</a><button class="menu-btn" type="button" aria-label="Menu">☰</button></div>
+  </div>
+</header>
+<main>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="hand">Welkom bij de scouts!</p>
+      <h1>Scouting?<br><em>DAS Goesting!</em></h1>
+      <p>Elke zondag spelen, bouwen en op avontuur trekken in Vosselaar. Voor iedereen van 6 tot 17 jaar, en met Akabe ook voor kinderen en jongeren met een beperking.</p>
+      <p class="actions"><a class="btn" href="#kalender">Bekijk de kalender</a><a class="btn ghost" href="#">Word lid</a></p>
+    </div>
+    <div class="hero-photo">
+      <svg viewBox="0 0 800 560" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="dsky" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8a8"/><stop offset="1" stop-color="#f4a59a"/></linearGradient></defs>
+        <rect width="800" height="560" fill="url(#dsky)"/>
+        <path d="M-11 246.40000000000003 L14.872 314.16 L5.55808 314.16 L21.08128 369.6 L-43.08128 369.6 L-27.55808 314.16 L-36.872 314.16Z" fill="#2f5b3b"/><path d="M117.28571428571428 235.20000000000002 L145.50971428571427 309.12 L135.34907428571427 309.12 L152.28347428571428 369.6 L82.28795428571428 369.6 L99.22235428571427 309.12 L89.06171428571427 309.12Z" fill="#2f5b3b"/><path d="M222.57142857142858 224.00000000000003 L253.14742857142858 304.08000000000004 L242.14006857142857 304.08000000000004 L260.48566857142856 369.6 L184.65718857142858 369.6 L203.0027885714286 304.08000000000004 L191.9954285714286 304.08000000000004Z" fill="#2f5b3b"/><path d="M350.8571428571429 212.8 L383.7851428571429 299.04 L371.9310628571429 299.04 L391.6878628571429 369.6 L310.0264228571429 369.6 L329.7832228571429 299.04 L317.9291428571429 299.04Z" fill="#2f5b3b"/><path d="M456.14285714285717 201.60000000000002 L491.4228571428572 294 L478.7220571428572 294 L499.8900571428572 369.6 L412.39565714285715 369.6 L433.56365714285715 294 L420.86285714285714 294Z" fill="#2f5b3b"/><path d="M561.4285714285714 190.4 L599.0605714285714 288.96000000000004 L585.5130514285714 288.96000000000004 L608.0922514285714 369.6 L514.7648914285714 369.6 L537.3440914285715 288.96000000000004 L523.7965714285715 288.96000000000004Z" fill="#2f5b3b"/><path d="M689.7142857142858 179.20000000000005 L729.6982857142858 283.92 L715.3040457142857 283.92 L739.2944457142858 369.6 L640.1341257142858 369.6 L664.1245257142858 283.92 L649.7302857142857 283.92Z" fill="#2f5b3b"/><path d="M795 168.00000000000003 L837.336 278.88 L822.09504 278.88 L847.49664 369.6 L742.50336 369.6 L767.90496 278.88 L752.664 278.88Z" fill="#2f5b3b"/><rect x="0" y="368.6" width="800" height="560" fill="#2f5b3b"/>
+        <path d="M0 448 Q 400 380.8 800 459.2 V 560 H 0Z" fill="#3f7a45"/>
+        <g transform="translate(240 464.79999999999995)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#7d1428"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(336 464.79999999999995)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#f2b92c"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(432 464.79999999999995)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#178f8a"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(528 464.79999999999995)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#2f6fd0"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g>
+      </svg></div>
+  </div>
+</section>
+
+<div class="wrap stack">
+  <section class="pinned" aria-labelledby="pinned-title">
+    <p class="label">Vastgepind</p>
+    <h2 id="pinned-title">Inschrijvingen 2026-2027 zijn open</h2>
+    <p>Schrijf je kind in voor het nieuwe werkjaar. Het lidgeld blijft 50 euro, met UiTPAS en recht op verminderd tarief 15 euro.</p>
+    <p><a class="btn" href="#">Inschrijven</a></p>
+  </section>
+
+  <div class="two-col">
+    <section id="kalender" aria-labelledby="events-title">
+      <div class="section-head"><h2 id="events-title">Binnenkort</h2><a href="#">Volledige kalender →</a></div>
+      <ul class="events"><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">24</span><span class="m">okt</span></div>
+        <div class="event-body"><h3>Halloweentocht</h3><p class="meta">18u tot 21u · Lokaal</p><p class="chips"><span class="chip" style="--c:#f2b92c">Kapoenen</span><span class="chip" style="--c:#3f9a52">Welpen</span><span class="chip" style="--c:#178f8a">Wolven</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">14</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Spaghettiavond</h3><p class="meta">vanaf 17u · Parochiezaal · €12</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">zo</span><span class="d">22</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Sinterklaasvergadering</h3><p class="meta">14u tot 16u30 · Lokaal</p><p class="chips"><span class="chip" style="--c:#f2b92c">Kapoenen</span><span class="chip" style="--c:#3f9a52">Welpen</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">vr</span><span class="d">11</span><span class="m">dec</span></div>
+        <div class="event-body"><h3>Kerstmarkt Vosselaar</h3><p class="meta">17u tot 22u · Markt</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li></ul>
+    </section>
+
+    <section aria-labelledby="posts-title">
+      <div class="section-head"><h2 id="posts-title">Nieuws</h2><a href="#">Alle berichten →</a></div>
+      <div class="posts"><article class="card post">
+          <div class="cover" style="--h:28">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="dsky0" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8a8"/><stop offset="1" stop-color="#f4a59a"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#dsky0)"/>
+        <path d="M-11 132 L2.8599999999999994 168.3 L-2.1296 168.3 L6.186399999999999 198 L-28.1864 198 L-19.8704 168.3 L-24.86 168.3Z" fill="#2f5b3b"/><path d="M88.71428571428571 126 L103.83428571428571 165.6 L98.39108571428571 165.6 L107.46308571428571 198 L69.9654857142857 198 L79.03748571428571 165.6 L73.5942857142857 165.6Z" fill="#2f5b3b"/><path d="M165.42857142857142 120 L181.8085714285714 162.9 L175.91177142857143 162.9 L185.73977142857143 198 L145.1173714285714 198 L154.9453714285714 162.9 L149.04857142857142 162.9Z" fill="#2f5b3b"/><path d="M265.1428571428571 113.99999999999999 L282.7828571428571 160.2 L276.4324571428571 160.2 L287.0164571428571 198 L243.2692571428571 198 L253.8532571428571 160.2 L247.50285714285712 160.2Z" fill="#2f5b3b"/><path d="M341.85714285714283 108 L360.7571428571428 157.5 L353.95314285714284 157.5 L365.2931428571428 198 L318.42114285714285 198 L329.76114285714283 157.5 L322.95714285714286 157.5Z" fill="#2f5b3b"/><path d="M418.57142857142856 102 L438.7314285714286 154.8 L431.47382857142856 154.8 L443.56982857142856 198 L393.57302857142855 198 L405.66902857142856 154.8 L398.41142857142853 154.8Z" fill="#2f5b3b"/><path d="M518.2857142857142 96.00000000000001 L539.7057142857142 152.10000000000002 L531.9945142857142 152.10000000000002 L544.8465142857142 198 L491.72491428571425 198 L504.5769142857142 152.10000000000002 L496.8657142857142 152.10000000000002Z" fill="#2f5b3b"/><path d="M595 90 L617.68 149.4 L609.5152 149.4 L623.1232 198 L566.8768 198 L580.4848 149.4 L572.32 149.4Z" fill="#2f5b3b"/><rect x="0" y="197" width="600" height="300" fill="#2f5b3b"/>
+        <path d="M0 240 Q 300 204.00000000000003 600 245.99999999999997 V 300 H 0Z" fill="#3f7a45"/>
+        <g transform="translate(180 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#7d1428"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(252 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#f2b92c"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(324 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#178f8a"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(396 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#2f6fd0"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g>
+      </svg></div>
+          <div class="card-body"><p class="meta">12 oktober 2026</p><h3>Smoutebollenbak: bestel nu je portie</h3><p>Op zaterdag 7 november bakken we weer smoutebollen. Bestel vooraf en haal ze warm op aan het lokaal.</p></div>
+        </article><article class="card post">
+          <div class="cover" style="--h:140">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="dsky1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8a8"/><stop offset="1" stop-color="#f4a59a"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#dsky1)"/>
+        <path d="M-11 132 L2.8599999999999994 168.3 L-2.1296 168.3 L6.186399999999999 198 L-28.1864 198 L-19.8704 168.3 L-24.86 168.3Z" fill="#2f5b3b"/><path d="M88.71428571428571 126 L103.83428571428571 165.6 L98.39108571428571 165.6 L107.46308571428571 198 L69.9654857142857 198 L79.03748571428571 165.6 L73.5942857142857 165.6Z" fill="#2f5b3b"/><path d="M165.42857142857142 120 L181.8085714285714 162.9 L175.91177142857143 162.9 L185.73977142857143 198 L145.1173714285714 198 L154.9453714285714 162.9 L149.04857142857142 162.9Z" fill="#2f5b3b"/><path d="M265.1428571428571 113.99999999999999 L282.7828571428571 160.2 L276.4324571428571 160.2 L287.0164571428571 198 L243.2692571428571 198 L253.8532571428571 160.2 L247.50285714285712 160.2Z" fill="#2f5b3b"/><path d="M341.85714285714283 108 L360.7571428571428 157.5 L353.95314285714284 157.5 L365.2931428571428 198 L318.42114285714285 198 L329.76114285714283 157.5 L322.95714285714286 157.5Z" fill="#2f5b3b"/><path d="M418.57142857142856 102 L438.7314285714286 154.8 L431.47382857142856 154.8 L443.56982857142856 198 L393.57302857142855 198 L405.66902857142856 154.8 L398.41142857142853 154.8Z" fill="#2f5b3b"/><path d="M518.2857142857142 96.00000000000001 L539.7057142857142 152.10000000000002 L531.9945142857142 152.10000000000002 L544.8465142857142 198 L491.72491428571425 198 L504.5769142857142 152.10000000000002 L496.8657142857142 152.10000000000002Z" fill="#2f5b3b"/><path d="M595 90 L617.68 149.4 L609.5152 149.4 L623.1232 198 L566.8768 198 L580.4848 149.4 L572.32 149.4Z" fill="#2f5b3b"/><rect x="0" y="197" width="600" height="300" fill="#2f5b3b"/>
+        <path d="M0 240 Q 300 204.00000000000003 600 245.99999999999997 V 300 H 0Z" fill="#3f7a45"/>
+        <g transform="translate(180 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#7d1428"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(252 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#f2b92c"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(324 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#178f8a"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(396 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#2f6fd0"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g>
+      </svg></div>
+          <div class="card-body"><p class="meta">28 september 2026</p><h3>Overgang 2026: een weekend vol vuur</h3><p>Met een spannend spel en een groot kampvuur namen we afscheid van het oude werkjaar.</p></div>
+        </article><article class="card post">
+          <div class="cover" style="--h:95">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="dsky2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd8a8"/><stop offset="1" stop-color="#f4a59a"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#dsky2)"/>
+        <path d="M-11 132 L2.8599999999999994 168.3 L-2.1296 168.3 L6.186399999999999 198 L-28.1864 198 L-19.8704 168.3 L-24.86 168.3Z" fill="#2f5b3b"/><path d="M88.71428571428571 126 L103.83428571428571 165.6 L98.39108571428571 165.6 L107.46308571428571 198 L69.9654857142857 198 L79.03748571428571 165.6 L73.5942857142857 165.6Z" fill="#2f5b3b"/><path d="M165.42857142857142 120 L181.8085714285714 162.9 L175.91177142857143 162.9 L185.73977142857143 198 L145.1173714285714 198 L154.9453714285714 162.9 L149.04857142857142 162.9Z" fill="#2f5b3b"/><path d="M265.1428571428571 113.99999999999999 L282.7828571428571 160.2 L276.4324571428571 160.2 L287.0164571428571 198 L243.2692571428571 198 L253.8532571428571 160.2 L247.50285714285712 160.2Z" fill="#2f5b3b"/><path d="M341.85714285714283 108 L360.7571428571428 157.5 L353.95314285714284 157.5 L365.2931428571428 198 L318.42114285714285 198 L329.76114285714283 157.5 L322.95714285714286 157.5Z" fill="#2f5b3b"/><path d="M418.57142857142856 102 L438.7314285714286 154.8 L431.47382857142856 154.8 L443.56982857142856 198 L393.57302857142855 198 L405.66902857142856 154.8 L398.41142857142853 154.8Z" fill="#2f5b3b"/><path d="M518.2857142857142 96.00000000000001 L539.7057142857142 152.10000000000002 L531.9945142857142 152.10000000000002 L544.8465142857142 198 L491.72491428571425 198 L504.5769142857142 152.10000000000002 L496.8657142857142 152.10000000000002Z" fill="#2f5b3b"/><path d="M595 90 L617.68 149.4 L609.5152 149.4 L623.1232 198 L566.8768 198 L580.4848 149.4 L572.32 149.4Z" fill="#2f5b3b"/><rect x="0" y="197" width="600" height="300" fill="#2f5b3b"/>
+        <path d="M0 240 Q 300 204.00000000000003 600 245.99999999999997 V 300 H 0Z" fill="#3f7a45"/>
+        <g transform="translate(180 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#7d1428"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(252 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#f2b92c"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(324 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#178f8a"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g><g transform="translate(396 249)"><rect x="-16" y="-70" width="32" height="54" rx="14" fill="#5b6b4a"/><circle cy="-86" r="15" fill="#f1c7a3"/><path d="M-12 -70 L0 -50 L12 -70Z" fill="#2f6fd0"/><rect x="-13" y="-18" width="10" height="20" fill="#3c3a33"/><rect x="3" y="-18" width="10" height="20" fill="#3c3a33"/></g>
+      </svg></div>
+          <div class="card-body"><p class="meta">20 september 2026</p><h3>Welpen op tocht in de Liereman</h3><p>Twee uur stappen, een verborgen schat en natte voeten. De welpen hebben zich geamuseerd.</p></div>
+        </article></div>
+    </section>
+  </div>
+
+  <div class="divider" role="presentation"></div>
+
+  <section aria-labelledby="takken-title">
+    <div class="section-head"><h2 id="takken-title">Onze takken</h2></div>
+    <ul class="tiles"><li><a class="tile" href="tak.html" style="--c:#f2b92c"><span class="tile-name">Kapoenen</span><span class="tile-age">6 en 7 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#3f9a52"><span class="tile-name">Welpen</span><span class="tile-age">8 tot 10 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#178f8a"><span class="tile-name">Wolven</span><span class="tile-age">8 tot 10 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#2f6fd0"><span class="tile-name">Jongverkenners</span><span class="tile-age">11 tot 13 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#7d1428"><span class="tile-name">Verkenners</span><span class="tile-age">14 tot 16 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#ef6a2c"><span class="tile-name">Jin</span><span class="tile-age">17 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#8f5bd6"><span class="tile-name">Akabe</span><span class="tile-age">Aangepaste werking</span></a></li></ul>
+  </section>
+
+  <section class="group-leaders" aria-labelledby="gl-title">
+    <h2 id="gl-title">Groepsleiding</h2>
+    <ul class="leaders"><li class="leader"><span class="avatar" style="--c:var(--brand)">NS</span><span class="name">Neil Scheltjens</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">JA</span><span class="name">Joppe Adriaensen</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">AV</span><span class="name">Annemijn de Vries</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">DS</span><span class="name">Daan Scheyltjens</span></li></ul>
+  </section>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><p class="brand">Scouts Don Bosco Vosselaar</p><p>Groep A4108G · Scouts en Gidsen Vlaanderen</p></div>
+    <div><p>Adres van het lokaal</p><p><a href="#">info@scoutsvosselaar.be</a></p></div>
+    <div><p><a href="#">Inschrijven</a></p><p><a href="#">Privacy</a></p></div>
+  </div>
+</footer>
+</body>
+</html>
