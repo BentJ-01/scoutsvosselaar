@@ -59,7 +59,8 @@ export function unwrapLink(href: string): string {
 export function summarize(text: string, max = MAX_EXCERPT): string {
   const clean = text.replace(/\s+/g, ' ').trim();
   if (clean.length <= max) return clean;
-  const sentences = clean.match(/[^.!?]+[.!?]+["')\]]*\s*/g) ?? [];
+  // A sentence ends at . ! or ? followed by a space or the end (so "16.30" is not an end).
+  const sentences = clean.match(/.+?[.!?]+["')\]]*(?=\s|$)\s*/g) ?? [];
   let out = '';
   for (const sentence of sentences) {
     if ((out + sentence).trim().length > max) break;

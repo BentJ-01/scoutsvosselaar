@@ -111,3 +111,10 @@ describe('cleanup of WordPress content', () => {
     expect(summarize(text)).toBe('Beste ouders, op zaterdag 29 juni is onze barbecue. Vanaf 13u is er een fietstocht. Daarna eten we samen en is er een groot vuur voor iedereen die blijft.');
   });
 });
+
+describe('summaries with times', () => {
+  it('does not end a sentence inside a time like 16.30', () => {
+    const text = 'De familiedag is op zondag 16 maart van 14.00 tot 16.30 en iedereen is welkom. ' + 'Inschrijven kan tot 9 maart via het formulier dat je hieronder vindt, samen met alle info. '.repeat(3);
+    expect(summarize(text)).toBe('De familiedag is op zondag 16 maart van 14.00 tot 16.30 en iedereen is welkom. Inschrijven kan tot 9 maart via het formulier dat je hieronder vindt, samen met alle info.');
+  });
+});
