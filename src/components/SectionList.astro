@@ -1,0 +1,33 @@
+---
+/** The sections as a list from young to old, each with its color, age and meeting time. */
+import type { Section } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+interface Props {
+  sections: Section[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { sections, headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
+---
+
+<ul class="border-t-2 border-ink">
+  {
+    sections.map((s) => (
+      <li class="group relative grid grid-cols-[0.6rem_1fr] items-stretch gap-x-4 border-b-2 border-ink sm:grid-cols-[0.6rem_14rem_1fr_auto]">
+        <span class="row-span-2 sm:row-span-1" style={`background:${s.data.color}`} aria-hidden="true" />
+        <Heading class="pt-3 text-2xl sm:py-3">
+          <a href={url(`/takken/${s.id}/`)} class="no-underline after:absolute after:inset-0 group-hover:underline">
+            {s.data.name}
+          </a>
+        </Heading>
+        <p class="pb-3 text-muted sm:self-center sm:py-3">
+          <strong class="text-ink">{s.data.ageRange}</strong>, {s.data.meetingTime.charAt(0).toLowerCase() + s.data.meetingTime.slice(1)}
+        </p>
+        <span class="hidden self-center pr-2 font-bold text-brand sm:block" aria-hidden="true">
+          Meer info
+        </span>
+      </li>
+    ))
+  }
+</ul>

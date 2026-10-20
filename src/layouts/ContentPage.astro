@@ -7,10 +7,9 @@ import { contentWarning } from '@/lib/log';
 
 interface Props {
   title: string;
-  eyebrow?: string;
   description: string;
 }
-const { title, eyebrow, description } = Astro.props;
+const { title, description } = Astro.props;
 
 const missing = Object.entries({
   'site.address.street': site.address.street,
@@ -30,9 +29,9 @@ if (missing.length) contentWarning(`Vaste gegevens ontbreken in src/site.config.
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageIntro title={title} eyebrow={eyebrow}><slot name="intro" /></PageIntro>
+  <PageIntro title={title}><slot name="intro" /></PageIntro>
   <div class="wrap py-12">
-    <div class="space-y-10">
+    <div class="max-w-5xl space-y-10">
       <slot />
     </div>
   </div>

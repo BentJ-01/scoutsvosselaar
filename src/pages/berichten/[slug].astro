@@ -22,18 +22,18 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
 
 <BaseLayout title={post.data.title} description={post.data.excerpt} image={ogImage} type="article">
   <article>
-    <header class="bg-night text-cream topo">
+    <header class="bg-forest text-cream topo">
       <div class="wrap max-w-4xl py-10 sm:py-14">
         <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
           <a href={url('/')} class="underline">Home</a> / <a href={url('/berichten/')} class="underline">Berichten</a>
         </nav>
         <p class="mt-4 text-cream-muted">{post.data.date && <time datetime={post.data.date.date}>{formatLongDate(post.data.date)}</time>}</p>
-        <h1 class="mt-2 text-4xl font-extrabold sm:text-5xl">{post.data.title}</h1>
+        <h1 class="mt-1 text-4xl sm:text-5xl">{post.data.title}</h1>
         {
           sections.length > 0 && (
-            <p class="mt-4 flex flex-wrap gap-1.5">
+            <p class="mt-4 flex flex-wrap gap-x-4">
               {sections.map((s) => (
-                <a class="chip no-underline" style={`--chip:${s.data.color}`} href={url(`/takken/${s.id}/`)}>
+                <a class="chip text-cream underline" style={`--chip:${s.data.color}`} href={url(`/takken/${s.id}/`)}>
                   {s.data.name}
                 </a>
               ))}
@@ -46,7 +46,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
     <div class="wrap max-w-4xl py-10">
       {
         cover && (
-          <Image src={cover} alt="" widths={[480, 800, 1200]} sizes="(min-width: 56rem) 56rem, 92vw" loading="eager" class="-mt-20 mb-10 w-full rounded-[var(--radius-card)] shadow-[0_24px_40px_-20px_rgb(0_0_0/0.5)]" />
+          <Image src={cover} alt="" widths={[480, 800, 1200]} sizes="(min-width: 56rem) 56rem, 92vw" loading="eager" class="-mt-16 mb-10 w-full border-2 border-ink" />
         )
       }
       <div class="prose">
@@ -62,7 +62,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
               </a>
             )}
             {post.data.videoUrl && (
-              <a class="btn btn-dark" href={post.data.videoUrl}>
+              <a class="btn btn-line" href={post.data.videoUrl}>
                 Bekijk de video op YouTube
               </a>
             )}
@@ -73,7 +73,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
       {
         post.data.gallery.length > 0 && (
           <section aria-labelledby="fotos" class="mt-12">
-            <h2 id="fotos" class="section-title mb-5">
+            <h2 id="fotos" class="mb-5 text-3xl">
               Foto's
             </h2>
             <Gallery images={post.data.gallery} label={post.data.title} />
@@ -81,7 +81,7 @@ const ogImage = cover ? (await getImage({ src: cover, width: 1200, format: 'jpg'
         )
       }
 
-      <p class="mt-12"><a class="font-bold text-brand" href={url('/berichten/')}>Alle berichten</a></p>
+      <p class="mt-12"><a class="link" href={url('/berichten/')}>Alle berichten</a></p>
     </div>
   </article>
 </BaseLayout>

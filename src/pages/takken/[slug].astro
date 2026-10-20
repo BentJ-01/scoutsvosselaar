@@ -32,85 +32,91 @@ const blocks = [
 ---
 
 <BaseLayout title={s.name} description={s.shortDescription || `${s.name} (${s.ageRange}) bij Scouts Don Bosco Vosselaar.`}>
-  <section class="bg-night text-cream topo">
-    <div class="wrap grid items-center gap-8 py-10 sm:py-14 md:grid-cols-2">
-      <div>
-        <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
+  <section class="text-white topo" style={`background:${s.color}`}>
+    <div class="wrap grid gap-8 pt-8 pb-10 sm:pt-12 md:grid-cols-[1fr_22rem] md:pb-0">
+      <div class="md:pb-12">
+        <nav aria-label="Kruimelpad" class="text-sm">
           <a href={url('/')} class="underline">Home</a> / <a href={url('/takken/')} class="underline">Takken</a> / <span aria-current="page">{s.name}</span>
         </nav>
-        <h1 class="mt-4 text-5xl font-extrabold sm:text-7xl">{s.name}</h1>
-        <dl class="mt-6 grid gap-3 text-lg">
-          <div class="grid grid-cols-[7.5rem_1fr] gap-2">
-            <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Leeftijd</dt>
-            <dd class="font-semibold">{s.ageRange}</dd>
-          </div>
-          <div class="grid grid-cols-[7.5rem_1fr] gap-2">
-            <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Vergaderen</dt>
-            <dd class="font-semibold">{s.meetingTime}</dd>
-          </div>
-          {
-            s.email && (
-              <div class="grid grid-cols-[7.5rem_1fr] gap-2">
-                <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Mail</dt>
-                <dd class="font-semibold break-all">
-                  <a class="underline" href={`mailto:${s.email}`}>
-                    {s.email}
-                  </a>
-                </dd>
-              </div>
-            )
-          }
-        </dl>
+        <h1 class="mt-3 text-5xl sm:text-7xl">{s.name}</h1>
+        <p class="mt-2 text-xl font-bold">{s.ageRange}</p>
       </div>
-      <div class="overflow-hidden rounded-[22px_22px_22px_4px] shadow-[0_30px_60px_-20px_rgb(0_0_0/0.6)]">
-        {s.image ? <Image src={s.image} alt="" widths={[480, 720, 1000]} sizes="(min-width: 768px) 36rem, 92vw" loading="eager" class="aspect-[16/10] w-full object-cover" /> : <CampfireScene class="aspect-[16/10] w-full" />}
-      </div>
+      <figure class="polaroid self-end [--tape:62%] [--tape-tilt:3deg] [--tilt:2.2deg] md:mb-[-5rem]">
+        {s.image ? <Image src={s.image} alt="" widths={[360, 540, 720]} sizes="(min-width: 768px) 22rem, 92vw" loading="eager" class="aspect-[4/3] w-full object-cover" /> : <CampfireScene class="aspect-[4/3] w-full" />}
+        <figcaption class="polaroid-caption">De {s.name.toLowerCase()}</figcaption>
+      </figure>
     </div>
-    <div class="h-2" style={`background:${s.color}`}></div>
   </section>
 
-  <div class="wrap space-y-16 py-12">
-    {
-      blocks.length > 0 && (
-        <div class="grid gap-5 md:grid-cols-3">
-          {blocks.map(([title, text]) => (
-            <section class="card border-t-[6px] p-6" style={`border-top-color:${s.color}`}>
-              <h2 class="text-2xl font-bold">{title}</h2>
-              <Markdown source={text!} class="mt-3 text-base" />
-            </section>
-          ))}
+  <div class="wrap grid gap-x-14 gap-y-10 pt-10 md:grid-cols-[1fr_22rem] md:pt-24">
+    <div class="space-y-8 md:-mt-14">
+      {
+        blocks.map(([title, text]) => (
+          <section>
+            <h2 class="text-3xl">{title}</h2>
+            <Markdown source={text!} class="mt-2" />
+          </section>
+        ))
+      }
+    </div>
+
+    <aside aria-labelledby="praktisch" class="panel self-start p-5">
+      <h2 id="praktisch" class="text-2xl">Praktisch</h2>
+      <dl class="mt-3 divide-y-2 divide-dotted divide-rule">
+        <div class="py-2">
+          <dt class="font-bold">Vergaderen</dt>
+          <dd>{s.meetingTime}</dd>
         </div>
+        <div class="py-2">
+          <dt class="font-bold">Leeftijd</dt>
+          <dd>{s.ageRange}</dd>
+        </div>
+        {
+          s.email && (
+            <div class="py-2">
+              <dt class="font-bold">Mail de {s.leaderLabel.toLowerCase()}</dt>
+              <dd class="break-all">
+                <a class="link" href={`mailto:${s.email}`}>
+                  {s.email}
+                </a>
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+    </aside>
+  </div>
+
+  <section aria-labelledby="leiding" class="wrap mt-16">
+    <h2 id="leiding" class="text-3xl sm:text-4xl">{s.leaderLabel} {overview?.year.data.label}</h2>
+    {
+      team && team.members.length > 0 ? (
+        <ul class="mt-6 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-6">
+          {team.members.map((m) => (
+            <LeaderCard leader={m.leader} color={s.color} isLead={m.isLead} showContact />
+          ))}
+        </ul>
+      ) : (
+        <p class="mt-4 border-y-2 border-ink py-4 text-muted">De {s.leaderLabel.toLowerCase()} voor dit werkjaar staat nog niet online.</p>
       )
     }
+  </section>
 
-    <section aria-labelledby="leiding">
-      <h2 id="leiding" class="section-title">{s.leaderLabel} {overview?.year.data.label}</h2>
-      {
-        team && team.members.length > 0 ? (
-          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
-            {team.members.map((m) => (
-              <LeaderCard leader={m.leader} color={s.color} isLead={m.isLead} showContact />
-            ))}
-          </ul>
-        ) : (
-          <p class="card mt-6 p-4 text-muted">De {s.leaderLabel.toLowerCase()} voor dit werkjaar staat nog niet online.</p>
-        )
-      }
-    </section>
-
+  <div class="wrap mt-16 grid gap-x-14 gap-y-14 lg:grid-cols-[1.4fr_1fr]">
     <section aria-labelledby="binnenkort">
-      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-        <h2 id="binnenkort" class="section-title">Binnenkort</h2>
-        <a class="font-bold text-brand" href={url(`/kalender/#tak-${section.id}`)}>Kalender van de {s.name.toLowerCase()}</a>
-      </div>
+      <h2 id="binnenkort" class="text-3xl sm:text-4xl">Binnenkort</h2>
+      <p class="mt-1 mb-4 text-muted">Activiteiten van de {s.name.toLowerCase()} en van de hele groep.</p>
       <EventList events={events} sections={sectionMap} limit={5} upcoming />
+      <p class="mt-4"><a class="link" href={url(`/kalender/#tak-${section.id}`)}>Hele kalender van de {s.name.toLowerCase()}</a></p>
     </section>
 
     {
       posts.length > 0 && (
         <section aria-labelledby="berichten">
-          <h2 id="berichten" class="section-title mb-5">Recente berichten</h2>
-          <div class="grid gap-4 lg:grid-cols-2">
+          <h2 id="berichten" class="text-3xl sm:text-4xl">
+            Berichten
+          </h2>
+          <div class="mt-4 divide-y-2 divide-dotted divide-rule border-y-2 border-ink">
             {posts.map((post) => (
               <PostCard post={post} sections={sectionMap} />
             ))}

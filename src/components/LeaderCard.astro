@@ -10,31 +10,27 @@ interface Props {
   /** Show e-mail and phone when filled in. */
   showContact?: boolean;
 }
-const { leader, color = 'var(--color-brand)', isLead = false, showContact = false } = Astro.props;
+const { leader, color = 'var(--color-forest-2)', isLead = false, showContact = false } = Astro.props;
 const { firstName, lastName, totem, voortotem, photo, email, phone } = leader.data;
 const name = `${firstName} ${lastName}`.trim();
 const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 ---
 
-<li class="flex flex-col items-center text-center">
+<li>
   <div class="relative">
     {
       photo ? (
-        <Image src={photo} alt="" widths={[112, 224]} sizes="7rem" class="size-28 rounded-full object-cover ring-4 ring-card shadow-md" />
+        <Image src={photo} alt="" widths={[176, 320]} sizes="(min-width: 1024px) 10rem, 40vw" class="aspect-[4/5] w-full border-2 border-ink object-cover" />
       ) : (
-        <span
-          class="grid size-28 place-items-center rounded-full font-display text-3xl font-extrabold text-white ring-4 ring-card shadow-md"
-          style={`background:${color}`}
-          aria-hidden="true"
-        >
+        <span class="grid aspect-[4/5] w-full place-items-center border-2 border-ink font-display text-4xl font-bold text-white" style={`background:${color}`} aria-hidden="true">
           {initials}
         </span>
       )
     }
-    {isLead && <span class="absolute -right-1 bottom-0 rounded-full bg-night px-2 py-0.5 text-[0.7rem] font-bold tracking-wide text-glow uppercase">Takleiding</span>}
+    {isLead && <span class="label absolute -bottom-3 left-2 -rotate-3 bg-card text-brand">Takleiding</span>}
   </div>
-  <p class="mt-3 font-bold">{name}</p>
-  {totem && <p class="text-sm text-muted italic">{voortotem ? `${voortotem} ${totem}` : totem}</p>}
+  <p class="mt-4 font-bold leading-tight">{name}</p>
+  {totem && <p class="text-muted">{voortotem ? `${voortotem} ${totem}` : totem}</p>}
   {
     showContact && (email || phone) && (
       <p class="mt-1 flex flex-col text-sm break-all">

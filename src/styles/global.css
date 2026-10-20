@@ -1,35 +1,30 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/fraunces/opsz.css';
-@import '@fontsource-variable/inter/wght.css';
-@import '@fontsource/caveat/latin-700.css';
+@import '@fontsource/zilla-slab/latin-500.css';
+@import '@fontsource/zilla-slab/latin-700.css';
+@import '@fontsource-variable/source-sans-3/wght.css';
+@import '@fontsource/saira-stencil-one/latin-400.css';
 
 /*
- * Huisstijl "Kampvuur / Veldgids": nachtgroen en vuurgloed, met hoogtelijnen,
- * stempels en gestippelde paden uit een scoutshandboek.
+ * Huisstijl: kraftpapier en bosgroen, met bordeaux (de kleur van het T-shirt
+ * en de das) als enige accent. Twee terugkerende elementen: hoogtelijnen en
+ * datumstempels. Foto's krijgen een polaroidrand. Verder geen versiering.
  */
 @theme {
-  --color-night: #1b2a24;
-  --color-night-2: #26392f;
-  --color-night-3: #34493d;
-  --color-paper: #f4ecdd;
-  --color-card: #fffaf2;
-  --color-ink: #231a14;
-  --color-muted: #66564a;
-  --color-line: #e2d3b8;
-  --color-ember: #e0782f;
-  --color-ember-dark: #a34e15;
-  --color-glow: #ffd59a;
-  --color-cream: #f3e8d6;
-  --color-cream-muted: #d9c8b0;
+  --color-paper: #efe6d2;
+  --color-card: #faf6ec;
+  --color-ink: #20241d;
+  --color-muted: #5c5546;
+  --color-rule: #b9ab8a;
+  --color-forest: #1f3327;
+  --color-forest-2: #2b4535;
+  --color-cream: #efe6d2;
+  --color-cream-muted: #c9d2b8;
   --color-brand: #8c1d2c;
   --color-brand-dark: #6c1421;
-  --color-moss: #5f8f3e;
 
-  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
-  --font-hand: 'Caveat', 'Comic Sans MS', cursive;
-
-  --radius-card: 14px;
+  --font-sans: 'Source Sans 3 Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Zilla Slab', Rockwell, 'Roboto Slab', Georgia, serif;
+  --font-stencil: 'Saira Stencil One', Impact, sans-serif;
 }
 
 @layer base {
@@ -42,16 +37,17 @@
 
   body {
     font-family: var(--font-sans);
+    font-size: 1.125rem;
     line-height: 1.6;
   }
 
   h1,
   h2,
-  h3 {
+  h3,
+  h4 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    line-height: 1.08;
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    line-height: 1.1;
     text-wrap: balance;
   }
 
@@ -60,9 +56,8 @@
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-ember);
+    outline: 3px solid var(--color-brand);
     outline-offset: 2px;
-    border-radius: 4px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -82,190 +77,188 @@
     margin-inline: auto;
   }
 
-  /* Hoogtelijnen, zoals op een stafkaart. */
+  /* Hoogtelijnen, zoals op een stafkaart. Op donkergroen en op papier. */
   .topo {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600' fill='none' stroke='%23ffffff' stroke-opacity='.07' stroke-width='1.5'%3E%3Cpath d='M-20 70 C120 30 220 120 330 70 S520 20 640 80'/%3E%3Cpath d='M-20 130 C120 94 220 175 330 132 S520 86 640 138'/%3E%3Cpath d='M-20 190 C120 158 220 230 330 194 S520 152 640 196'/%3E%3Cpath d='M-20 250 C120 222 220 285 330 256 S520 218 640 254'/%3E%3Cpath d='M-20 310 C120 286 220 340 330 318 S520 284 640 312'/%3E%3Cpath d='M-20 370 C120 350 220 395 330 380 S520 350 640 370'/%3E%3Cpath d='M-20 430 C120 414 220 450 330 442 S520 416 640 428'/%3E%3Cpath d='M-20 490 C120 478 220 505 330 504 S520 482 640 486'/%3E%3Cellipse cx='430' cy='170' rx='60' ry='34'/%3E%3Cellipse cx='430' cy='170' rx='34' ry='18'/%3E%3C/svg%3E");
-    background-size: 600px 600px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640' fill='none' stroke='%23efe6d2' stroke-opacity='.12' stroke-width='1.4'%3E%3Cpath d='M-20 60 C110 24 230 112 340 64 S540 18 660 70'/%3E%3Cpath d='M-20 118 C110 86 230 166 340 122 S540 80 660 126'/%3E%3Cpath d='M-20 178 C110 150 230 222 340 184 S540 144 660 184'/%3E%3Cpath d='M-20 300 C120 276 230 332 340 310 S540 276 660 302'/%3E%3Cpath d='M-20 362 C120 342 230 388 340 372 S540 342 660 362'/%3E%3Cpath d='M-20 486 C120 474 230 500 340 498 S540 476 660 482'/%3E%3Cpath d='M-20 548 C120 538 230 560 340 560 S540 540 660 544'/%3E%3Cpath d='M455 236 c40 -6 70 10 66 30 s-44 30 -80 22 s-40 -46 14 -52Z'/%3E%3Cpath d='M466 250 c18 -2 32 4 30 12 s-20 12 -36 9 s-14 -19 6 -21Z'/%3E%3Cpath d='M120 420 c50 -10 96 6 92 28 s-60 34 -104 24 s-42 -44 12 -52Z'/%3E%3C/svg%3E");
+    background-size: 640px 640px;
   }
-
-  .topo-light {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600' fill='none' stroke='%23c9b591' stroke-opacity='.35' stroke-width='1.3'%3E%3Cpath d='M-20 70 C120 30 220 120 330 70 S520 20 640 80'/%3E%3Cpath d='M-20 190 C120 158 220 230 330 194 S520 152 640 196'/%3E%3Cpath d='M-20 310 C120 286 220 340 330 318 S520 284 640 312'/%3E%3Cpath d='M-20 430 C120 414 220 450 330 442 S520 416 640 428'/%3E%3Cellipse cx='130' cy='520' rx='70' ry='30'/%3E%3C/svg%3E");
-    background-size: 600px 600px;
+  .topo-paper {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640' fill='none' stroke='%23a8936a' stroke-opacity='.32' stroke-width='1.2'%3E%3Cpath d='M-20 60 C110 24 230 112 340 64 S540 18 660 70'/%3E%3Cpath d='M-20 178 C110 150 230 222 340 184 S540 144 660 184'/%3E%3Cpath d='M-20 300 C120 276 230 332 340 310 S540 276 660 302'/%3E%3Cpath d='M-20 486 C120 474 230 500 340 498 S540 476 660 482'/%3E%3Cpath d='M455 236 c40 -6 70 10 66 30 s-44 30 -80 22 s-40 -46 14 -52Z'/%3E%3Cpath d='M466 250 c18 -2 32 4 30 12 s-20 12 -36 9 s-14 -19 6 -21Z'/%3E%3C/svg%3E");
+    background-size: 640px 640px;
   }
 
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
     min-height: 2.75rem;
-    padding: 0.6rem 1.25rem;
-    border-radius: 999px;
+    padding: 0.55rem 1.1rem;
+    border: 2px solid var(--color-brand);
+    border-radius: 2px;
+    background: var(--color-brand);
+    color: #fff;
     font-weight: 700;
     text-decoration: none;
-    background: var(--color-ember);
-    color: #1d130c;
-    transition: background-color 0.15s;
   }
   .btn:hover {
-    background: #ea8a45;
+    background: var(--color-brand-dark);
+    border-color: var(--color-brand-dark);
   }
-  .btn-outline {
+  .btn-line {
     background: transparent;
     color: inherit;
-    box-shadow: inset 0 0 0 2px currentColor;
+    border-color: currentColor;
   }
-  .btn-outline:hover {
-    background: rgb(255 255 255 / 0.08);
-  }
-  .btn-dark {
-    background: var(--color-night);
-    color: var(--color-cream);
-  }
-  .btn-dark:hover {
-    background: var(--color-night-2);
+  .btn-line:hover {
+    background: rgb(127 127 127 / 0.12);
+    border-color: currentColor;
   }
   .btn-small {
     min-height: 2.25rem;
-    padding: 0.35rem 0.9rem;
-    font-size: 0.9rem;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.92rem;
   }
 
-  .card {
+  /* A plain bordered surface. */
+  .panel {
     background: var(--color-card);
-    border: 1px solid var(--color-line);
-    border-radius: var(--radius-card);
+    border: 2px solid var(--color-ink);
   }
 
-  .eyebrow {
-    font-family: var(--font-hand);
-    font-size: 1.6rem;
-    line-height: 1;
-    color: var(--color-ember-dark);
+  .link {
+    color: var(--color-brand);
+    font-weight: 700;
+    text-decoration: underline;
   }
 
-  .section-title {
-    font-size: clamp(1.7rem, 3.2vw, 2.4rem);
-    font-weight: 750;
-  }
-
-  /* Gestippeld pad als scheiding. */
-  .trail {
-    height: 18px;
-    background: radial-gradient(circle, var(--color-ember) 2.5px, transparent 3px) center / 16px 18px repeat-x;
-    opacity: 0.8;
-  }
-
-  /* Stempel voor een datum. */
+  /* Datumstempel. De rotatie wisselt per item, zoals bij echt stempelen. */
   .stamp {
     display: grid;
     place-items: center;
     flex: none;
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 4.25rem;
+    height: 4.25rem;
     border: 3px solid var(--color-brand);
     border-radius: 50%;
     color: var(--color-brand);
     text-align: center;
-    line-height: 1;
-    transform: rotate(-7deg);
-    background: color-mix(in srgb, var(--color-card) 70%, transparent);
+    line-height: 0.95;
+    font-family: var(--font-stencil);
+    transform: rotate(var(--tilt, -5deg));
+  }
+  :nth-child(3n + 2) > .stamp {
+    --tilt: 3deg;
+  }
+  :nth-child(3n + 3) > .stamp {
+    --tilt: -9deg;
+  }
+  :nth-child(4n + 4) > .stamp {
+    --tilt: 1deg;
   }
   .stamp-day {
-    font-family: var(--font-display);
-    font-size: 1.6rem;
-    font-weight: 800;
+    font-size: 1.55rem;
   }
   .stamp-month,
   .stamp-weekday {
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  /* Label in stencilletter, zoals op de materiaalkisten. */
+  .label {
+    display: inline-block;
+    padding: 0.05rem 0.45rem;
+    border: 2px solid currentColor;
+    font-family: var(--font-stencil);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.4;
   }
 
   .chip {
     display: inline-flex;
     align-items: center;
-    padding: 0.15rem 0.6rem;
-    border-radius: 999px;
-    font-size: 0.78rem;
+    gap: 0.35rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    background: color-mix(in srgb, var(--chip, var(--color-ink)) 14%, white);
-    color: color-mix(in srgb, var(--chip, var(--color-ink)) 60%, black);
+    color: var(--color-ink);
+  }
+  .chip::before {
+    content: '';
+    width: 0.7rem;
+    height: 0.7rem;
+    background: var(--chip, var(--color-ink));
   }
 
-  /* Polaroid met een stukje tape. */
+  /* Foto met witte rand, een stukje tape en een kleine, wisselende rotatie. */
   .polaroid {
     position: relative;
-    padding: 0.6rem 0.6rem 2.6rem;
-    background: #fffdf8;
-    box-shadow: 0 24px 40px -18px rgb(0 0 0 / 0.55);
-    transform: rotate(1.4deg);
-  }
-  .polaroid-caption {
-    position: absolute;
-    inset: auto 0 0.55rem;
-    text-align: center;
-    font-family: var(--font-hand);
-    font-size: 1.45rem;
-    color: var(--color-ink);
+    padding: 0.55rem 0.55rem 2.2rem;
+    background: #fffdf7;
+    border: 1px solid #d8ccb2;
+    transform: rotate(var(--tilt, 1.5deg));
   }
   .polaroid::before {
     content: '';
     position: absolute;
-    top: -14px;
-    left: 50%;
-    width: 110px;
-    height: 28px;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgb(243 211 107 / 0.85);
-    box-shadow: 0 1px 3px rgb(0 0 0 / 0.15);
+    top: -12px;
+    left: var(--tape, 30%);
+    width: 92px;
+    height: 24px;
+    transform: rotate(var(--tape-tilt, -4deg));
+    background: rgb(232 214 160 / 0.9);
+  }
+  .polaroid-caption {
+    position: absolute;
+    inset: auto 0.6rem 0.45rem;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--color-ink);
   }
 
   /* Tekst uit de CMS. */
   .prose {
-    max-width: 68ch;
-    font-size: 1.05rem;
+    max-width: 66ch;
   }
   .prose > * + * {
-    margin-top: 1em;
+    margin-top: 0.9em;
   }
   .prose h2 {
     margin-top: 1.6em;
     font-size: 1.6rem;
-    font-weight: 700;
   }
   .prose h3 {
     margin-top: 1.4em;
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-size: 1.3rem;
   }
   .prose a {
     color: var(--color-brand);
-    font-weight: 600;
+    font-weight: 700;
     text-decoration: underline;
   }
   .prose ul {
-    list-style: disc;
-    padding-left: 1.4em;
+    list-style: square;
+    padding-left: 1.3em;
   }
   .prose ol {
     list-style: decimal;
     padding-left: 1.4em;
   }
   .prose li + li {
-    margin-top: 0.3em;
+    margin-top: 0.25em;
+  }
+  .prose li::marker {
+    color: var(--color-brand);
   }
   .prose blockquote {
-    border-left: 4px solid var(--color-ember);
+    border-left: 3px solid var(--color-brand);
     padding-left: 1em;
-    font-style: italic;
-    color: var(--color-muted);
   }
   .prose img {
-    border-radius: var(--radius-card);
     height: auto;
+    border: 2px solid var(--color-ink);
   }
   .prose strong {
     font-weight: 700;

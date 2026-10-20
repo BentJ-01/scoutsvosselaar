@@ -5,8 +5,8 @@ import InfoBlock from '@/components/InfoBlock.astro';
 import { membership, site } from '@/site.config';
 ---
 
-<ContentPage title="Inschrijven" eyebrow="Word lid" description={`Lid worden van ${site.name}: lidgeld, betaling, UiTPAS en de medische fiche.`}>
-  <Fragment slot="intro">Welkom! Hier lees je hoe je je kind inschrijft voor het werkjaar.</Fragment>
+<ContentPage title="Inschrijven" description={`Lid worden van ${site.name}: lidgeld, betaling, UiTPAS en de medische fiche.`}>
+  <Fragment slot="intro">Zo schrijf je je kind in voor het werkjaar.</Fragment>
 
   {
     membership.registrationUrl && (

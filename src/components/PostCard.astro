@@ -1,4 +1,5 @@
 ---
+/** A post as a row: small photo, date, title and summary. */
 import { Image } from 'astro:assets';
 import { formatDate } from '@/lib/dates';
 import { sectionsOf, type Post, type Section } from '@/lib/content';
@@ -14,27 +15,21 @@ const Heading = headingLevel;
 const tags = sectionsOf(post.data.sections, sections);
 ---
 
-<article class="card group relative grid grid-cols-[7rem_1fr] overflow-hidden sm:grid-cols-[11rem_1fr]">
-  <div class="relative bg-night-3 topo">
-    {
-      post.data.coverImage ? (
-        <Image src={post.data.coverImage} alt="" widths={[224, 352, 528]} sizes="(min-width: 640px) 11rem, 7rem" class="absolute inset-0 size-full object-cover" />
-      ) : (
-        <span class="absolute inset-0 grid place-items-center font-hand text-3xl text-glow" aria-hidden="true">
-          Scouts
-        </span>
-      )
-    }
-  </div>
-  <div class="p-4">
+<article class:list={['group relative grid gap-4 py-4', post.data.coverImage && 'grid-cols-[5.5rem_1fr] sm:grid-cols-[8rem_1fr]']}>
+  {
+    post.data.coverImage && (
+      <Image src={post.data.coverImage} alt="" widths={[176, 256, 384]} sizes="(min-width: 640px) 8rem, 5.5rem" class="aspect-square w-full border-2 border-ink object-cover" />
+    )
+  }
+  <div>
     <p class="text-sm text-muted">{post.data.date && <time datetime={post.data.date.date}>{formatDate(post.data.date)}</time>}</p>
-    <Heading class="mt-0.5 text-lg font-bold">
+    <Heading class="text-xl leading-tight">
       <a href={url(`/berichten/${post.id}/`)} class="no-underline after:absolute after:inset-0 group-hover:underline">{post.data.title}</a>
     </Heading>
-    <p class="mt-1 line-clamp-2 text-[0.95rem]">{post.data.excerpt}</p>
+    <p class="mt-1 line-clamp-2">{post.data.excerpt}</p>
     {
       tags.length > 0 && (
-        <p class="mt-2 flex flex-wrap gap-1.5">
+        <p class="mt-1.5 flex flex-wrap gap-x-3">
           {tags.map((s) => (
             <span class="chip" style={`--chip:${s.data.color}`}>
               {s.data.name}

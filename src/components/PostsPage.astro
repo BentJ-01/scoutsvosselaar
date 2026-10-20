@@ -16,24 +16,24 @@ const sections = await getSectionMap();
 ---
 
 <BaseLayout title={page > 1 ? `Berichten, pagina ${page}` : 'Berichten'} description="Nieuws, uitnodigingen en mededelingen van Scouts Don Bosco Vosselaar.">
-  <PageIntro title="Berichten" eyebrow="Nieuws van de groep">{page > 1 && `Pagina ${page} van ${pages}`}</PageIntro>
+  <PageIntro title="Berichten">{page > 1 && `Pagina ${page} van ${pages}`}</PageIntro>
   <div class="wrap py-12">
     {
       posts.length > 0 ? (
-        <div class="grid gap-4 lg:grid-cols-2">
+        <div class="max-w-3xl divide-y-2 divide-dotted divide-rule border-y-2 border-ink">
           {posts.map((post) => (
             <PostCard post={post} sections={sections} headingLevel="h2" />
           ))}
         </div>
       ) : (
-        <p class="card p-4 text-muted">Nog geen berichten.</p>
+        <p class="border-y-2 border-ink py-4 text-muted">Nog geen berichten.</p>
       )
     }
     {
       pages > 1 && (
-        <nav aria-label="Paginering" class="mt-10 flex flex-wrap items-center justify-center gap-2">
+        <nav aria-label="Paginering" class="mt-10 flex max-w-3xl flex-wrap items-center gap-2">
           {page > 1 && (
-            <a class="btn btn-small btn-dark" href={url(postsPageHref(page - 1))} rel="prev">
+            <a class="btn btn-small btn-line" href={url(postsPageHref(page - 1))} rel="prev">
               Nieuwere berichten
             </a>
           )}
@@ -41,14 +41,14 @@ const sections = await getSectionMap();
             <a
               href={url(postsPageHref(n))}
               aria-current={n === page ? 'page' : undefined}
-              class="grid size-10 place-items-center rounded-full font-bold no-underline hover:bg-line aria-[current=page]:bg-night aria-[current=page]:text-cream"
+              class="grid size-10 place-items-center border-2 border-transparent font-bold no-underline hover:border-ink aria-[current=page]:border-ink aria-[current=page]:bg-ink aria-[current=page]:text-paper"
             >
               <span class="sr-only">Pagina </span>
               {n}
             </a>
           ))}
           {page < pages && (
-            <a class="btn btn-small btn-dark" href={url(postsPageHref(page + 1))} rel="next">
+            <a class="btn btn-small btn-line" href={url(postsPageHref(page + 1))} rel="next">
               Oudere berichten
             </a>
           )}

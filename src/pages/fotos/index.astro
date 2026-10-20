@@ -3,48 +3,37 @@ import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Gallery from '@/components/Gallery.astro';
 import PageIntro from '@/components/PageIntro.astro';
-import { getAlbums, getScoutYears, getSectionMap, sectionsOf } from '@/lib/content';
+import { getAlbums, getScoutYears } from '@/lib/content';
 
-const [albums, years, sectionMap] = await Promise.all([getAlbums(), getScoutYears(), getSectionMap()]);
+const [albums, years] = await Promise.all([getAlbums(), getScoutYears()]);
 const albumsByYear = Map.groupBy(albums, (a) => a.data.date?.date.slice(0, 4) ?? 'Zonder datum');
 const yearsWithPhotos = years.filter((y) => y.data.groupPhotos.length > 0);
 ---
 
 <BaseLayout title="Foto's" description="Fotoalbums en groepsfoto's van Scouts Don Bosco Vosselaar.">
-  <PageIntro title="Foto's" eyebrow="Herinneringen">
-    De volledige albums staan in een gedeeld album. Klik op een album om het te openen.
-  </PageIntro>
-  <div class="wrap space-y-14 py-12">
+  <PageIntro title="Foto's">De volledige albums staan in een gedeeld album. Klik op een foto om het album te openen.</PageIntro>
+  <div class="wrap space-y-16 py-12">
     <section aria-labelledby="albums">
-      <h2 id="albums" class="section-title">Fotoalbums</h2>
-      {albums.length === 0 && <p class="card mt-5 p-4 text-muted">Nog geen albums.</p>}
+      <h2 id="albums" class="text-3xl sm:text-4xl">Albums</h2>
+      {albums.length === 0 && <p class="mt-4 border-y-2 border-ink py-4 text-muted">Nog geen albums.</p>}
       {
         [...albumsByYear].map(([year, items]) => (
-          <div class="mt-6">
-            <h3 class="text-xl font-bold">{year}</h3>
-            <ul class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-              {items.map((album) => (
-                <li class="card group relative overflow-hidden">
-                  <div class="aspect-[4/3] bg-night-3 topo">
-                    {album.data.coverImage && (
-                      <Image src={album.data.coverImage} alt="" widths={[320, 480, 640]} sizes="(min-width: 1024px) 17rem, (min-width: 640px) 30vw, 45vw" class="size-full object-cover" />
-                    )}
-                  </div>
-                  <div class="p-3">
-                    <h4 class="font-display text-lg leading-tight font-bold">
-                      <a href={album.data.albumUrl} class="no-underline after:absolute after:inset-0 group-hover:underline">
-                        {album.data.title}
-                        <span class="sr-only"> (opent een extern album)</span>
-                      </a>
-                    </h4>
-                    <p class="mt-1 flex flex-wrap gap-1">
-                      {sectionsOf(album.data.sections, sectionMap).map((s) => (
-                        <span class="chip" style={`--chip:${s.data.color}`}>
-                          {s.data.name}
-                        </span>
-                      ))}
-                    </p>
-                  </div>
+          <div class="mt-8">
+            <h3 class="border-b-2 border-ink pb-1 text-2xl">{year}</h3>
+            <ul class="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-4">
+              {items.map((album, i) => (
+                <li class="polaroid group" style={`--tilt:${[-2, 1.5, -0.8, 2.4, -1.6][i % 5]}deg; --tape:${[25, 48, 12, 60, 35][i % 5]}%`}>
+                  {album.data.coverImage ? (
+                    <Image src={album.data.coverImage} alt="" widths={[320, 480, 640]} sizes="(min-width: 1024px) 15rem, (min-width: 640px) 30vw, 45vw" class="aspect-[4/3] w-full object-cover" />
+                  ) : (
+                    <div class="aspect-[4/3] bg-forest-2 topo" />
+                  )}
+                  <h4 class="polaroid-caption leading-tight">
+                    <a href={album.data.albumUrl} class="no-underline after:absolute after:inset-0 group-hover:underline">
+                      {album.data.title}
+                      <span class="sr-only"> (opent een extern album)</span>
+                    </a>
+                  </h4>
                 </li>
               ))}
             </ul>
@@ -54,12 +43,12 @@ const yearsWithPhotos = years.filter((y) => y.data.groupPhotos.length > 0);
     </section>
 
     <section aria-labelledby="groepsfotos">
-      <h2 id="groepsfotos" class="section-title">Groepsfoto's</h2>
-      {yearsWithPhotos.length === 0 && <p class="card mt-5 p-4 text-muted">Nog geen groepsfoto's.</p>}
+      <h2 id="groepsfotos" class="text-3xl sm:text-4xl">Groepsfoto's</h2>
+      {yearsWithPhotos.length === 0 && <p class="mt-4 border-y-2 border-ink py-4 text-muted">Nog geen groepsfoto's.</p>}
       {
         yearsWithPhotos.map((y) => (
-          <div class="mt-6">
-            <h3 class="mb-4 text-xl font-bold">Werkjaar {y.data.label}</h3>
+          <div class="mt-8">
+            <h3 class="mb-4 border-b-2 border-ink pb-1 text-2xl">Werkjaar {y.data.label}</h3>
             <Gallery images={y.data.groupPhotos} label={`Groepsfoto werkjaar ${y.data.label}`} />
           </div>
         ))
