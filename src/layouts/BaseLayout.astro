@@ -4,6 +4,7 @@ import SiteHeader from '@/components/SiteHeader.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import { site } from '@/site.config';
 import { url } from '@/lib/paths';
+import { indexable } from '../../deployment.config';
 // Preloaded so headings and text do not jump when the fonts arrive.
 import slabBold from '@fontsource/zilla-slab/files/zilla-slab-latin-700-normal.woff2?url';
 import slabMedium from '@fontsource/zilla-slab/files/zilla-slab-latin-500-normal.woff2?url';
@@ -32,6 +33,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <title>{fullTitle}</title>
     {[slabBold, slabMedium, sans].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
     <meta name="description" content={description} />
+    {!indexable && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
     <meta property="og:site_name" content={site.name} />
