@@ -133,3 +133,11 @@ Sveltia is nog pre-1.0 en verschijnt vaak. De versie staat exact gepind in `pack
 4. Test kort zelf in de lokale modus en daarna online.
 
 Dependabot stelt maandelijks updates voor, maar merge een Sveltia-update nooit zonder de stappen hierboven.
+
+## Kalender en agenda-feeds
+
+- `/kalender/` toont alle activiteiten per maand, met filters per tak. Voorbije activiteiten verbergt een klein script op basis van de huidige datum, dus ook zonder nieuwe build. Een tak-link naar `/kalender/#tak-welpen` zet de filter meteen op die tak.
+- Feeds (iCalendar, RFC 5545): `/ics/alle.ics`, `/ics/<tak>.ics` (die tak plus de activiteiten voor de hele groep) en `/ics/evenement/<id>.ics`. Gemaakt in `src/lib/ics.ts` met `ical-generator`.
+- Tijden staan in de feed als Belgische tijd met `TZID=Europe/Brussels` en een VTIMEZONE-blok. De datums gaan als Luxon-objecten in die zone naar `ical-generator`: met een gewone `Date` zou de tijd in de tijdzone van de buildserver komen. Getest rond zomer- en wintertijd en in verschillende tijdzones (`tests/ics.test.ts`).
+- UID per activiteit is `<id>@scoutsvosselaar.be`, en DTSTAMP is vast. Zo geeft dezelfde inhoud altijd hetzelfde bestand en zien agenda-apps een gewijzigde activiteit als dezelfde.
+- Een geannuleerde activiteit krijgt `STATUS:CANCELLED` en blijft in de feed, zodat ze uit de agenda's van wie geabonneerd is verdwijnt of als geannuleerd verschijnt.

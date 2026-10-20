@@ -1,0 +1,162 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EventItem from '@/components/EventItem.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import { absoluteUrl, feedPath } from '@/lib/calendar';
+import { eventEndsAt } from '@/lib/content-core';
+import { getEvents, getSectionMap, getSections } from '@/lib/content';
+import { monthLabel } from '@/lib/events';
+import { webcalUrl } from '@/lib/ics';
+import { url } from '@/lib/paths';
+import { site } from '@/site.config';
+
+const [events, sections, sectionMap] = await Promise.all([getEvents(), getSections(), getSectionMap()]);
+const builtAt = new Date();
+const months = Map.groupBy(events, (e) => monthLabel(e.data.start));
+const feeds = [
+  { id: 'alle', name: 'Alle activiteiten', path: feedPath.all, color: undefined as string | undefined },
+  ...sections.map((s) => ({ id: s.id, name: `${s.data.name} en hele groep`, path: feedPath.section(s.id), color: s.data.color })),
+];
+---
+
+<BaseLayout title="Kalender" description={`De kalender van ${site.name}: weekends, kampen, feesten en andere activiteiten, per tak.`}>
+  <PageIntro title="Kalender">De activiteiten van de groep en de takken. De gewone zondagen staan bij elke tak.</PageIntro>
+
+  <div class="wrap grid gap-x-14 gap-y-12 py-10 lg:grid-cols-[1fr_20rem]">
+    <div>
+      <div data-calendar-controls hidden class="mb-6 space-y-4">
+        <div role="group" aria-label="Toon activiteiten voor" class="flex flex-wrap gap-2">
+          <button type="button" class="btn btn-small btn-line aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper" data-filter="alle" aria-pressed="true">
+            Alle takken
+          </button>
+          {
+            sections.map((s) => (
+              <button
+                type="button"
+                class="btn btn-small btn-line gap-2 aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper"
+                data-filter={s.id}
+                aria-pressed="false"
+              >
+                <span class="inline-block size-3" style={`background:${s.data.color}`} aria-hidden="true" />
+                {s.data.name}
+              </button>
+            ))
+          }
+        </div>
+        <p class="text-sm text-muted" data-filter-note hidden>Activiteiten voor de hele groep staan er ook bij.</p>
+      </div>
+
+      <div data-calendar>
+        {
+          [...months].map(([month, items]) => (
+            <section data-month class="mb-10" aria-label={month}>
+              <h2 class="border-b-2 border-ink pb-1 text-3xl first-letter:uppercase">{month}</h2>
+              <ul class="divide-y-2 divide-dotted divide-rule">
+                {items.map((event) => (
+                  <EventItem event={event} sections={sectionMap} hidden={eventEndsAt(event.data) <= builtAt} />
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+        <p data-empty class="border-y-2 border-ink py-4 text-muted" hidden={events.some((e) => eventEndsAt(e.data) > builtAt)}>
+          Er staat nog niets gepland. Kijk binnenkort nog eens.
+        </p>
+      </div>
+
+      <p data-calendar-controls hidden>
+        <button type="button" class="btn btn-small btn-line" data-show-past aria-pressed="false">Toon ook voorbije activiteiten</button>
+      </p>
+    </div>
+
+    <aside aria-labelledby="abonneren" class="self-start">
+      <h2 id="abonneren" class="text-2xl">Abonneer in je agenda</h2>
+      <p class="mt-2">Zet de kalender in je eigen agenda. Nieuwe en gewijzigde activiteiten komen er dan vanzelf bij.</p>
+      <ul class="mt-4 divide-y-2 divide-dotted divide-rule border-y-2 border-ink">
+        {
+          feeds.map((f) => (
+            <li class="flex items-center justify-between gap-3 py-2">
+              <span class="flex items-center gap-2 font-bold">
+                {f.color && <span class="inline-block size-3" style={`background:${f.color}`} aria-hidden="true" />}
+                {f.name}
+              </span>
+              <a class="link shrink-0" href={webcalUrl(absoluteUrl(f.path, Astro.site))}>
+                Abonneren<span class="sr-only">: {f.name}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="mt-6 text-xl">Zo werkt het</h3>
+      <div class="prose mt-2 text-[0.98rem]">
+        <p><strong>iPhone, iPad of Mac:</strong> tik of klik op "Abonneren" en bevestig.</p>
+        <p>
+          <strong>Google Agenda:</strong> kopieer het adres hieronder. Ga op een computer naar Google Agenda, kies bij "Andere agenda's" het plusje en dan "Via URL", en
+          plak het adres.
+        </p>
+        <p><strong>Outlook:</strong> kies "Agenda toevoegen" en dan "Abonneren vanaf internet", en plak het adres.</p>
+      </div>
+      <label class="mt-3 block text-sm font-bold" for="feed-url">Adres van de volledige kalender</label>
+      <input id="feed-url" readonly value={absoluteUrl(feedPath.all, Astro.site)} class="mt-1 w-full border-2 border-ink bg-card px-2 py-1.5 text-sm" />
+      <p class="mt-2 text-sm text-muted">
+        Voor één tak vervang je <code>alle</code> door de tak, bv. <code>{absoluteUrl(feedPath.section('welpen'), Astro.site).replace(/^https?:\/\//, '')}</code>.
+      </p>
+      <p class="mt-4"><a class="link" href={url(feedPath.all)} download="scouts-vosselaar.ics">Download als bestand</a></p>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  const calendar = document.querySelector<HTMLElement>('[data-calendar]');
+  if (calendar) {
+    const items = [...calendar.querySelectorAll<HTMLElement>('[data-ends]')];
+    const filterButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const pastButton = document.querySelector<HTMLButtonElement>('[data-show-past]');
+    const note = document.querySelector<HTMLElement>('[data-filter-note]');
+    const empty = calendar.querySelector<HTMLElement>('[data-empty]');
+    const known = new Set(filterButtons.map((b) => b.dataset.filter));
+    const fromHash = location.hash.replace(/^#tak-/, '');
+    let filter = known.has(fromHash) ? fromHash : 'alle';
+    let showPast = false;
+
+    const apply = () => {
+      const now = Date.now();
+      let visible = 0;
+      for (const item of items) {
+        const sections = (item.dataset.sections ?? '').split(' ').filter(Boolean);
+        const matches = filter === 'alle' || sections.length === 0 || sections.includes(filter);
+        const past = Date.parse(item.dataset.ends ?? '') <= now;
+        item.hidden = !matches || (past && !showPast);
+        if (!item.hidden) visible++;
+      }
+      for (const month of calendar.querySelectorAll<HTMLElement>('[data-month]')) {
+        month.hidden = ![...month.querySelectorAll<HTMLElement>('[data-ends]')].some((i) => !i.hidden);
+      }
+      if (empty) empty.hidden = visible > 0;
+      for (const b of filterButtons) b.setAttribute('aria-pressed', String(b.dataset.filter === filter));
+      if (note) note.hidden = filter === 'alle';
+      pastButton?.setAttribute('aria-pressed', String(showPast));
+      if (pastButton) pastButton.textContent = showPast ? 'Verberg voorbije activiteiten' : 'Toon ook voorbije activiteiten';
+    };
+
+    for (const b of filterButtons) {
+      b.addEventListener('click', () => {
+        filter = b.dataset.filter ?? 'alle';
+        history.replaceState(null, '', filter === 'alle' ? location.pathname : `#tak-${filter}`);
+        apply();
+      });
+    }
+    pastButton?.addEventListener('click', () => {
+      showPast = !showPast;
+      apply();
+    });
+    window.addEventListener('hashchange', () => {
+      const tak = location.hash.replace(/^#tak-/, '');
+      filter = known.has(tak) ? tak : 'alle';
+      apply();
+    });
+    for (const el of document.querySelectorAll<HTMLElement>('[data-calendar-controls]')) el.hidden = false;
+    apply();
+  }
+</script>

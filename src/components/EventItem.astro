@@ -1,0 +1,52 @@
+---
+/** One event with a date stamp, as a list item. Extra attributes go on the <li>. */
+import type { HTMLAttributes } from 'astro/types';
+import { eventEndsAt } from '@/lib/content-core';
+import { stampParts, timeLabel } from '@/lib/events';
+import { sectionsOf, type CalendarEvent, type Section } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+interface Props extends HTMLAttributes<'li'> {
+  event: CalendarEvent;
+  sections: Map<string, Section>;
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { event, sections, headingLevel = 'h3', ...attrs } = Astro.props;
+const Heading = headingLevel;
+const stamp = stampParts(event.data.start);
+const forSections = sectionsOf(event.data.sections, sections);
+---
+
+<li {...attrs} data-ends={eventEndsAt(event.data).toISOString()} data-sections={event.data.sections.map((r) => r.id).join(' ')} class="relative flex items-center gap-4 py-4">
+  <div class="stamp" aria-hidden="true">
+    <span class="stamp-weekday">{stamp.weekday}</span>
+    <span class="stamp-day">{stamp.day}</span>
+    <span class="stamp-month">{stamp.month}</span>
+  </div>
+  <div class="min-w-0">
+    <Heading class="text-xl leading-tight">
+      <a href={url(`/kalender/${event.id}/`)} class="no-underline after:absolute after:inset-0 hover:underline">
+        <span class="sr-only">{`${stamp.weekday} ${stamp.day} ${stamp.month}: `}</span>
+        {event.data.cancelled ? <s>{event.data.title}</s> : event.data.title}
+      </a>
+    </Heading>
+    <p class="text-[0.95rem] text-muted">
+      {event.data.cancelled && <span class="label mr-2 text-brand">Geannuleerd</span>}
+      {timeLabel(event.data)}
+      {event.data.location && `, ${event.data.location}`}
+      {event.data.price && `, ${event.data.price}`}
+    </p>
+    <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1">
+      {forSections.length === 0 && <span class="chip">Hele groep</span>}
+      {
+        forSections.map((s) => (
+          <span class="chip" style={`--chip:${s.data.color}`}>
+            {s.data.name}
+          </span>
+        ))
+      }
+      {event.data.forLeaders && <span class="chip">Leiding</span>}
+    </p>
+  </div>
+</li>
