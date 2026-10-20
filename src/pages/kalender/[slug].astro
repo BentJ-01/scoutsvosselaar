@@ -1,0 +1,106 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { feedPath } from '@/lib/calendar';
+import { getEvents, getSectionMap, sectionsOf, type CalendarEvent } from '@/lib/content';
+import { formatLongDate } from '@/lib/dates';
+import { stampParts, timeLabel } from '@/lib/events';
+import { url } from '@/lib/paths';
+
+export const getStaticPaths = (async () => (await getEvents()).map((event) => ({ params: { slug: event.id }, props: { event } }))) satisfies GetStaticPaths;
+
+interface Props {
+  event: CalendarEvent;
+}
+const { event } = Astro.props;
+const d = event.data;
+const { Content } = await render(event);
+const sections = sectionsOf(d.sections, await getSectionMap());
+const stamp = stampParts(d.start);
+const multiDay = d.end && d.end.date !== d.start.date && d.end.utc > d.start.utc;
+---
+
+<BaseLayout title={d.title} description={`${formatLongDate(d.start)}: ${d.title}${d.location ? `, ${d.location}` : ''}.`}>
+  <article>
+    <header class="bg-forest text-cream topo">
+      <div class="wrap flex flex-wrap items-center gap-x-8 gap-y-4 py-10 sm:py-14">
+        <div class="stamp size-24 border-cream text-cream [--tilt:-6deg]" aria-hidden="true">
+          <span class="stamp-weekday">{stamp.weekday}</span>
+          <span class="stamp-day text-3xl">{stamp.day}</span>
+          <span class="stamp-month">{stamp.month}</span>
+        </div>
+        <div class="min-w-0">
+          <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
+            <a href={url('/')} class="underline">Home</a> / <a href={url('/kalender/')} class="underline">Kalender</a>
+          </nav>
+          <h1 class="mt-2 text-4xl sm:text-5xl">{d.cancelled ? <s>{d.title}</s> : d.title}</h1>
+          {d.cancelled && <p class="mt-3"><span class="label bg-cream text-brand">Geannuleerd</span></p>}
+        </div>
+      </div>
+    </header>
+
+    <div class="wrap grid gap-x-14 gap-y-10 py-10 md:grid-cols-[1fr_20rem]">
+      <div>
+        {
+          d.image && (
+            <figure class="polaroid mb-8 max-w-xl [--tilt:-1.2deg] [--tape:60%]">
+              <Image src={d.image} alt="" widths={[480, 720, 1000]} sizes="(min-width: 768px) 36rem, 92vw" class="w-full" />
+            </figure>
+          )
+        }
+        <div class="prose"><Content /></div>
+        <p class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+          {d.linkUrl && !d.cancelled && <a class="btn" href={d.linkUrl}>{d.linkLabel ?? 'Meer info'}</a>}
+          <a class="btn btn-line" href={url(feedPath.event(event.id))} download={`${event.id}.ics`}>Toevoegen aan agenda</a>
+        </p>
+        <p class="mt-10"><a class="link" href={url('/kalender/')}>Terug naar de kalender</a></p>
+      </div>
+
+      <aside aria-labelledby="praktisch" class="panel order-first self-start p-5 md:order-none">
+        <h2 id="praktisch" class="text-2xl">Praktisch</h2>
+        <dl class="mt-3 divide-y-2 divide-dotted divide-rule">
+          <div class="py-2">
+            <dt class="font-bold">Wanneer</dt>
+            <dd>
+              {formatLongDate(d.start)}{multiDay && d.end && <> tot {formatLongDate(d.end)}</>}
+              <br />
+              {timeLabel(d)}
+            </dd>
+          </div>
+          {
+            d.location && (
+              <div class="py-2">
+                <dt class="font-bold">Waar</dt>
+                <dd>{d.location}</dd>
+              </div>
+            )
+          }
+          {
+            d.price && (
+              <div class="py-2">
+                <dt class="font-bold">Prijs</dt>
+                <dd>{d.price}</dd>
+              </div>
+            )
+          }
+          <div class="py-2">
+            <dt class="font-bold">Voor wie</dt>
+            <dd class="flex flex-wrap gap-x-3 gap-y-1">
+              {sections.length === 0 && <span class="chip">Hele groep</span>}
+              {
+                sections.map((s) => (
+                  <a class="chip underline" style={`--chip:${s.data.color}`} href={url(`/takken/${s.id}/`)}>
+                    {s.data.name}
+                  </a>
+                ))
+              }
+              {d.forLeaders && <span class="chip">Leiding</span>}
+            </dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
