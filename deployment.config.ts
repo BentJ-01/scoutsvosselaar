@@ -33,4 +33,14 @@ export const deployment = {
   cmsAuthUrl: env('CMS_AUTH_URL') ?? '',
 } as const;
 
+/** The own domain. Only a site on this origin may be indexed by search engines. */
+export const PRODUCTION_ORIGINS = ['https://scoutsvosselaar.be', 'https://www.scoutsvosselaar.be'];
+
+/**
+ * False on the temporary github.io address: pages then get `noindex` and
+ * robots.txt disallows everything, so that copy does not end up in Google.
+ * Switches on by itself once `siteUrl` is the own domain.
+ */
+export const indexable = PRODUCTION_ORIGINS.includes(deployment.siteUrl.replace(/\/+$/, ''));
+
 export type Deployment = typeof deployment;

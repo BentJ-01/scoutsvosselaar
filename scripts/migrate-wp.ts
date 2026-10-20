@@ -249,7 +249,9 @@ async function migratePosts(): Promise<Record<string, string>> {
 const isOwnUpload = (href: string) => {
   try {
     const url = new URL(href, `${SITE}/`);
-    return url.host === new URL(SITE).host && url.pathname.includes('/wp-content/uploads/');
+    // The old site is reachable with and without www.
+    const bare = (host: string) => host.replace(/^www\./, '');
+    return bare(url.host) === bare(new URL(SITE).host) && url.pathname.includes('/wp-content/uploads/');
   } catch {
     return false;
   }

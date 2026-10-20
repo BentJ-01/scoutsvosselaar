@@ -1,0 +1,63 @@
+name: Migratie oude site
+
+# One-off: migrates the old WordPress site with scripts/migrate-wp.ts and
+# pushes the result to the branch "migratie" (never to main). Start it by hand
+# under Actions > Migratie oude site > Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      site:
+        description: Adres van de oude WordPress-site
+        default: https://www.scoutsvosselaar.be
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: migratie
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Afhankelijkheden installeren
+        run: pnpm install --frozen-lockfile
+
+      - name: Migratie draaien
+        run: pnpm migrate --site "${{ inputs.site }}"
+
+      # The result is pushed even if the build fails, so it can be inspected.
+      - name: Controle met een build
+        continue-on-error: true
+        run: pnpm build
+
+      - name: Rapport tonen
+        if: always()
+        run: |
+          if [ -f docs/huidige-site/migratie-rapport.md ]; then
+            cat docs/huidige-site/migratie-rapport.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Resultaat pushen naar de branch migratie
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c migratie
+          git add -A src/content src/assets src/data public/voske public/docs docs/huidige-site
+          if git diff --cached --quiet; then
+            echo "Niets gemigreerd."
+            exit 1
+          fi
+          git commit -m "Migratie van ${{ inputs.site }}"
+          git push --force origin migratie
