@@ -177,7 +177,9 @@ async function migratePosts(): Promise<Record<string, string>> {
     }
 
     const date = wpDate(post.date);
-    const id = `${date}-${slugify(post.slug) || slugify(title)}`;
+    // Some WordPress slugs are just numbers (e.g. "1311-2"); use the title then.
+    const slugBase = /^[\d-]+$/.test(post.slug) ? slugify(title) : slugify(post.slug) || slugify(title);
+    const id = `${date}-${slugBase}`;
     const converted = convertPostHtml(post.content.rendered);
     const imageDir = 'src/assets/uploads/posts';
     const imagePath = (n: number) => `${imageDir}/${id}-${n}.webp`;
@@ -274,7 +276,23 @@ async function migratePages() {
         report.push(`  - **Nakijken:** Office-bestand, niet gedownload (open vraag: publiek houden?).`);
       }
     }
+
+    // PDFs that are embedded (viewer plugins, iframes, shortcodes) instead of linked.
+    const html = page.content.rendered.replace(/\\\//g, '/');
+    for (const m of html.matchAll(/https?:\/\/[^"'\s<>()]+?\.pdf/gi)) {
+      const href = decodeHtml(m[0]);
+      if (isOwnUpload(href) && ![...pdfs.keys()].some((k) => k.split('?')[0] === href)) {
+        pdfs.set(href, { href, text: '', page: title });
+        report.push(`- Ingebedde PDF: ${href}`);
+      }
+    }
     report.push('');
+
+    // The text of every old page, for reference when writing the new fixed pages.
+    const converted = convertPostHtml(page.content.rendered);
+    let text = converted.markdown;
+    converted.inlineImages.forEach((src, i) => (text = text.replaceAll(imagePlaceholder(i), src)));
+    write(`docs/huidige-site/paginas/${slugify(page.slug) || page.id}.md`, `# ${title}\n\nOude URL: \`/${page.slug}/\`\n\n${fixText(text)}\n`);
   }
 
   // 't Voske and other PDFs of the group.
