@@ -1,0 +1,11 @@
+name: URL-check (tijdelijk)
+on: push
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for u in https://jeugdlokalenvosselaar.be/beschikbaarheid http://jeugdlokalenvosselaar.be/beschikbaarheid; do
+            r=$(curl -sS -L -o /dev/null -w "%{http_code} %{url_effective}" --max-time 20 "$u" 2>&1 || true)
+            echo "::notice title=URL::$u -> $r"
+          done
