@@ -7,18 +7,21 @@ import PostCard from '@/components/PostCard.astro';
 import SectionList from '@/components/SectionList.astro';
 import { site } from '@/site.config';
 import { url } from '@/lib/paths';
-import { getCurrentYear, getPosts, getSectionMap, getSections, getUpcomingEvents } from '@/lib/content';
+import { getCurrentYear, getPosts, getScoutYears, getSectionMap, getSections, getUpcomingEvents } from '@/lib/content';
 import { pinnedPost } from '@/lib/content-core';
 
-const [sections, sectionMap, posts, events, year] = await Promise.all([
+const [sections, sectionMap, posts, events, currentYear, years] = await Promise.all([
   getSections(),
   getSectionMap(),
   getPosts(),
   getUpcomingEvents(),
   getCurrentYear(),
+  getScoutYears(),
 ]);
 const pinned = pinnedPost(posts);
 const latest = posts.filter((p) => p !== pinned).slice(0, 6);
+// The group photo of the active year, or the most recent one until that is taken.
+const year = currentYear?.data.groupPhotos.length ? currentYear : years.find((y) => y.data.groupPhotos.length > 0);
 const groupPhoto = year?.data.groupPhotos[0];
 ---
 

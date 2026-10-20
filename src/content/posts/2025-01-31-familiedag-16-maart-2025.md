@@ -1,11 +1,9 @@
 ---
 title: Familiedag 16 maart 2025
 date: 2025-01-31
-excerpt: Beste leden, familie en oud-scouten, Bij deze nodigen wij jullie uit
-  voor de familiedag van onze scouts! De familiedag zal doorgaan op zondag 16
-  maart van 14.00 tot 16.
 pinned: false
 draft: false
+excerpt: "Bij deze nodigen wij jullie uit voor de familiedag van onze scouts op zondag 16 maart, van 14u tot 16u30, voor alle leden, hun familie en oud-leden."
 ---
 
 Beste leden, familie en oud-scouten,

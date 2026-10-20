@@ -202,6 +202,8 @@ async function migratePosts(): Promise<Record<string, string>> {
     if (!coverImage && inline[0]) {
       coverImage = inline[0];
       markdown = removeLeadingImage(markdown, 0);
+      // Shown as cover already: leave it out of the text.
+      markdown = markdown.replace(new RegExp(`\\n*!\\[[^\\]]*\\]\\(${imagePlaceholder(0).replace(/[{}]/g, '\\$&')}\\)\\n*`, 'g'), '\n\n').trim();
     }
 
     for (const [i, path] of inline.entries()) {

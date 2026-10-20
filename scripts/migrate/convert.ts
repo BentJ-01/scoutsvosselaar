@@ -156,7 +156,8 @@ export function convertPostHtml(html: string): ConvertedPost {
     replacement: (_content, node) => {
       const el = node as HTMLElement;
       // WordPress replaces emoji by small images; keep the emoji itself.
-      if (/\bemoji\b/.test(el.getAttribute('class') ?? '') || /s\.w\.org\/images\/core\/emoji/.test(el.getAttribute('src') ?? '')) {
+      // Facebook pastes them as tiny images from its emoji service.
+      if (/\bemoji\b/.test(el.getAttribute('class') ?? '') || /s\.w\.org\/images\/core\/emoji|fbcdn\.net\/images\/emoji|emoji\.php/.test(el.getAttribute('src') ?? '')) {
         return el.getAttribute('alt') ?? '';
       }
       // Gallery images are collected by the gallery rule.

@@ -1,41 +1,27 @@
 ---
-// Voorlopige tekst: vervangen door de tekst uit docs/huidige-site/inhoud.md (§2 en §7) zodra die er is.
+// Tekst: oude pagina "Lid worden" (verhuur) en de spec (§7). Lege blokken van de oude verhuurpagina niet overgenomen.
 import ContentPage from '@/layouts/ContentPage.astro';
 import InfoBlock from '@/components/InfoBlock.astro';
 import { rental, site } from '@/site.config';
 ---
 
 <ContentPage title="Verhuur" description={`De lokalen van ${site.name} huren voor een weekend of kamp, tot ${rental.maxPeople} personen.`}>
-  <Fragment slot="intro">Onze lokalen zijn te huur voor weekends en kampen van jeugdbewegingen.</Fragment>
+  <Fragment slot="intro">Onze lokalen zijn te huur voor weekends en kampen, voor groepen tot {rental.maxPeople} personen.</Fragment>
 
-  <InfoBlock title="Wat huur je?">
-    <p>De lokalen zijn geschikt voor groepen tot <strong>{rental.maxPeople} personen</strong>, voor weekends en kampen.</p>
+  <InfoBlock title="Reserveren">
+    <p>De verhuur gebeurt door de vzw van de lokalen, niet door de leiding.</p>
+    <ul>
+      {rental.email && <li>Mail: <a href={`mailto:${rental.email}`}>{rental.email}</a></li>}
+      {rental.phone && <li>Telefoon: <a href={`tel:${rental.phone.replace(/[^\d+]/g, '')}`}>{rental.phone}</a></li>}
+      {rental.calendarUrl && <li><a href={rental.calendarUrl}>Bekijk de verhuurkalender</a></li>}
+      <li>Je vindt onze lokalen ook op <a href={rental.kampasUrl}>kampas.be</a>.</li>
+    </ul>
   </InfoBlock>
 
-  <InfoBlock title="Beschikbaarheid en reservatie">
+  <InfoBlock title="De lokalen">
     <p>
-      De verhuur gebeurt door de vzw van de lokalen.
-      {rental.calendarUrl && <a href={rental.calendarUrl}>Bekijk de verhuurkalender</a>}
+      Houten lokalen op twee verdiepingen, met een keuken met kookmateriaal, drie toiletten en een ruime douche. Op een minuutje wandelen liggen de Konijnenberg
+      voor bosspelen en het Geiteblak voor pleinspelen.
     </p>
-    <p>Je vindt onze lokalen ook op <a href={rental.kampasUrl}>kampas.be</a>.</p>
   </InfoBlock>
-
-  {
-    (rental.email || rental.phone) && (
-      <InfoBlock title="Contact">
-        <ul>
-          {rental.email && (
-            <li>
-              Mail: <a href={`mailto:${rental.email}`}>{rental.email}</a>
-            </li>
-          )}
-          {rental.phone && (
-            <li>
-              Telefoon: <a href={`tel:${rental.phone.replace(/[^\d+]/g, '')}`}>{rental.phone}</a>
-            </li>
-          )}
-        </ul>
-      </InfoBlock>
-    )
-  }
 </ContentPage>

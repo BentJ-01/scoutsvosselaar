@@ -4,7 +4,7 @@
  * patterns that cannot be listed (e.g. /event/...) are handled by the script
  * in src/pages/404.astro.
  *
- * The full list of old URLs is in docs/huidige-site/inhoud.md, §1.
+ * The old pages are listed in docs/huidige-site/migratie-rapport.md (and inhoud.md, §1).
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { deployment } from '../deployment.config';
@@ -17,6 +17,19 @@ const fixed: Record<string, string> = {
   '/voskes/': '/voske/',
   '/lokalenverhuur/': '/verhuur/',
   '/corona-upd/': '/',
+  // Old section pages.
+  '/kapoenen/': '/takken/kapoenen/',
+  '/welpen/': '/takken/welpen/',
+  '/wolven/': '/takken/wolven/',
+  '/jongverkenners/': '/takken/jongverkenners/',
+  '/verkenners/': '/takken/verkenners/',
+  '/jin/': '/takken/jin/',
+  '/akabe/': '/takken/akabe/',
+  // Old photo pages that the 404 patterns do not cover.
+  '/kapoenenkamp-2022/': '/fotos/',
+  '/welpenkamp-essen-2022/': '/fotos/',
+  '/jong-verkennerkamp-herbeumont-2022/': '/fotos/',
+  '/akabekamp-2022/': '/fotos/',
 };
 
 /** Old post URLs (/<slug>/ → /berichten/<id>/), written by scripts/migrate-wp.ts. */

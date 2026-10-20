@@ -7,6 +7,8 @@ excerpt: Beste scouten, oud-scouten en sympathisanten, Op zaterdag 25 oktober
 coverImage: ../../assets/uploads/posts/2025-10-08-verkennerbar-1.webp
 pinned: false
 draft: false
+sections:
+  - verkenners
 ---
 
 Beste scouten, oud-scouten en sympathisanten,
@@ -22,5 +24,3 @@ Korte samenvatting:
 
 We zien jullie graag op 25 oktober!  
 De Verkenners Scouts Don Bosco Vosselaar
-
-![](../../assets/uploads/posts/2025-10-08-verkennerbar-1.webp)

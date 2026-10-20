@@ -1,51 +1,58 @@
 ---
-// Voorlopige tekst: vervangen door de tekst uit docs/huidige-site/inhoud.md (§2 en §7) zodra die er is.
+// Tekst: oude pagina's "Lid worden" en "Informatie" (docs/huidige-site/paginas/), opgeschoond.
 import ContentPage from '@/layouts/ContentPage.astro';
 import InfoBlock from '@/components/InfoBlock.astro';
 import { membership, site } from '@/site.config';
+import { url } from '@/lib/paths';
+
+const instructions = membership.medicalInstructionsUrl && url(membership.medicalInstructionsUrl);
 ---
 
-<ContentPage title="Inschrijven" description={`Lid worden van ${site.name}: lidgeld, betaling, UiTPAS en de medische fiche.`}>
-  <Fragment slot="intro">Zo schrijf je je kind in voor het werkjaar.</Fragment>
+<ContentPage title="Inschrijven" description={`Lid worden van ${site.name}: lidgeld, inschrijven via de groepsadministratie, UiTPAS en de medische fiche.`}>
+  <Fragment slot="intro">Inschrijven doe je elk werkjaar opnieuw, in twee stappen.</Fragment>
 
-  {
-    membership.registrationUrl && (
-      <p>
-        <a class="btn" href={membership.registrationUrl}>
-          Naar het inschrijfformulier
-        </a>
-      </p>
-    )
-  }
-
-  <InfoBlock title="Lidgeld">
-    <ul>
-      <li>Het lidgeld is <strong>{membership.fee} euro</strong> per jaar.</li>
-      <li>Met een UiTPAS en recht op verminderd tarief betaal je <strong>{membership.reducedFee} euro</strong>.</li>
-      <li>Word je lid na {membership.lateFrom}, dan betaal je <strong>{membership.lateFee} euro</strong>.</li>
-    </ul>
+  <InfoBlock title="In twee stappen">
+    <ol>
+      <li>
+        Schrijf het lidgeld over
+        {membership.bankAccount && <> naar <strong>{membership.bankAccount}</strong></>}
+        {membership.paymentReference && <>, met als mededeling <strong>'{membership.paymentReference}'</strong></>}.
+      </li>
+      <li>Vul het inschrijfformulier in en klik op verzenden.</li>
+    </ol>
     {
-      membership.bankAccount && (
+      membership.registrationUrl && (
         <p>
-          Stort het lidgeld op rekeningnummer <strong>{membership.bankAccount}</strong>
-          {membership.paymentReference && (
-            <>
-              {' '}
-              met als mededeling <strong>{membership.paymentReference}</strong>
-            </>
-          )}
-          .
+          <a class="btn" href={membership.registrationUrl}>
+            Naar het inschrijfformulier
+          </a>
         </p>
       )
     }
+    <p>Loopt er iets mis of heb je een vraag? Mail de groepsleiding op <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
+  </InfoBlock>
+
+  <InfoBlock title="Lidgeld">
+    <ul>
+      <li>Het lidgeld is <strong>{membership.fee} euro</strong>.</li>
+      <li>Jongeren met een UiTPAS en recht op verminderd tarief betalen <strong>{membership.reducedFee} euro</strong>.</li>
+      <li>Wie zich inschrijft na {membership.lateFrom}, betaalt <strong>{membership.lateFee} euro</strong>.</li>
+    </ul>
   </InfoBlock>
 
   <InfoBlock title="UiTPAS Kempen">
-    <p>Met een UiTPAS Kempen spaar je punten bij elke activiteit. Heb je recht op verminderd tarief, dan betaal je een lager lidgeld.</p>
+    <p>
+      Sinds 2026 doet {site.name} mee met de UiTPAS Kempen. Bij elke inschrijving voor een activiteit die geld kost (bv. kampen, weekends of kerstfeestjes)
+      kan je aanduiden dat je een UiTPAS hebt. Zo spaar je punten, en wie recht heeft op een kansentarief krijgt alle voordelen die daarbij horen.
+    </p>
   </InfoBlock>
 
   <InfoBlock title="Medische fiche">
-    <p>De medische fiche vul je in via de groepsadministratie van Scouts en Gidsen Vlaanderen. Zo heeft de leiding de juiste info bij de hand, op vergaderingen en op kamp.</p>
-    {membership.medicalInstructionsUrl && <p><a href={membership.medicalInstructionsUrl}>Bekijk de uitleg stap voor stap</a></p>}
+    <p>
+      De medische fiche staat volledig online, in de groepsadministratie van Scouts en Gidsen Vlaanderen. Na je inschrijving krijg je een lidnummer. Daarmee
+      maak je een account aan in de groepsadministratie, waar je de gegevens van je kind invult en aanpast als dat nodig is. Je houdt ze dus zelf up-to-date.
+    </p>
+    {instructions && <p><a href={instructions}>Stappenplan: account aanmaken en medische fiche invullen (PDF)</a></p>}
+    <p>Ben je de mail met je lidnummer kwijt? Mail de naam van je kind naar <a href={`mailto:${site.email}`}>{site.email}</a>.</p>
   </InfoBlock>
 </ContentPage>

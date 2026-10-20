@@ -16,7 +16,7 @@ export const site = {
   district: 'District Noorderkempen',
   email: 'info@scoutsvosselaar.be',
   address: {
-    street: undefined as Maybe,
+    street: 'Konijnenbergpad 2Y' as Maybe,
     postalCode: '2350',
     city: 'Vosselaar',
   },
@@ -30,18 +30,18 @@ export const membership = {
   /** For members who join after `lateFrom`. */
   lateFee: 30,
   lateFrom: '1 maart',
-  bankAccount: undefined as Maybe,
-  paymentReference: undefined as Maybe,
+  bankAccount: 'BE55 3630 5784 1544' as Maybe,
+  paymentReference: 'lidgeld naam voornaam tak' as Maybe,
   /** External registration form or document. */
-  registrationUrl: undefined as Maybe,
+  registrationUrl: 'https://groepsadmin.scoutsengidsenvlaanderen.be/groepsadmin/frontend/formulier/lidworden/A4108G' as Maybe,
   /** Instructions for the medical form in the Scouts en Gidsen Vlaanderen administration. */
-  medicalInstructionsUrl: undefined as Maybe,
+  medicalInstructionsUrl: '/docs/handleiding-medische-fiche.pdf' as Maybe,
 };
 
 /** Renting the premises (page /verhuur/). */
 export const rental = {
   maxPeople: 50,
-  email: undefined as Maybe,
+  email: 'vzwjeugdwerkingvosselaar@gmail.com' as Maybe,
   phone: undefined as Maybe,
   calendarUrl: undefined as Maybe,
   kampasUrl: 'https://www.kampas.be',
@@ -49,9 +49,9 @@ export const rental = {
 
 /** Other addresses and documents. */
 export const extra = {
-  smoutebollenbakEmail: undefined as Maybe,
+  smoutebollenbakEmail: 'smoutebollenbak@scoutsvosselaar.be' as Maybe,
   /** Privacy statement as a file in public/docs/. */
-  privacyPdf: undefined as Maybe,
+  privacyPdf: '/docs/privacyverklaring.pdf' as Maybe,
 };
 
 export interface NavItem {
