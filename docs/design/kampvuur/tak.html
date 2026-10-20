@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welpen | Mockup Kampvuur</title>
+<style>
+
+      @font-face { font-family: 'Fraunces'; src: url(../fonts/fraunces-latin-full-normal.woff2) format('woff2'); font-weight: 100 900; font-display: swap; }
+      @font-face { font-family: 'Inter'; src: url(../fonts/inter-latin-wght-normal.woff2) format('woff2'); font-weight: 100 900; font-display: swap; }
+      @font-face { font-family: 'Caveat'; src: url(../fonts/caveat-latin-700-normal.woff2) format('woff2'); font-weight: 700; font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; line-height: 1.55; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.1; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+:focus-visible { outline: 3px solid #f2b92c; outline-offset: 2px; }
+.wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+.stack > * + * { margin-top: clamp(40px, 6vw, 72px); }
+.stack { padding-block: clamp(32px, 5vw, 64px); }
+.mock-banner { margin: 0; padding: 8px 16px; font: 600 13px/1.4 system-ui, sans-serif; background: #111; color: #fff; text-align: center; }
+.site-header { position: sticky; top: 0; z-index: 10; }
+.header-row { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.brand { text-decoration: none; margin-right: auto; }
+.nav.desktop { display: none; }
+.nav ul { display: flex; gap: 2px; flex-wrap: wrap; }
+.nav a { display: block; padding: 8px 10px; text-decoration: none; border-radius: 6px; }
+.quick { display: flex; gap: 8px; align-items: center; }
+.menu-btn { width: 40px; height: 40px; border: 0; border-radius: 10px; background: rgb(127 127 127 / .18); color: inherit; font-size: 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; text-decoration: none; }
+.btn.small { min-height: 38px; padding: 6px 14px; font-size: .9rem; }
+@media (min-width: 1100px) { .nav.desktop { display: block; } .quick { display: none; } }
+.hero { position: relative; padding-block: clamp(36px, 7vw, 96px); overflow-x: clip; }
+main { overflow-x: clip; }
+.hero-grid { position: relative; display: grid; gap: 32px; align-items: center; }
+@media (min-width: 860px) { .hero-grid { grid-template-columns: 1.05fr 1fr; } }
+.hero-text > * + * { margin-top: 18px; }
+.hero p { max-width: 34em; font-size: 1.1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-photo { position: relative; overflow: visible; }
+.hero-photo svg { width: 100%; height: auto; aspect-ratio: 10 / 7; border-radius: inherit; }
+.hero-photo.small svg { aspect-ratio: 16 / 10; }
+.pinned { padding: clamp(20px, 4vw, 36px); }
+.pinned > * + * { margin-top: 12px; }
+.label { font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
+.two-col { display: grid; gap: 48px; }
+@media (min-width: 960px) { .two-col { grid-template-columns: 1fr 1.1fr; } }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.section-head a { font-weight: 700; }
+.events { display: grid; gap: 14px; }
+.event { display: flex; gap: 16px; padding: 14px; align-items: center; }
+.date-badge { flex: none; width: 68px; display: grid; justify-items: center; padding: 8px 4px; line-height: 1; }
+.date-badge .wd, .date-badge .m { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.date-badge .d { font-size: 1.9rem; font-weight: 800; margin-block: 2px; }
+.event h3 { font-size: 1.2rem; }
+.meta { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { font-size: .78rem; font-weight: 700; padding: 3px 10px; background: color-mix(in srgb, var(--c) 16%, white); color: color-mix(in srgb, var(--c) 75%, black); }
+.posts { display: grid; gap: 18px; }
+.post { display: grid; grid-template-columns: 120px 1fr; }
+.post .cover svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.card-body { padding: 14px 16px; }
+.card-body h3 { font-size: 1.1rem; margin-top: 2px; }
+.card-body p:last-child { margin-top: 6px; font-size: .95rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (min-width: 600px) { .post { grid-template-columns: 180px 1fr; } }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 700px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1100px) { .tiles { grid-template-columns: repeat(7, 1fr); } }
+.tile { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; min-height: 130px; padding: 16px; background: var(--c); text-decoration: none; }
+.tile-name { font-weight: 800; font-size: 1.2rem; line-height: 1.1; }
+.tile-age { font-size: .85rem; opacity: .92; }
+.leaders { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px; }
+@media (min-width: 700px) { .leaders { grid-template-columns: repeat(4, 1fr); } .leaders.big { grid-template-columns: repeat(6, 1fr); } }
+.leader { display: grid; justify-items: center; align-content: start; text-align: center; gap: 4px; position: relative; }
+.avatar { width: 88px; height: 88px; display: grid; place-items: center; background: var(--c); color: #fff; font-size: 1.6rem; font-weight: 800; }
+.leader .name { font-weight: 700; }
+.leader .totem { color: var(--muted); font-style: italic; font-size: .92rem; }
+.lead-badge { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; background: var(--ink); color: #fff; }
+.site-footer { padding-block: 40px; margin-top: 24px; }
+.footer-grid { display: grid; gap: 20px; }
+@media (min-width: 700px) { .footer-grid { grid-template-columns: 2fr 1.5fr 1fr; } }
+.section-hero { padding-block: 28px 44px; background: var(--c) !important; color: #fff; }
+.theme-veldgids .section-hero { background: linear-gradient(transparent 0 0) !important; color: var(--ink); border-bottom: 6px solid var(--c); }
+.crumbs { font-size: .9rem; opacity: .85; margin-bottom: 18px; }
+.section-hero h1 { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 800; }
+.section-hero-grid { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 860px) { .section-hero-grid { grid-template-columns: 1fr 1fr; } }
+.facts { display: grid; gap: 10px; margin: 20px 0 0; }
+.facts div { display: grid; grid-template-columns: 110px 1fr; gap: 8px; }
+.facts dt { font-weight: 800; text-transform: uppercase; font-size: .8rem; letter-spacing: .08em; opacity: .85; padding-top: 3px; }
+.facts dd { margin: 0; font-size: 1.1rem; font-weight: 600; }
+.blocks { display: grid; gap: 18px; }
+@media (min-width: 860px) { .blocks { grid-template-columns: repeat(3, 1fr); } }
+.block { padding: 22px; border-top: 6px solid var(--c) !important; }
+.block p { margin-top: 10px; }
+.theme-veldgids .tile-name { font-family: 'Barlow Condensed'; text-transform: uppercase; font-size: 1.5rem; }
+.theme-das .tile-name { font-family: 'Bricolage Grotesque'; font-size: 1.35rem; }
+.theme-kampvuur .tile-name { font-family: 'Fraunces', serif; font-size: 1.35rem; }
+
+
+      :root { --ink: #231a14; --muted: #6b5a4c; --paper: #f7f0e4; --card: #fffaf2; --line: #e5d8c3; --night: #1b2a24; --night-2: #26392f; --ember: #e0782f; --brand: #8c1d2c; --radius: 14px; }
+      body { font-family: 'Inter', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+      h1, h2, h3, .brand { font-family: 'Fraunces', Georgia, serif; font-optical-sizing: auto; }
+      h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.01em; }
+      .hand { font-family: 'Caveat', cursive; color: var(--ember); font-size: 1.5rem; }
+      .site-header { background: var(--night); color: #f3e8d6; }
+      .brand { font-weight: 800; font-size: 1.15rem; line-height: 1.05; }
+      .brand small { display: block; font-family: 'Inter', sans-serif; font-weight: 500; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: #d7b98f; }
+      .nav a { color: #f3e8d6; } .nav a[aria-current] { color: #ffd59a; box-shadow: inset 0 -2px #e0782f; }
+      .btn { background: var(--ember); color: #1d130c; border-radius: 999px; font-weight: 700; }
+      .btn.ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 2px currentColor; }
+      .hero { background: var(--night); color: #fbf1e1; }
+      .hero h1 { font-size: clamp(2.6rem, 7vw, 5rem); font-weight: 800; line-height: .95; letter-spacing: -0.02em; }
+      .hero h1 em { font-style: italic; color: #ffb565; font-weight: 600; }
+      .hero p { color: #e2d3bd; }
+      .hero-photo { border-radius: 22px 22px 22px 4px; box-shadow: 0 30px 60px -20px rgb(0 0 0 / .6); }
+      .pinned { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--brand); border-radius: var(--radius); }
+      .pinned .label { color: var(--brand); }
+      .event { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+      .date-badge { background: var(--night); color: #ffd59a; border-radius: 10px; font-family: 'Fraunces', serif; }
+      .card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden; }
+      .tile { border-radius: var(--radius); color: #fff; }
+      .chip { border-radius: 999px; }
+      .site-footer { background: var(--night); color: #d9c8b0; }
+      .section-hero { background: var(--night); color: #fbf1e1; }
+      .block { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+      .block h2 { font-size: 1.5rem; }
+      .leader .avatar { border-radius: 50%; font-family: 'Fraunces', serif; }
+      .divider { height: 28px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 28'%3E%3Cpath d='M0 20 Q 25 4 50 18 T 100 16 T 150 20 T 200 14' fill='none' stroke='%23e0782f' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") center / 200px 28px no-repeat; }
+    
+</style>
+</head>
+<body class="theme-kampvuur">
+<p class="mock-banner">Mockup richting <strong>Kampvuur</strong>: Warm en avondlijk: dennen, gloed en een klassieke serif. Teksten zijn voorbeeldtekst.</p>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html">Scouts Don Bosco<br>Vosselaar<small>Scouting? DAS Goesting!</small></a>
+    <nav class="nav desktop" aria-label="Hoofdmenu"><ul><li><a href="index.html">Home</a></li><li><a href="index.html">Kalender</a></li><li><a href="tak.html" aria-current="page">Takken</a></li><li><a href="index.html">Leiding</a></li><li><a href="index.html">Foto's</a></li><li><a href="index.html">'t Voske</a></li><li><a href="index.html">Inschrijven</a></li><li><a href="index.html">Praktisch</a></li><li><a href="index.html">Verhuur</a></li><li><a href="index.html">Onze groep</a></li></ul></nav>
+    <div class="quick"><a class="btn small" href="#kalender">Kalender</a><a class="btn small ghost" href="#">Inschrijven</a><button class="menu-btn" type="button" aria-label="Menu">☰</button></div>
+  </div>
+</header>
+<main>
+
+<section class="section-hero" style="--c:#5f8f3e">
+  <div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / <a href="index.html">Takken</a> / Welpen</p>
+    <div class="section-hero-grid">
+      <div>
+        <h1>Welpen</h1>
+        <dl class="facts">
+          <div><dt>Leeftijd</dt><dd>8 tot 10 jaar</dd></div>
+          <div><dt>Vergaderen</dt><dd>Zondag 14u tot 16u30</dd></div>
+          <div><dt>Mail</dt><dd><a href="mailto:welpen@scoutsvosselaar.be">welpen@scoutsvosselaar.be</a></dd></div>
+        </dl>
+      </div>
+      <div class="hero-photo small">
+      <svg viewBox="0 0 640 400" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <radialGradient id="glowt" cx="50%" cy="85%" r="60%"><stop offset="0" stop-color="#ffb04a" stop-opacity=".85"/><stop offset=".4" stop-color="#c8562b" stop-opacity=".35"/><stop offset="1" stop-color="#1b2a24" stop-opacity="0"/></radialGradient>
+          <linearGradient id="skyt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22362d"/><stop offset="1" stop-color="#3b2b22"/></linearGradient>
+        </defs>
+        <rect width="640" height="400" fill="url(#skyt)"/>
+        <rect width="640" height="400" fill="url(#glowt)"/>
+        <path d="M-11 160 L7.48 208.4 L0.8272000000000013 208.4 L11.915199999999999 248 L-33.9152 248 L-22.8272 208.4 L-29.48 208.4Z" fill="#14201b"/><path d="M67 152 L87.16 204.8 L79.9024 204.8 L91.9984 248 L42.001599999999996 248 L54.0976 204.8 L46.84 204.8Z" fill="#14201b"/><path d="M122 144 L143.84 201.2 L135.9776 201.2 L149.0816 248 L94.9184 248 L108.0224 201.2 L100.16 201.2Z" fill="#14201b"/><path d="M200 136 L223.52 197.6 L215.0528 197.6 L229.1648 248 L170.8352 248 L184.9472 197.6 L176.48 197.6Z" fill="#14201b"/><path d="M255 128 L280.2 194 L271.128 194 L286.248 248 L223.752 248 L238.872 194 L229.8 194Z" fill="#14201b"/><path d="M310 120 L336.88 190.4 L327.2032 190.4 L343.33119999999997 248 L276.66880000000003 248 L292.7968 190.4 L283.12 190.4Z" fill="#14201b"/><path d="M388 112 L416.56 186.8 L406.2784 186.8 L423.4144 248 L352.5856 248 L369.7216 186.8 L359.44 186.8Z" fill="#14201b"/><path d="M443 104 L473.24 183.2 L462.35360000000003 183.2 L480.4976 248 L405.5024 248 L423.64639999999997 183.2 L412.76 183.2Z" fill="#14201b"/><path d="M521 96 L552.92 179.6 L541.4288 179.6 L560.5808 248 L481.4192 248 L500.5712 179.6 L489.08 179.6Z" fill="#14201b"/><path d="M576 156 L595.32 206.6 L588.3648 206.6 L599.9568 248 L552.0432 248 L563.6352 206.6 L556.68 206.6Z" fill="#14201b"/><path d="M631 148 L652 203 L644.44 203 L657.04 248 L604.96 248 L617.56 203 L610 203Z" fill="#14201b"/><rect x="0" y="247" width="640" height="400" fill="#14201b"/>
+        <path d="M-11 232 L7.48 280.4 L0.8272000000000013 280.4 L11.915199999999999 320 L-33.9152 320 L-22.8272 280.4 L-29.48 280.4Z" fill="#0e1713"/><path d="M109.66666666666667 224 L129.82666666666668 276.8 L122.56906666666667 276.8 L134.66506666666666 320 L84.66826666666667 320 L96.76426666666667 276.8 L89.50666666666667 276.8Z" fill="#0e1713"/><path d="M207.33333333333334 216 L229.17333333333335 273.2 L221.31093333333334 273.2 L234.41493333333335 320 L180.25173333333333 320 L193.35573333333335 273.2 L185.49333333333334 273.2Z" fill="#0e1713"/><path d="M328 208 L351.52 269.6 L343.0528 269.6 L357.1648 320 L298.8352 320 L312.9472 269.6 L304.48 269.6Z" fill="#0e1713"/><path d="M425.6666666666667 200 L450.8666666666667 266 L441.79466666666667 266 L456.9146666666667 320 L394.4186666666667 320 L409.5386666666667 266 L400.4666666666667 266Z" fill="#0e1713"/><path d="M523.3333333333334 192 L550.2133333333334 262.4 L540.5365333333334 262.4 L556.6645333333333 320 L490.0021333333334 320 L506.1301333333334 262.4 L496.4533333333334 262.4Z" fill="#0e1713"/><path d="M644 184 L672.56 258.8 L662.2784 258.8 L679.4144 320 L608.5856 320 L625.7216 258.8 L615.44 258.8Z" fill="#0e1713"/><rect x="0" y="319" width="640" height="400" fill="#0e1713"/>
+        <g transform="translate(320 344)"><path d="M-46 10 L46 -6 M-46 -6 L46 10" stroke="#3a2416" stroke-width="10" stroke-linecap="round"/><path d="M0 -70 C 22 -40 30 -20 0 0 C -30 -20 -18 -44 0 -70Z" fill="#ffb04a"/><path d="M0 -40 C 10 -26 12 -14 0 -2 C -12 -14 -8 -28 0 -40Z" fill="#fff1c9"/></g>
+        <text x="24" y="378" fill="#f3e8d6" opacity=".7" font-family="Inter, sans-serif" font-size="15">Groepsfoto van het werkjaar</text>
+      </svg></div>
+    </div>
+  </div>
+</section>
+<div class="wrap stack">
+  <div class="blocks">
+    <section class="block" style="--c:#5f8f3e"><h2>Wie?</h2><p>De welpen zijn jongens en meisjes van 8 tot 10 jaar. Ze leven in een groep waarin iedereen meetelt en samen speelt.</p></section>
+    <section class="block" style="--c:#5f8f3e"><h2>Wat?</h2><p>Elke zondag spelen we in het bos, bouwen we hutten en trekken we op avontuur. Af en toe is er een weekend of een uitstap.</p></section>
+    <section class="block" style="--c:#5f8f3e"><h2>Kamp?</h2><p>In de zomer trekken de welpen tien dagen op kamp. Daar leren ze koken op vuur, slapen ze in tenten en maken ze herinneringen voor het leven.</p></section>
+  </div>
+
+  <section aria-labelledby="leiding-title">
+    <div class="section-head"><h2 id="leiding-title">Leiding 2026-2027</h2></div>
+    <ul class="leaders big"><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span><span class="lead-badge">Takleiding</span></li><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span><span class="lead-badge">Takleiding</span></li><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span></li><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span></li><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span></li><li class="leader"><span class="avatar" style="--c:#5f8f3e">VN</span><span class="name">Voornaam Naam</span><span class="totem">Totem</span></li></ul>
+  </section>
+
+  <section aria-labelledby="tak-events">
+    <div class="section-head"><h2 id="tak-events">Binnenkort bij de welpen</h2><a href="#">Abonneer in je agenda →</a></div>
+    <ul class="events"><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">24</span><span class="m">okt</span></div>
+        <div class="event-body"><h3>Halloweentocht</h3><p class="meta">18u tot 21u · Lokaal</p><p class="chips"><span class="chip" style="--c:#e8a33d">Kapoenen</span><span class="chip" style="--c:#5f8f3e">Welpen</span><span class="chip" style="--c:#3f7f7a">Wolven</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">14</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Spaghettiavond</h3><p class="meta">vanaf 17u · Parochiezaal · €12</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">zo</span><span class="d">22</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Sinterklaasvergadering</h3><p class="meta">14u tot 16u30 · Lokaal</p><p class="chips"><span class="chip" style="--c:#e8a33d">Kapoenen</span><span class="chip" style="--c:#5f8f3e">Welpen</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">vr</span><span class="d">11</span><span class="m">dec</span></div>
+        <div class="event-body"><h3>Kerstmarkt Vosselaar</h3><p class="meta">17u tot 22u · Markt</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li></ul>
+  </section>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><p class="brand">Scouts Don Bosco Vosselaar</p><p>Groep A4108G · Scouts en Gidsen Vlaanderen</p></div>
+    <div><p>Adres van het lokaal</p><p><a href="#">info@scoutsvosselaar.be</a></p></div>
+    <div><p><a href="#">Inschrijven</a></p><p><a href="#">Privacy</a></p></div>
+  </div>
+</footer>
+</body>
+</html>

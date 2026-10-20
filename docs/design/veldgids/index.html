@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="nl-BE">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home | Mockup Veldgids</title>
+<style>
+
+      @font-face { font-family: 'Barlow Condensed'; src: url(../fonts/barlow-condensed-latin-800-normal.woff2) format('woff2'); font-weight: 800; font-display: swap; }
+      @font-face { font-family: 'Barlow Condensed'; src: url(../fonts/barlow-condensed-latin-600-normal.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+      @font-face { font-family: 'Barlow'; src: url(../fonts/barlow-latin-400-normal.woff2) format('woff2'); font-weight: 400; font-display: swap; }
+      @font-face { font-family: 'Barlow'; src: url(../fonts/barlow-latin-600-normal.woff2) format('woff2'); font-weight: 600; font-display: swap; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; line-height: 1.55; }
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.1; }
+p { margin: 0; }
+ul { list-style: none; margin: 0; padding: 0; }
+:focus-visible { outline: 3px solid #f2b92c; outline-offset: 2px; }
+.wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+.stack > * + * { margin-top: clamp(40px, 6vw, 72px); }
+.stack { padding-block: clamp(32px, 5vw, 64px); }
+.mock-banner { margin: 0; padding: 8px 16px; font: 600 13px/1.4 system-ui, sans-serif; background: #111; color: #fff; text-align: center; }
+.site-header { position: sticky; top: 0; z-index: 10; }
+.header-row { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+.brand { text-decoration: none; margin-right: auto; }
+.nav.desktop { display: none; }
+.nav ul { display: flex; gap: 2px; flex-wrap: wrap; }
+.nav a { display: block; padding: 8px 10px; text-decoration: none; border-radius: 6px; }
+.quick { display: flex; gap: 8px; align-items: center; }
+.menu-btn { width: 40px; height: 40px; border: 0; border-radius: 10px; background: rgb(127 127 127 / .18); color: inherit; font-size: 20px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 20px; text-decoration: none; }
+.btn.small { min-height: 38px; padding: 6px 14px; font-size: .9rem; }
+@media (min-width: 1100px) { .nav.desktop { display: block; } .quick { display: none; } }
+.hero { position: relative; padding-block: clamp(36px, 7vw, 96px); overflow-x: clip; }
+main { overflow-x: clip; }
+.hero-grid { position: relative; display: grid; gap: 32px; align-items: center; }
+@media (min-width: 860px) { .hero-grid { grid-template-columns: 1.05fr 1fr; } }
+.hero-text > * + * { margin-top: 18px; }
+.hero p { max-width: 34em; font-size: 1.1rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-photo { position: relative; overflow: visible; }
+.hero-photo svg { width: 100%; height: auto; aspect-ratio: 10 / 7; border-radius: inherit; }
+.hero-photo.small svg { aspect-ratio: 16 / 10; }
+.pinned { padding: clamp(20px, 4vw, 36px); }
+.pinned > * + * { margin-top: 12px; }
+.label { font-weight: 800; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
+.two-col { display: grid; gap: 48px; }
+@media (min-width: 960px) { .two-col { grid-template-columns: 1fr 1.1fr; } }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+.section-head a { font-weight: 700; }
+.events { display: grid; gap: 14px; }
+.event { display: flex; gap: 16px; padding: 14px; align-items: center; }
+.date-badge { flex: none; width: 68px; display: grid; justify-items: center; padding: 8px 4px; line-height: 1; }
+.date-badge .wd, .date-badge .m { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+.date-badge .d { font-size: 1.9rem; font-weight: 800; margin-block: 2px; }
+.event h3 { font-size: 1.2rem; }
+.meta { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chip { font-size: .78rem; font-weight: 700; padding: 3px 10px; background: color-mix(in srgb, var(--c) 16%, white); color: color-mix(in srgb, var(--c) 75%, black); }
+.posts { display: grid; gap: 18px; }
+.post { display: grid; grid-template-columns: 120px 1fr; }
+.post .cover svg { height: 100%; width: 100%; aspect-ratio: auto; }
+.card-body { padding: 14px 16px; }
+.card-body h3 { font-size: 1.1rem; margin-top: 2px; }
+.card-body p:last-child { margin-top: 6px; font-size: .95rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (min-width: 600px) { .post { grid-template-columns: 180px 1fr; } }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+@media (min-width: 700px) { .tiles { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1100px) { .tiles { grid-template-columns: repeat(7, 1fr); } }
+.tile { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; min-height: 130px; padding: 16px; background: var(--c); text-decoration: none; }
+.tile-name { font-weight: 800; font-size: 1.2rem; line-height: 1.1; }
+.tile-age { font-size: .85rem; opacity: .92; }
+.leaders { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 20px; }
+@media (min-width: 700px) { .leaders { grid-template-columns: repeat(4, 1fr); } .leaders.big { grid-template-columns: repeat(6, 1fr); } }
+.leader { display: grid; justify-items: center; align-content: start; text-align: center; gap: 4px; position: relative; }
+.avatar { width: 88px; height: 88px; display: grid; place-items: center; background: var(--c); color: #fff; font-size: 1.6rem; font-weight: 800; }
+.leader .name { font-weight: 700; }
+.leader .totem { color: var(--muted); font-style: italic; font-size: .92rem; }
+.lead-badge { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 2px 8px; border-radius: 999px; background: var(--ink); color: #fff; }
+.site-footer { padding-block: 40px; margin-top: 24px; }
+.footer-grid { display: grid; gap: 20px; }
+@media (min-width: 700px) { .footer-grid { grid-template-columns: 2fr 1.5fr 1fr; } }
+.section-hero { padding-block: 28px 44px; background: var(--c) !important; color: #fff; }
+.theme-veldgids .section-hero { background: linear-gradient(transparent 0 0) !important; color: var(--ink); border-bottom: 6px solid var(--c); }
+.crumbs { font-size: .9rem; opacity: .85; margin-bottom: 18px; }
+.section-hero h1 { font-size: clamp(3rem, 9vw, 5.5rem); font-weight: 800; }
+.section-hero-grid { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 860px) { .section-hero-grid { grid-template-columns: 1fr 1fr; } }
+.facts { display: grid; gap: 10px; margin: 20px 0 0; }
+.facts div { display: grid; grid-template-columns: 110px 1fr; gap: 8px; }
+.facts dt { font-weight: 800; text-transform: uppercase; font-size: .8rem; letter-spacing: .08em; opacity: .85; padding-top: 3px; }
+.facts dd { margin: 0; font-size: 1.1rem; font-weight: 600; }
+.blocks { display: grid; gap: 18px; }
+@media (min-width: 860px) { .blocks { grid-template-columns: repeat(3, 1fr); } }
+.block { padding: 22px; border-top: 6px solid var(--c) !important; }
+.block p { margin-top: 10px; }
+.theme-veldgids .tile-name { font-family: 'Barlow Condensed'; text-transform: uppercase; font-size: 1.5rem; }
+.theme-das .tile-name { font-family: 'Bricolage Grotesque'; font-size: 1.35rem; }
+.theme-kampvuur .tile-name { font-family: 'Fraunces', serif; font-size: 1.35rem; }
+
+
+      :root { --ink: #22281f; --muted: #5a5e4e; --paper: #efe4cf; --card: #f8f1e2; --line: #cdbb98; --forest: #2f4a2c; --brand: #8e2433; --radius: 4px; }
+      body { font-family: 'Barlow', system-ui, sans-serif; background: var(--paper) url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'600'%20height%3D'600'%20viewBox%3D'0%200%20600%20600'%20fill%3D'none'%20stroke%3D'%23d8c7a6'%20stroke-width%3D'1.4'%3E%3Cpath%20d%3D'M-20%2070%20C%20120%2030%20220%20120%20330%2070%20S%20520%2020%20640%2080'%2F%3E%3Cpath%20d%3D'M-20%20130%20C%20120%2094%20220%20175%20330%20132%20S%20520%2086%20640%20138'%2F%3E%3Cpath%20d%3D'M-20%20190%20C%20120%20158%20220%20230%20330%20194%20S%20520%20152%20640%20196'%2F%3E%3Cpath%20d%3D'M-20%20250%20C%20120%20222%20220%20285%20330%20256%20S%20520%20218%20640%20254'%2F%3E%3Cpath%20d%3D'M-20%20310%20C%20120%20286%20220%20340%20330%20318%20S%20520%20284%20640%20312'%2F%3E%3Cpath%20d%3D'M-20%20370%20C%20120%20350%20220%20395%20330%20380%20S%20520%20350%20640%20370'%2F%3E%3Cpath%20d%3D'M-20%20430%20C%20120%20414%20220%20450%20330%20442%20S%20520%20416%20640%20428'%2F%3E%3Cpath%20d%3D'M-20%20490%20C%20120%20478%20220%20505%20330%20504%20S%20520%20482%20640%20486'%2F%3E%3Cpath%20d%3D'M-20%20550%20C%20120%20542%20220%20560%20330%20566%20S%20520%20548%20640%20544'%2F%3E%3Cellipse%20cx%3D'430'%20cy%3D'170'%20rx%3D'60'%20ry%3D'34'%2F%3E%3Cellipse%20cx%3D'430'%20cy%3D'170'%20rx%3D'34'%20ry%3D'18'%2F%3E%3C%2Fsvg%3E"); color: var(--ink); font-size: 1.05rem; }
+      h1, h2, h3, .brand, .date-badge, .btn, .label, .nav a { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; letter-spacing: .02em; }
+      h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); font-weight: 800; }
+      h2::before { content: ''; display: inline-block; width: .55em; height: .55em; margin-right: .3em; border: 3px solid var(--brand); border-radius: 50%; vertical-align: .05em; }
+      .site-header { background: var(--forest); color: #f1e8d5; border-bottom: 4px solid var(--brand); }
+      .brand { font-weight: 800; font-size: 1.35rem; line-height: .95; }
+      .brand small { display: block; font-weight: 600; font-size: .8rem; letter-spacing: .2em; color: #c9d6a8; }
+      .nav a { color: #f1e8d5; font-weight: 600; font-size: 1.05rem; } .nav a[aria-current] { background: #f1e8d5; color: var(--forest); }
+      .btn { background: var(--brand); color: #fff; border-radius: 3px; font-weight: 800; font-size: 1.1rem; box-shadow: 3px 3px 0 #22281f; }
+      .btn.ghost { background: #f8f1e2; color: var(--ink); }
+      .hero { background: transparent; color: var(--ink); }
+      .hero h1 { font-size: clamp(3rem, 9vw, 6.4rem); font-weight: 800; line-height: .86; }
+      .hero h1 em { font-style: normal; color: var(--brand); display: block; }
+      .hero p { color: var(--muted); font-size: 1.15rem; }
+      .hero-photo { border: 10px solid #fffaf0; box-shadow: 0 18px 30px -12px rgb(40 30 10 / .45); transform: rotate(1.5deg); border-radius: 2px; }
+      .hero-photo::after { content: 'Groepsfoto 2026-2027'; position: absolute; left: 50%; bottom: -26px; transform: translateX(-50%) rotate(-2deg); background: #f3d36b; padding: 4px 14px; font-family: 'Barlow Condensed'; font-weight: 600; text-transform: uppercase; box-shadow: 1px 2px 4px rgb(0 0 0 / .2); }
+      .pinned { background: var(--card); border: 2px dashed var(--brand); border-radius: var(--radius); }
+      .pinned .label { background: var(--brand); color: #fff; padding: 2px 10px; transform: rotate(-2deg); display: inline-block; }
+      .event { background: var(--card); border: 2px solid var(--ink); border-radius: var(--radius); box-shadow: 4px 4px 0 var(--line); }
+      .date-badge { background: transparent; color: var(--brand); border: 3px solid var(--brand); border-radius: 50%; aspect-ratio: 1; transform: rotate(-8deg); }
+      .card { background: var(--card); border: 2px solid var(--ink); border-radius: var(--radius); overflow: hidden; }
+      .tile { border-radius: var(--radius); color: #fff; box-shadow: 4px 4px 0 var(--ink); }
+      .tile::after { content: ''; position: absolute; right: -18px; bottom: -18px; width: 90px; height: 90px; border: 3px dashed rgb(255 255 255 / .45); border-radius: 50%; }
+      .chip { border-radius: 2px; font-family: 'Barlow Condensed'; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+      .site-footer { background: var(--forest); color: #dfe3c6; }
+      .section-hero { background: transparent; }
+      .block { background: var(--card); border: 2px solid var(--ink); border-radius: var(--radius); }
+      .block h2 { font-size: 1.8rem; }
+      .leader .avatar { border-radius: 50%; border: 3px solid #fffaf0; box-shadow: 0 0 0 2px var(--ink); font-family: 'Barlow Condensed'; font-weight: 800; }
+      .divider { height: 16px; background: repeating-linear-gradient(90deg, var(--ink) 0 14px, transparent 14px 24px) center / 100% 3px no-repeat; }
+    
+</style>
+</head>
+<body class="theme-veldgids">
+<p class="mock-banner">Mockup richting <strong>Veldgids</strong>: Kraftpapier, hoogtelijnen en stempels: een scoutshandboek in de bus. Teksten zijn voorbeeldtekst.</p>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="index.html">Scouts Don Bosco<br>Vosselaar<small>Scouting? DAS Goesting!</small></a>
+    <nav class="nav desktop" aria-label="Hoofdmenu"><ul><li><a href="index.html" aria-current="page">Home</a></li><li><a href="index.html">Kalender</a></li><li><a href="tak.html">Takken</a></li><li><a href="index.html">Leiding</a></li><li><a href="index.html">Foto's</a></li><li><a href="index.html">'t Voske</a></li><li><a href="index.html">Inschrijven</a></li><li><a href="index.html">Praktisch</a></li><li><a href="index.html">Verhuur</a></li><li><a href="index.html">Onze groep</a></li></ul></nav>
+    <div class="quick"><a class="btn small" href="#kalender">Kalender</a><a class="btn small ghost" href="#">Inschrijven</a><button class="menu-btn" type="button" aria-label="Menu">☰</button></div>
+  </div>
+</header>
+<main>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <p class="hand">Welkom bij de scouts!</p>
+      <h1>Scouting?<br><em>DAS Goesting!</em></h1>
+      <p>Elke zondag spelen, bouwen en op avontuur trekken in Vosselaar. Voor iedereen van 6 tot 17 jaar, en met Akabe ook voor kinderen en jongeren met een beperking.</p>
+      <p class="actions"><a class="btn" href="#kalender">Bekijk de kalender</a><a class="btn ghost" href="#">Word lid</a></p>
+    </div>
+    <div class="hero-photo">
+      <svg viewBox="0 0 800 560" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="vsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9c6c8"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient></defs>
+        <rect width="800" height="560" fill="url(#vsky)"/>
+        <circle cx="624" cy="156.8" r="67.2" fill="#f6d77a"/>
+        <path d="M0 392 Q 200 280 400 380.8 T 800 336 V 560 H 0Z" fill="#7d9a5a"/>
+        <path d="M-11 280 L14.872 347.76 L5.55808 347.76 L21.08128 403.2 L-43.08128 403.2 L-27.55808 347.76 L-36.872 347.76Z" fill="#3d5a33"/><path d="M103 268.79999999999995 L131.224 342.71999999999997 L121.06336 342.71999999999997 L137.99776 403.2 L68.00224 403.2 L84.93664 342.71999999999997 L74.776 342.71999999999997Z" fill="#3d5a33"/><path d="M194 257.6 L224.576 337.68 L213.56864 337.68 L231.91424 403.2 L156.08576 403.2 L174.43136 337.68 L163.424 337.68Z" fill="#3d5a33"/><path d="M308 246.39999999999998 L340.928 332.64 L329.07392 332.64 L348.83072 403.2 L267.16928 403.2 L286.92608 332.64 L275.072 332.64Z" fill="#3d5a33"/><path d="M399 235.2 L434.28 327.59999999999997 L421.5792 327.59999999999997 L442.7472 403.2 L355.2528 403.2 L376.4208 327.59999999999997 L363.72 327.59999999999997Z" fill="#3d5a33"/><path d="M490 223.99999999999997 L527.6320000000001 322.55999999999995 L514.08448 322.55999999999995 L536.66368 403.2 L443.33632 403.2 L465.91552 322.55999999999995 L452.368 322.55999999999995Z" fill="#3d5a33"/><path d="M604 212.8 L643.984 317.52 L629.58976 317.52 L653.58016 403.2 L554.41984 403.2 L578.41024 317.52 L564.016 317.52Z" fill="#3d5a33"/><path d="M695 201.6 L737.336 312.48 L722.09504 312.48 L747.49664 403.2 L642.50336 403.2 L667.90496 312.48 L652.664 312.48Z" fill="#3d5a33"/><path d="M809 190.39999999999998 L853.688 307.44 L837.60032 307.44 L864.41312 403.2 L753.58688 403.2 L780.39968 307.44 L764.312 307.44Z" fill="#3d5a33"/><rect x="0" y="402.2" width="800" height="560" fill="#3d5a33"/>
+        <path d="M0 481.59999999999997 Q 320 425.6 800 504 V 560 H 0Z" fill="#4c6b3c"/>
+        <path d="M400 560 Q 368 481.59999999999997 448.00000000000006 436.8" stroke="#e7d7b1" stroke-width="10" fill="none" stroke-dasharray="2 14" stroke-linecap="round"/>
+      </svg></div>
+  </div>
+</section>
+
+<div class="wrap stack">
+  <section class="pinned" aria-labelledby="pinned-title">
+    <p class="label">Vastgepind</p>
+    <h2 id="pinned-title">Inschrijvingen 2026-2027 zijn open</h2>
+    <p>Schrijf je kind in voor het nieuwe werkjaar. Het lidgeld blijft 50 euro, met UiTPAS en recht op verminderd tarief 15 euro.</p>
+    <p><a class="btn" href="#">Inschrijven</a></p>
+  </section>
+
+  <div class="two-col">
+    <section id="kalender" aria-labelledby="events-title">
+      <div class="section-head"><h2 id="events-title">Binnenkort</h2><a href="#">Volledige kalender →</a></div>
+      <ul class="events"><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">24</span><span class="m">okt</span></div>
+        <div class="event-body"><h3>Halloweentocht</h3><p class="meta">18u tot 21u · Lokaal</p><p class="chips"><span class="chip" style="--c:#d99a1e">Kapoenen</span><span class="chip" style="--c:#4e7d3a">Welpen</span><span class="chip" style="--c:#2e7468">Wolven</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">za</span><span class="d">14</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Spaghettiavond</h3><p class="meta">vanaf 17u · Parochiezaal · €12</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">zo</span><span class="d">22</span><span class="m">nov</span></div>
+        <div class="event-body"><h3>Sinterklaasvergadering</h3><p class="meta">14u tot 16u30 · Lokaal</p><p class="chips"><span class="chip" style="--c:#d99a1e">Kapoenen</span><span class="chip" style="--c:#4e7d3a">Welpen</span></p></div>
+      </li><li class="event">
+        <div class="date-badge"><span class="wd">vr</span><span class="d">11</span><span class="m">dec</span></div>
+        <div class="event-body"><h3>Kerstmarkt Vosselaar</h3><p class="meta">17u tot 22u · Markt</p><p class="chips"><span class="chip" style="--c:var(--ink)">Hele groep</span></p></div>
+      </li></ul>
+    </section>
+
+    <section aria-labelledby="posts-title">
+      <div class="section-head"><h2 id="posts-title">Nieuws</h2><a href="#">Alle berichten →</a></div>
+      <div class="posts"><article class="card post">
+          <div class="cover" style="--h:28">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="vsky0" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9c6c8"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#vsky0)"/>
+        <circle cx="468" cy="84.00000000000001" r="36" fill="#f6d77a"/>
+        <path d="M0 210 Q 150 150 300 204.00000000000003 T 600 180 V 300 H 0Z" fill="#7d9a5a"/>
+        <path d="M-11 150 L2.8599999999999994 186.3 L-2.1296 186.3 L6.186399999999999 216 L-28.1864 216 L-19.8704 186.3 L-24.86 186.3Z" fill="#3d5a33"/><path d="M78 144 L93.12 183.6 L87.6768 183.6 L96.7488 216 L59.2512 216 L68.3232 183.6 L62.88 183.6Z" fill="#3d5a33"/><path d="M144 138 L160.38 180.9 L154.4832 180.9 L164.31119999999999 216 L123.6888 216 L133.5168 180.9 L127.62 180.9Z" fill="#3d5a33"/><path d="M233 132 L250.64 178.2 L244.2896 178.2 L254.8736 216 L211.1264 216 L221.7104 178.2 L215.36 178.2Z" fill="#3d5a33"/><path d="M299 126 L317.9 175.5 L311.096 175.5 L322.436 216 L275.564 216 L286.904 175.5 L280.1 175.5Z" fill="#3d5a33"/><path d="M365 120 L385.16 172.8 L377.9024 172.8 L389.9984 216 L340.0016 216 L352.0976 172.8 L344.84 172.8Z" fill="#3d5a33"/><path d="M454 114.00000000000001 L475.42 170.10000000000002 L467.7088 170.10000000000002 L480.5608 216 L427.4392 216 L440.2912 170.10000000000002 L432.58 170.10000000000002Z" fill="#3d5a33"/><path d="M520 108 L542.68 167.4 L534.5152 167.4 L548.1232 216 L491.8768 216 L505.4848 167.4 L497.32 167.4Z" fill="#3d5a33"/><path d="M609 102 L632.94 164.7 L624.3216 164.7 L638.6856 216 L579.3144 216 L593.6784 164.7 L585.06 164.7Z" fill="#3d5a33"/><rect x="0" y="215" width="600" height="300" fill="#3d5a33"/>
+        <path d="M0 258 Q 240 228 600 270 V 300 H 0Z" fill="#4c6b3c"/>
+        <path d="M300 300 Q 276 258 336.00000000000006 234" stroke="#e7d7b1" stroke-width="10" fill="none" stroke-dasharray="2 14" stroke-linecap="round"/>
+      </svg></div>
+          <div class="card-body"><p class="meta">12 oktober 2026</p><h3>Smoutebollenbak: bestel nu je portie</h3><p>Op zaterdag 7 november bakken we weer smoutebollen. Bestel vooraf en haal ze warm op aan het lokaal.</p></div>
+        </article><article class="card post">
+          <div class="cover" style="--h:140">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="vsky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9c6c8"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#vsky1)"/>
+        <circle cx="468" cy="84.00000000000001" r="36" fill="#f6d77a"/>
+        <path d="M0 210 Q 150 150 300 204.00000000000003 T 600 180 V 300 H 0Z" fill="#7d9a5a"/>
+        <path d="M-11 150 L2.8599999999999994 186.3 L-2.1296 186.3 L6.186399999999999 216 L-28.1864 216 L-19.8704 186.3 L-24.86 186.3Z" fill="#3d5a33"/><path d="M78 144 L93.12 183.6 L87.6768 183.6 L96.7488 216 L59.2512 216 L68.3232 183.6 L62.88 183.6Z" fill="#3d5a33"/><path d="M144 138 L160.38 180.9 L154.4832 180.9 L164.31119999999999 216 L123.6888 216 L133.5168 180.9 L127.62 180.9Z" fill="#3d5a33"/><path d="M233 132 L250.64 178.2 L244.2896 178.2 L254.8736 216 L211.1264 216 L221.7104 178.2 L215.36 178.2Z" fill="#3d5a33"/><path d="M299 126 L317.9 175.5 L311.096 175.5 L322.436 216 L275.564 216 L286.904 175.5 L280.1 175.5Z" fill="#3d5a33"/><path d="M365 120 L385.16 172.8 L377.9024 172.8 L389.9984 216 L340.0016 216 L352.0976 172.8 L344.84 172.8Z" fill="#3d5a33"/><path d="M454 114.00000000000001 L475.42 170.10000000000002 L467.7088 170.10000000000002 L480.5608 216 L427.4392 216 L440.2912 170.10000000000002 L432.58 170.10000000000002Z" fill="#3d5a33"/><path d="M520 108 L542.68 167.4 L534.5152 167.4 L548.1232 216 L491.8768 216 L505.4848 167.4 L497.32 167.4Z" fill="#3d5a33"/><path d="M609 102 L632.94 164.7 L624.3216 164.7 L638.6856 216 L579.3144 216 L593.6784 164.7 L585.06 164.7Z" fill="#3d5a33"/><rect x="0" y="215" width="600" height="300" fill="#3d5a33"/>
+        <path d="M0 258 Q 240 228 600 270 V 300 H 0Z" fill="#4c6b3c"/>
+        <path d="M300 300 Q 276 258 336.00000000000006 234" stroke="#e7d7b1" stroke-width="10" fill="none" stroke-dasharray="2 14" stroke-linecap="round"/>
+      </svg></div>
+          <div class="card-body"><p class="meta">28 september 2026</p><h3>Overgang 2026: een weekend vol vuur</h3><p>Met een spannend spel en een groot kampvuur namen we afscheid van het oude werkjaar.</p></div>
+        </article><article class="card post">
+          <div class="cover" style="--h:95">
+      <svg viewBox="0 0 600 300" role="img" aria-label="Plaats voor een groepsfoto" preserveAspectRatio="xMidYMid slice">
+        <defs><linearGradient id="vsky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a9c6c8"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient></defs>
+        <rect width="600" height="300" fill="url(#vsky2)"/>
+        <circle cx="468" cy="84.00000000000001" r="36" fill="#f6d77a"/>
+        <path d="M0 210 Q 150 150 300 204.00000000000003 T 600 180 V 300 H 0Z" fill="#7d9a5a"/>
+        <path d="M-11 150 L2.8599999999999994 186.3 L-2.1296 186.3 L6.186399999999999 216 L-28.1864 216 L-19.8704 186.3 L-24.86 186.3Z" fill="#3d5a33"/><path d="M78 144 L93.12 183.6 L87.6768 183.6 L96.7488 216 L59.2512 216 L68.3232 183.6 L62.88 183.6Z" fill="#3d5a33"/><path d="M144 138 L160.38 180.9 L154.4832 180.9 L164.31119999999999 216 L123.6888 216 L133.5168 180.9 L127.62 180.9Z" fill="#3d5a33"/><path d="M233 132 L250.64 178.2 L244.2896 178.2 L254.8736 216 L211.1264 216 L221.7104 178.2 L215.36 178.2Z" fill="#3d5a33"/><path d="M299 126 L317.9 175.5 L311.096 175.5 L322.436 216 L275.564 216 L286.904 175.5 L280.1 175.5Z" fill="#3d5a33"/><path d="M365 120 L385.16 172.8 L377.9024 172.8 L389.9984 216 L340.0016 216 L352.0976 172.8 L344.84 172.8Z" fill="#3d5a33"/><path d="M454 114.00000000000001 L475.42 170.10000000000002 L467.7088 170.10000000000002 L480.5608 216 L427.4392 216 L440.2912 170.10000000000002 L432.58 170.10000000000002Z" fill="#3d5a33"/><path d="M520 108 L542.68 167.4 L534.5152 167.4 L548.1232 216 L491.8768 216 L505.4848 167.4 L497.32 167.4Z" fill="#3d5a33"/><path d="M609 102 L632.94 164.7 L624.3216 164.7 L638.6856 216 L579.3144 216 L593.6784 164.7 L585.06 164.7Z" fill="#3d5a33"/><rect x="0" y="215" width="600" height="300" fill="#3d5a33"/>
+        <path d="M0 258 Q 240 228 600 270 V 300 H 0Z" fill="#4c6b3c"/>
+        <path d="M300 300 Q 276 258 336.00000000000006 234" stroke="#e7d7b1" stroke-width="10" fill="none" stroke-dasharray="2 14" stroke-linecap="round"/>
+      </svg></div>
+          <div class="card-body"><p class="meta">20 september 2026</p><h3>Welpen op tocht in de Liereman</h3><p>Twee uur stappen, een verborgen schat en natte voeten. De welpen hebben zich geamuseerd.</p></div>
+        </article></div>
+    </section>
+  </div>
+
+  <div class="divider" role="presentation"></div>
+
+  <section aria-labelledby="takken-title">
+    <div class="section-head"><h2 id="takken-title">Onze takken</h2></div>
+    <ul class="tiles"><li><a class="tile" href="tak.html" style="--c:#d99a1e"><span class="tile-name">Kapoenen</span><span class="tile-age">6 en 7 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#4e7d3a"><span class="tile-name">Welpen</span><span class="tile-age">8 tot 10 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#2e7468"><span class="tile-name">Wolven</span><span class="tile-age">8 tot 10 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#2d5f86"><span class="tile-name">Jongverkenners</span><span class="tile-age">11 tot 13 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#8e2433"><span class="tile-name">Verkenners</span><span class="tile-age">14 tot 16 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#b9542c"><span class="tile-name">Jin</span><span class="tile-age">17 jaar</span></a></li><li><a class="tile" href="tak.html" style="--c:#6c5592"><span class="tile-name">Akabe</span><span class="tile-age">Aangepaste werking</span></a></li></ul>
+  </section>
+
+  <section class="group-leaders" aria-labelledby="gl-title">
+    <h2 id="gl-title">Groepsleiding</h2>
+    <ul class="leaders"><li class="leader"><span class="avatar" style="--c:var(--brand)">NS</span><span class="name">Neil Scheltjens</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">JA</span><span class="name">Joppe Adriaensen</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">AV</span><span class="name">Annemijn de Vries</span></li><li class="leader"><span class="avatar" style="--c:var(--brand)">DS</span><span class="name">Daan Scheyltjens</span></li></ul>
+  </section>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div><p class="brand">Scouts Don Bosco Vosselaar</p><p>Groep A4108G · Scouts en Gidsen Vlaanderen</p></div>
+    <div><p>Adres van het lokaal</p><p><a href="#">info@scoutsvosselaar.be</a></p></div>
+    <div><p><a href="#">Inschrijven</a></p><p><a href="#">Privacy</a></p></div>
+  </div>
+</footer>
+</body>
+</html>
