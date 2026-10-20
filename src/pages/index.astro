@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/site.config';
+import { getCurrentYear, getEvents, getPosts, getSections, getYearOverview } from '@/lib/content';
+
+// Temporary overview page for fase 1. Replaced by the real home page in fase 5.
+const [sections, posts, events, year] = await Promise.all([getSections(), getPosts(), getEvents(), getCurrentYear()]);
+const overview = year ? await getYearOverview(year) : undefined;
+---
+
+<BaseLayout>
+  <h1 class="text-3xl font-bold">{site.name}</h1>
+  <p class="mt-2 text-lg text-muted">{site.slogan}</p>
+
+  <section class="mt-8">
+    <h2 class="text-xl font-bold">Fundament (tijdelijke pagina)</h2>
+    <ul class="mt-2 list-disc pl-5">
+      <li>Takken: {sections.length}</li>
+      <li>Berichten: {posts.length}</li>
+      <li>Evenementen: {events.length}</li>
+      <li>Actief werkjaar: {overview?.year.data.label ?? 'geen'}</li>
+      <li>Groepsleiding: {overview?.groupLeaders.map((l) => l.data.firstName).join(', ') || 'geen'}</li>
+    </ul>
+  </section>
+</BaseLayout>

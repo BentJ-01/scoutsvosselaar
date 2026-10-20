@@ -1,0 +1,68 @@
+---
+import { navigation, quickLinks, site } from '@/site.config';
+import { isActive, url } from '@/lib/paths';
+
+const pathname = Astro.url.pathname;
+---
+
+<header class="border-b border-line bg-white">
+  <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
+    <a href={url('/')} class="mr-auto font-bold leading-tight text-brand">
+      {site.name}
+    </a>
+
+    <nav aria-label="Snelkoppelingen" class="flex gap-2 lg:hidden">
+      {
+        quickLinks.map((item) => (
+          <a
+            href={url(item.href)}
+            class="rounded-full bg-brand px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-dark"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <details class="group relative lg:hidden">
+      <summary class="cursor-pointer list-none rounded-full border border-line px-3 py-1.5 text-sm font-semibold">
+        Menu
+      </summary>
+      <nav aria-label="Hoofdmenu" class="absolute right-0 z-20 mt-2 w-56 rounded-lg border border-line bg-white p-2 shadow-lg">
+        <ul>
+          {
+            navigation.map((item) => (
+              <li>
+                <a
+                  href={url(item.href)}
+                  aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+                  class="block rounded px-3 py-2 hover:bg-paper aria-[current=page]:font-bold aria-[current=page]:text-brand"
+                >
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </details>
+
+    <nav aria-label="Hoofdmenu" class="hidden lg:block">
+      <ul class="flex gap-1">
+        {
+          navigation.map((item) => (
+            <li>
+              <a
+                href={url(item.href)}
+                aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+                class="block rounded px-2.5 py-2 text-sm hover:bg-paper aria-[current=page]:font-bold aria-[current=page]:text-brand"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>

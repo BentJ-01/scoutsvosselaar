@@ -1,0 +1,23 @@
+---
+import { site } from '@/site.config';
+import { url } from '@/lib/paths';
+---
+
+<footer class="mt-16 border-t border-line bg-white">
+  <div class="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-sm text-muted sm:grid-cols-3">
+    <div>
+      <p class="font-bold text-ink">{site.name}</p>
+      <p>Groepsnummer {site.groupNumber}</p>
+      <p>{site.federation}</p>
+    </div>
+    <address class="not-italic">
+      <p>{site.address.street}</p>
+      <p>{site.address.postalCode} {site.address.city}</p>
+      <p><a class="underline" href={`mailto:${site.email}`}>{site.email}</a></p>
+    </address>
+    <ul>
+      <li><a class="underline" href={url('/inschrijven/')}>Inschrijven</a></li>
+      <li><a class="underline" href={url('/privacy/')}>Privacy</a></li>
+    </ul>
+  </div>
+</footer>
