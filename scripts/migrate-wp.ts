@@ -297,7 +297,10 @@ async function migratePages() {
   }
 
   // Editions of 't Voske that are embedded without a visible URL: look them up in the media library.
-  const media = await getAll<{ source_url: string; title: { rendered: string } }>('/wp-json/wp/v2/media?mime_type=application/pdf');
+  const media = await getAll<{ source_url: string; title: { rendered: string } }>('/wp-json/wp/v2/media?mime_type=application/pdf').catch((error: Error) => {
+    warn(`Mediabibliotheek niet beschikbaar (${error.message}).`);
+    return [];
+  });
   for (const item of media) {
     const known = [...pdfs.keys()].map((k) => basename(k.split('?')[0]!));
     if (/voske/i.test(`${item.source_url} ${item.title.rendered}`) && !known.includes(basename(item.source_url))) {
