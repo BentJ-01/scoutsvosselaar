@@ -1,0 +1,78 @@
+---
+/**
+ * Photo grid with a light lightbox in a <dialog>. Without JavaScript, each
+ * thumbnail links to the full image.
+ */
+import { getImage, Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: ImageMetadata[];
+  /** Describes the photos, e.g. "Groepsfoto 2026-2027". Used in the alt texts. */
+  label: string;
+}
+const { images, label } = Astro.props;
+const large = await Promise.all(images.map((src) => getImage({ src, width: Math.min(src.width, 1600), format: 'webp' })));
+---
+
+<div data-gallery>
+  <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3">
+    {
+      images.map((src, i) => (
+        <li>
+          <a href={large[i]?.src} data-index={i} class="block overflow-hidden rounded-[var(--radius-card)] bg-night-3">
+            <Image
+              src={src}
+              alt={`${label}, foto ${i + 1} van ${images.length}`}
+              widths={[320, 480, 720]}
+              sizes="(min-width: 640px) 33vw, 50vw"
+              class="aspect-[4/3] w-full object-cover transition-transform hover:scale-[1.03]"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <dialog class="m-auto max-h-[95dvh] max-w-[95vw] overflow-visible bg-transparent p-0 backdrop:bg-black/85" aria-label={label}>
+    <img alt="" class="max-h-[85dvh] max-w-[95vw] rounded-lg object-contain" />
+    <div class="mt-3 flex items-center justify-center gap-3 text-white">
+      <button type="button" class="btn btn-small btn-outline" data-prev>Vorige</button>
+      <span data-counter class="min-w-16 text-center text-sm"></span>
+      <button type="button" class="btn btn-small btn-outline" data-next>Volgende</button>
+      <button type="button" class="btn btn-small" data-close>Sluiten</button>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  for (const gallery of document.querySelectorAll<HTMLElement>('[data-gallery]')) {
+    const dialog = gallery.querySelector('dialog')!;
+    const img = dialog.querySelector('img')!;
+    const counter = dialog.querySelector<HTMLElement>('[data-counter]')!;
+    const links = [...gallery.querySelectorAll<HTMLAnchorElement>('a[data-index]')];
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + links.length) % links.length;
+      const link = links[current]!;
+      img.src = link.href;
+      img.alt = link.querySelector('img')?.alt ?? '';
+      counter.textContent = `${current + 1} / ${links.length}`;
+    };
+    links.forEach((link, i) =>
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        show(i);
+        dialog.showModal();
+      }),
+    );
+    dialog.querySelector('[data-prev]')!.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('[data-next]')!.addEventListener('click', () => show(current + 1));
+    dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => e.target === dialog && dialog.close());
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'ArrowRight') show(current + 1);
+    });
+    if (links.length < 2) dialog.querySelectorAll<HTMLElement>('[data-prev], [data-next], [data-counter]').forEach((el) => (el.hidden = true));
+  }
+</script>

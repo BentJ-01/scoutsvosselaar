@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import PostCard from '@/components/PostCard.astro';
+import { getSectionMap, type Post } from '@/lib/content';
+import { postsPageHref } from '@/lib/pagination';
+import { url } from '@/lib/paths';
+
+interface Props {
+  posts: Post[];
+  page: number;
+  pages: number;
+}
+const { posts, page, pages } = Astro.props;
+const sections = await getSectionMap();
+---
+
+<BaseLayout title={page > 1 ? `Berichten, pagina ${page}` : 'Berichten'} description="Nieuws, uitnodigingen en mededelingen van Scouts Don Bosco Vosselaar.">
+  <PageIntro title="Berichten" eyebrow="Nieuws van de groep">{page > 1 && `Pagina ${page} van ${pages}`}</PageIntro>
+  <div class="wrap py-12">
+    {
+      posts.length > 0 ? (
+        <div class="grid gap-4 lg:grid-cols-2">
+          {posts.map((post) => (
+            <PostCard post={post} sections={sections} headingLevel="h2" />
+          ))}
+        </div>
+      ) : (
+        <p class="card p-4 text-muted">Nog geen berichten.</p>
+      )
+    }
+    {
+      pages > 1 && (
+        <nav aria-label="Paginering" class="mt-10 flex flex-wrap items-center justify-center gap-2">
+          {page > 1 && (
+            <a class="btn btn-small btn-dark" href={url(postsPageHref(page - 1))} rel="prev">
+              Nieuwere berichten
+            </a>
+          )}
+          {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
+            <a
+              href={url(postsPageHref(n))}
+              aria-current={n === page ? 'page' : undefined}
+              class="grid size-10 place-items-center rounded-full font-bold no-underline hover:bg-line aria-[current=page]:bg-night aria-[current=page]:text-cream"
+            >
+              <span class="sr-only">Pagina </span>
+              {n}
+            </a>
+          ))}
+          {page < pages && (
+            <a class="btn btn-small btn-dark" href={url(postsPageHref(page + 1))} rel="next">
+              Oudere berichten
+            </a>
+          )}
+        </nav>
+      )
+    }
+  </div>
+</BaseLayout>

@@ -1,7 +1,11 @@
 /**
- * Fixed group data, managed in code.
- * TODO(fase 3): adres, rekeningnummer en verhuurgegevens aanvullen uit docs/huidige-site/inhoud.md.
+ * Fixed group data, managed in code by the webmaster.
+ *
+ * Values that are still `undefined` are not shown on the site; the build lists
+ * them as a warning. They come from docs/huidige-site/inhoud.md (§2 and §7).
  */
+type Maybe = string | undefined;
+
 export const site = {
   name: 'Scouts Don Bosco Vosselaar',
   shortName: 'Scouts Vosselaar',
@@ -12,12 +16,43 @@ export const site = {
   district: 'District Noorderkempen',
   email: 'info@scoutsvosselaar.be',
   address: {
-    street: 'TODO',
+    street: undefined as Maybe,
     postalCode: '2350',
     city: 'Vosselaar',
   },
-  bankAccount: 'TODO',
 } as const;
+
+/** Lidgeld and registration (page /inschrijven/). */
+export const membership = {
+  fee: 50,
+  /** With UiTPAS and a right to the reduced rate. */
+  reducedFee: 15,
+  /** For members who join after `lateFrom`. */
+  lateFee: 30,
+  lateFrom: '1 maart',
+  bankAccount: undefined as Maybe,
+  paymentReference: undefined as Maybe,
+  /** External registration form or document. */
+  registrationUrl: undefined as Maybe,
+  /** Instructions for the medical form in the Scouts en Gidsen Vlaanderen administration. */
+  medicalInstructionsUrl: undefined as Maybe,
+};
+
+/** Renting the premises (page /verhuur/). */
+export const rental = {
+  maxPeople: 50,
+  email: undefined as Maybe,
+  phone: undefined as Maybe,
+  calendarUrl: undefined as Maybe,
+  kampasUrl: 'https://www.kampas.be',
+};
+
+/** Other addresses and documents. */
+export const extra = {
+  smoutebollenbakEmail: undefined as Maybe,
+  /** Privacy statement as a file in public/docs/. */
+  privacyPdf: undefined as Maybe,
+};
 
 export interface NavItem {
   label: string;

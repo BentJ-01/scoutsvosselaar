@@ -1,0 +1,13 @@
+{
+  "name": "Wolven",
+  "ageRange": "8 tot 10 jaar",
+  "color": "#2c6e68",
+  "order": 3,
+  "shortDescription": "Testtekst voor de wolven: spelen, ravotten en samen op avontuur.",
+  "who": "De **wolven** zijn een testgroep.\n\nDit is voorbeeldtekst.",
+  "what": "Elke zondag spelen we buiten:\n\n- bosspelen\n- hutten bouwen\n- tochten",
+  "camp": "In de zomer gaan we tien dagen op kamp.",
+  "meetingTime": "Zondag 14u tot 16u30",
+  "email": "wolven@scoutsvosselaar.be",
+  "leaderLabel": "Leiding"
+}

@@ -1,0 +1,49 @@
+{
+  "label": "2026-2027",
+  "startDate": "2026-09-01",
+  "endDate": "2027-08-31",
+  "groupLeaders": [
+    "an-test",
+    "bo-test",
+    "verwijderd-persoon"
+  ],
+  "sectionTeams": [
+    {
+      "section": "kapoenen",
+      "leaders": [
+        "an-test",
+        "cas-test",
+        "dirk-test"
+      ],
+      "sectionLeads": [
+        "cas-test"
+      ]
+    },
+    {
+      "section": "welpen",
+      "leaders": [
+        "eva-test",
+        "fien-test",
+        "gust-test",
+        "an-test"
+      ],
+      "sectionLeads": [
+        "eva-test",
+        "fien-test"
+      ]
+    },
+    {
+      "section": "jin",
+      "leaders": [
+        "hanne-test"
+      ],
+      "sectionLeads": [
+        "hanne-test"
+      ]
+    }
+  ],
+  "groupPhotos": [
+    "../../assets/uploads/groepsfoto-2026.webp",
+    "../../assets/uploads/groepsfoto-2026-b.webp"
+  ]
+}

@@ -1,0 +1,20 @@
+---
+/** Dark page header with contour lines. Holds the page's only H1. */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  /** Accent color, e.g. a section color. */
+  color?: string;
+}
+const { title, eyebrow, color } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-night text-cream topo" style={color ? `--accent:${color}` : undefined}>
+  <div class="wrap py-10 sm:py-14">
+    <slot name="crumbs" />
+    {eyebrow && <p class="font-hand text-2xl text-glow">{eyebrow}</p>}
+    <h1 class="mt-1 text-4xl font-extrabold sm:text-6xl">{title}</h1>
+    <div class="mt-4 max-w-2xl text-lg text-cream-muted empty:hidden"><slot /></div>
+  </div>
+  {color && <div class="h-2" style="background: var(--accent)"></div>}
+</section>

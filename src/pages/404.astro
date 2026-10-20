@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { redirectPatterns } from '@/redirects';
+import { url } from '@/lib/paths';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const patterns = redirectPatterns.map(([prefix, target]) => [base + prefix, url(target)]);
+---
+
+<BaseLayout title="Pagina niet gevonden">
+  <script is:inline define:vars={{ patterns }}>
+    // Old URLs of the previous site that follow a pattern (e.g. /event/...).
+    for (const [prefix, target] of patterns) {
+      if (location.pathname.startsWith(prefix)) location.replace(target);
+    }
+  </script>
+  <section class="bg-night text-cream topo">
+    <div class="wrap py-20 text-center">
+      <p class="font-hand text-3xl text-glow">Oei, verdwaald in het bos?</p>
+      <h1 class="mt-2 text-5xl font-extrabold sm:text-6xl">Pagina niet gevonden</h1>
+      <p class="mx-auto mt-4 max-w-xl text-lg text-cream-muted">Deze pagina bestaat niet (meer). Misschien vind je wat je zoekt via een van deze paden.</p>
+      <p class="mt-8 flex flex-wrap justify-center gap-3">
+        <a class="btn" href={url('/')}>Naar de homepagina</a>
+        <a class="btn btn-outline" href={url('/kalender/')}>Kalender</a>
+        <a class="btn btn-outline" href={url('/takken/')}>Takken</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

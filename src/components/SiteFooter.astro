@@ -3,21 +3,23 @@ import { site } from '@/site.config';
 import { url } from '@/lib/paths';
 ---
 
-<footer class="mt-16 border-t border-line bg-white">
-  <div class="mx-auto grid max-w-6xl gap-6 px-4 py-8 text-sm text-muted sm:grid-cols-3">
+<footer class="mt-20 bg-night text-cream-muted topo">
+  <div class="trail -translate-y-1/2"></div>
+  <div class="wrap grid gap-8 pt-6 pb-12 sm:grid-cols-[2fr_1.5fr_1fr]">
     <div>
-      <p class="font-bold text-ink">{site.name}</p>
-      <p>Groepsnummer {site.groupNumber}</p>
-      <p>{site.federation}</p>
+      <p class="font-display text-xl font-bold text-cream">{site.name}</p>
+      <p class="mt-1">Groep {site.groupNumber} · {site.federation}</p>
+      <p class="mt-3 font-hand text-2xl text-glow">{site.slogan}</p>
     </div>
     <address class="not-italic">
-      <p>{site.address.street}</p>
+      {site.address.street && <p>{site.address.street}</p>}
       <p>{site.address.postalCode} {site.address.city}</p>
-      <p><a class="underline" href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p class="mt-2"><a class="underline hover:text-cream" href={`mailto:${site.email}`}>{site.email}</a></p>
     </address>
-    <ul>
-      <li><a class="underline" href={url('/inschrijven/')}>Inschrijven</a></li>
-      <li><a class="underline" href={url('/privacy/')}>Privacy</a></li>
+    <ul class="space-y-1">
+      <li><a class="underline hover:text-cream" href={url('/inschrijven/')}>Inschrijven</a></li>
+      <li><a class="underline hover:text-cream" href={url('/privacy/')}>Privacy</a></li>
+      <li><a class="underline hover:text-cream" href={url('/admin/')}>Beheer</a></li>
     </ul>
   </div>
 </footer>

@@ -1,0 +1,13 @@
+---
+/** Renders a Markdown string from JSON content. */
+import { renderMarkdown } from '@/lib/markdown';
+
+interface Props {
+  source: string;
+  class?: string;
+}
+const { source, class: className } = Astro.props;
+const html = await renderMarkdown(source);
+---
+
+<div class:list={['prose', className]} set:html={html} />

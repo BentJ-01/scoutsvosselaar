@@ -1,0 +1,25 @@
+---
+import ContentPage from '@/layouts/ContentPage.astro';
+import InfoBlock from '@/components/InfoBlock.astro';
+import { extra, site } from '@/site.config';
+import { url } from '@/lib/paths';
+---
+
+<ContentPage title="Privacy" description={`Privacyverklaring van ${site.name}.`}>
+  <InfoBlock title="Privacyverklaring">
+    <p>Deze site gebruikt geen cookies en volgt je niet.</p>
+    {
+      extra.privacyPdf ? (
+        <p>
+          <a class="btn" href={url(extra.privacyPdf)} download>
+            Download de privacyverklaring (PDF)
+          </a>
+        </p>
+      ) : (
+        <p>
+          Vragen over je gegevens? Mail naar <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      )
+    }
+  </InfoBlock>
+</ContentPage>

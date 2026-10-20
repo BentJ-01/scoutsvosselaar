@@ -7,6 +7,7 @@ import { existsSync } from 'node:fs';
 import { isAbsolute, resolve } from 'node:path';
 import { z } from 'astro/zod';
 import type { SchemaContext } from 'astro:content';
+import { CONTENT_DIR } from './content-dir';
 import { contentWarning } from './log';
 import { parseLocalDateTime, type LocalDateTime } from './dates';
 
@@ -65,7 +66,10 @@ export const bool = (field: string, fallback = false) => soft(field, z.boolean()
 
 /** A Brussels date or date-time. Invalid becomes `null` (the entry is then skipped by the helpers). */
 export const localDateTime = (field: string) =>
-  z.unknown().transform((v): LocalDateTime | null => {
+  z
+    .unknown()
+    .optional()
+    .transform((v): LocalDateTime | null => {
     if (v === undefined || v === null || v === '') return null;
     const parsed = parseLocalDateTime(v);
     if (!parsed) contentWarning(`Ongeldige datum voor "${field}": ${show(v)}`);
@@ -106,10 +110,10 @@ type ImageSchema = ReturnType<SchemaContext['image']>;
 /**
  * Wraps Astro's `image()` so a missing file is skipped with a warning instead
  * of failing the build. Paths are relative to the entry file, and every entry
- * lives directly in `src/content/<dir>/`.
+ * lives directly in `<CONTENT_DIR>/<dir>/`.
  */
 export function imageHelpers(image: SchemaContext['image'], dir: string) {
-  const entryDir = resolve(process.cwd(), 'src/content', dir);
+  const entryDir = resolve(process.cwd(), CONTENT_DIR, dir);
   const exists = (path: string) => {
     if (/^https?:\/\//.test(path)) return true;
     const full = isAbsolute(path) ? resolve(process.cwd(), `.${path}`) : resolve(entryDir, path);

@@ -1,6 +1,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { CONTENT_DIR } from './lib/content-dir';
 import {
   bool,
   imageHelpers,
@@ -15,8 +16,8 @@ import {
   text,
 } from './lib/schema';
 
-const json = (dir: string) => glob({ pattern: '*.json', base: `./src/content/${dir}` });
-const markdown = (dir: string) => glob({ pattern: '*.md', base: `./src/content/${dir}` });
+const json = (dir: string) => glob({ pattern: '*.json', base: `./${CONTENT_DIR}/${dir}` });
+const markdown = (dir: string) => glob({ pattern: '*.md', base: `./${CONTENT_DIR}/${dir}` });
 
 const refs = <C extends Parameters<typeof reference>[0]>(field: string, collection: C) =>
   list(field, reference(collection));

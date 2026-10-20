@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import { getSections } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+const sections = await getSections();
+---
+
+<BaseLayout title="Takken" description="De takken van Scouts Don Bosco Vosselaar, van kapoenen tot jin en akabe.">
+  <PageIntro title="Takken" eyebrow="Wie doet wat?">
+    Elke leeftijd heeft zijn eigen tak, met eigen leiding, eigen spelen en een eigen kamp.
+  </PageIntro>
+  <div class="wrap py-12">
+    <ul class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        sections.map((s) => (
+          <li class="card group relative flex flex-col overflow-hidden">
+            <div class="relative h-36 topo" style={`background:${s.data.color}`}>
+              {s.data.image && <Image src={s.data.image} alt="" widths={[400, 700]} sizes="(min-width: 1024px) 23rem, (min-width: 640px) 45vw, 92vw" class="absolute inset-0 size-full object-cover" />}
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <h2 class="text-2xl font-bold">
+                <a href={url(`/takken/${s.id}/`)} class="no-underline after:absolute after:inset-0 group-hover:underline">
+                  {s.data.name}
+                </a>
+              </h2>
+              <p class="font-semibold" style={`color:color-mix(in srgb, ${s.data.color} 80%, black)`}>{s.data.ageRange}</p>
+              <p class="mt-2 text-[0.95rem]">{s.data.shortDescription}</p>
+              <p class="mt-auto pt-3 text-sm text-muted">{s.data.meetingTime}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

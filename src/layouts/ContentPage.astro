@@ -1,0 +1,39 @@
+---
+/** Fixed page with a dark intro and readable text. */
+import BaseLayout from './BaseLayout.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import { extra, membership, rental, site } from '@/site.config';
+import { contentWarning } from '@/lib/log';
+
+interface Props {
+  title: string;
+  eyebrow?: string;
+  description: string;
+}
+const { title, eyebrow, description } = Astro.props;
+
+const missing = Object.entries({
+  'site.address.street': site.address.street,
+  'membership.bankAccount': membership.bankAccount,
+  'membership.paymentReference': membership.paymentReference,
+  'membership.registrationUrl': membership.registrationUrl,
+  'membership.medicalInstructionsUrl': membership.medicalInstructionsUrl,
+  'rental.email': rental.email,
+  'rental.phone': rental.phone,
+  'rental.calendarUrl': rental.calendarUrl,
+  'extra.smoutebollenbakEmail': extra.smoutebollenbakEmail,
+  'extra.privacyPdf': extra.privacyPdf,
+})
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+if (missing.length) contentWarning(`Vaste gegevens ontbreken in src/site.config.ts (niet getoond): ${missing.join(', ')}`);
+---
+
+<BaseLayout title={title} description={description}>
+  <PageIntro title={title} eyebrow={eyebrow}><slot name="intro" /></PageIntro>
+  <div class="wrap py-12">
+    <div class="space-y-10">
+      <slot />
+    </div>
+  </div>
+</BaseLayout>

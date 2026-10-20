@@ -1,0 +1,122 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import EventList from '@/components/EventList.astro';
+import LeaderCard from '@/components/LeaderCard.astro';
+import Markdown from '@/components/Markdown.astro';
+import PostCard from '@/components/PostCard.astro';
+import CampfireScene from '@/components/CampfireScene.astro';
+import { getCurrentYear, getPosts, getSectionMap, getSections, getUpcomingEvents, getYearOverview, type Section } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+export const getStaticPaths = (async () => (await getSections()).map((section) => ({ params: { slug: section.id }, props: { section } }))) satisfies GetStaticPaths;
+
+interface Props {
+  section: Section;
+}
+const { section } = Astro.props;
+const s = section.data;
+
+const [sectionMap, allEvents, allPosts, year] = await Promise.all([getSectionMap(), getUpcomingEvents(), getPosts(), getCurrentYear()]);
+const overview = year ? await getYearOverview(year) : undefined;
+const team = overview?.teams.find((t) => t.section.id === section.id);
+// Events for this section, plus the ones for the whole group.
+const events = allEvents.filter((e) => e.data.sections.length === 0 || e.data.sections.some((r) => r.id === section.id));
+const posts = allPosts.filter((p) => p.data.sections.some((r) => r.id === section.id)).slice(0, 3);
+const blocks = [
+  ['Wie?', s.who],
+  ['Wat?', s.what],
+  ['Kamp?', s.camp],
+].filter(([, text]) => text);
+---
+
+<BaseLayout title={s.name} description={s.shortDescription || `${s.name} (${s.ageRange}) bij Scouts Don Bosco Vosselaar.`}>
+  <section class="bg-night text-cream topo">
+    <div class="wrap grid items-center gap-8 py-10 sm:py-14 md:grid-cols-2">
+      <div>
+        <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
+          <a href={url('/')} class="underline">Home</a> / <a href={url('/takken/')} class="underline">Takken</a> / <span aria-current="page">{s.name}</span>
+        </nav>
+        <h1 class="mt-4 text-5xl font-extrabold sm:text-7xl">{s.name}</h1>
+        <dl class="mt-6 grid gap-3 text-lg">
+          <div class="grid grid-cols-[7.5rem_1fr] gap-2">
+            <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Leeftijd</dt>
+            <dd class="font-semibold">{s.ageRange}</dd>
+          </div>
+          <div class="grid grid-cols-[7.5rem_1fr] gap-2">
+            <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Vergaderen</dt>
+            <dd class="font-semibold">{s.meetingTime}</dd>
+          </div>
+          {
+            s.email && (
+              <div class="grid grid-cols-[7.5rem_1fr] gap-2">
+                <dt class="pt-1 text-xs font-bold tracking-[0.12em] text-glow uppercase">Mail</dt>
+                <dd class="font-semibold break-all">
+                  <a class="underline" href={`mailto:${s.email}`}>
+                    {s.email}
+                  </a>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
+      </div>
+      <div class="overflow-hidden rounded-[22px_22px_22px_4px] shadow-[0_30px_60px_-20px_rgb(0_0_0/0.6)]">
+        {s.image ? <Image src={s.image} alt="" widths={[480, 720, 1000]} sizes="(min-width: 768px) 36rem, 92vw" loading="eager" class="aspect-[16/10] w-full object-cover" /> : <CampfireScene class="aspect-[16/10] w-full" />}
+      </div>
+    </div>
+    <div class="h-2" style={`background:${s.color}`}></div>
+  </section>
+
+  <div class="wrap space-y-16 py-12">
+    {
+      blocks.length > 0 && (
+        <div class="grid gap-5 md:grid-cols-3">
+          {blocks.map(([title, text]) => (
+            <section class="card border-t-[6px] p-6" style={`border-top-color:${s.color}`}>
+              <h2 class="text-2xl font-bold">{title}</h2>
+              <Markdown source={text!} class="mt-3 text-base" />
+            </section>
+          ))}
+        </div>
+      )
+    }
+
+    <section aria-labelledby="leiding">
+      <h2 id="leiding" class="section-title">{s.leaderLabel} {overview?.year.data.label}</h2>
+      {
+        team && team.members.length > 0 ? (
+          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+            {team.members.map((m) => (
+              <LeaderCard leader={m.leader} color={s.color} isLead={m.isLead} showContact />
+            ))}
+          </ul>
+        ) : (
+          <p class="card mt-6 p-4 text-muted">De {s.leaderLabel.toLowerCase()} voor dit werkjaar staat nog niet online.</p>
+        )
+      }
+    </section>
+
+    <section aria-labelledby="binnenkort">
+      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+        <h2 id="binnenkort" class="section-title">Binnenkort</h2>
+        <a class="font-bold text-brand" href={url(`/kalender/#tak-${section.id}`)}>Kalender van de {s.name.toLowerCase()}</a>
+      </div>
+      <EventList events={events} sections={sectionMap} limit={5} upcoming />
+    </section>
+
+    {
+      posts.length > 0 && (
+        <section aria-labelledby="berichten">
+          <h2 id="berichten" class="section-title mb-5">Recente berichten</h2>
+          <div class="grid gap-4 lg:grid-cols-2">
+            {posts.map((post) => (
+              <PostCard post={post} sections={sectionMap} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</BaseLayout>

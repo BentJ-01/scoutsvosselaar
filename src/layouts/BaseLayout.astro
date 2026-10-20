@@ -37,9 +37,11 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="theme-color" content="#1b2a24" />
+    <link rel="alternate" type="application/rss+xml" title={`Berichten van ${site.name}`} href={url('/rss.xml')} />
     <slot name="head" />
   </head>
-  <body class="flex min-h-screen flex-col font-sans antialiased">
+  <body class="flex min-h-screen flex-col bg-paper antialiased">
     <a
       href="#inhoud"
       class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-2"
@@ -47,7 +49,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
       Naar de inhoud
     </a>
     <SiteHeader />
-    <main id="inhoud" class="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+    <main id="inhoud" class="flex-1">
       <slot />
     </main>
     <SiteFooter />

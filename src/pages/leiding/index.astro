@@ -1,0 +1,52 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import LeaderCard from '@/components/LeaderCard.astro';
+import PageIntro from '@/components/PageIntro.astro';
+import { getCurrentYear, getYearOverview } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+const year = await getCurrentYear();
+const overview = year ? await getYearOverview(year) : undefined;
+---
+
+<BaseLayout title="Leiding" description="De leiding van Scouts Don Bosco Vosselaar, per tak.">
+  <PageIntro title="Leiding" eyebrow={overview ? `Werkjaar ${overview.year.data.label}` : undefined}>
+    Elke zondag staan zij klaar. Vragen? Mail de tak of spreek de leiding aan na de vergadering.
+  </PageIntro>
+  <div class="wrap space-y-14 py-12">
+    {
+      !overview && <p class="card p-4 text-muted">De leiding voor dit werkjaar staat nog niet online.</p>
+    }
+    {
+      overview && overview.groupLeaders.length > 0 && (
+        <section aria-labelledby="groepsleiding">
+          <h2 id="groepsleiding" class="section-title">Groepsleiding</h2>
+          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-6">
+            {overview.groupLeaders.map((leader) => (
+              <LeaderCard leader={leader} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+    {
+      overview?.teams.map((team) => (
+        <section aria-labelledby={`tak-${team.section.id}`}>
+          <div class="flex flex-wrap items-baseline justify-between gap-3 border-b-4 pb-2" style={`border-color:${team.section.data.color}`}>
+            <h2 id={`tak-${team.section.id}`} class="section-title">
+              {team.section.data.name}
+            </h2>
+            <a class="font-bold text-brand" href={url(`/takken/${team.section.id}/`)}>
+              Meer over de {team.section.data.name.toLowerCase()}
+            </a>
+          </div>
+          <ul class="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:grid-cols-6">
+            {team.members.map((m) => (
+              <LeaderCard leader={m.leader} color={team.section.data.color} isLead={m.isLead} />
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
