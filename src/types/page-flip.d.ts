@@ -35,6 +35,8 @@ declare module 'page-flip' {
     flipPrev(corner?: 'top' | 'bottom'): void;
     flip(page: number, corner?: 'top' | 'bottom'): void;
     turnToPage(page: number): void;
+    update(): void;
+    getSettings(): Required<PageFlipSettings>;
     destroy(): void;
   }
 }

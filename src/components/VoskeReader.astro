@@ -70,7 +70,10 @@ const pages = Array.from({ length: manifest.pages }, (_, i) => url(`/voske/pagin
     justify-content: center;
     padding: 1rem;
     background: var(--color-forest);
-    overflow: auto;
+    overflow: hidden;
+  }
+  .voske-reader:fullscreen [data-controls] {
+    margin-top: 0.75rem;
   }
 </style>
 
@@ -98,34 +101,54 @@ const pages = Array.from({ length: manifest.pages }, (_, i) => url(`/voske/pagin
     };
     loadAround(0);
 
-    // Fit the book in the window: a spread side by side on wide screens, one page on narrow ones.
+    // Fit the book in the available space: a spread side by side on wide screens,
+    // one page on narrow ones. In full screen the book takes the whole screen.
     const frame = reader.querySelector<HTMLElement>('[data-frame]')!;
+    const controls = reader.querySelector<HTMLElement>('[data-controls]')!;
+    const ratio = width / height;
+    let spread = false;
     const fit = () => {
-      // Room for the header, the title and the buttons below the book.
-      const available = Math.max(320, window.innerHeight - 330);
-      const pageHeight = Math.min(height, available);
-      const pageWidth = Math.round((pageHeight * width) / height);
-      const spread = window.innerWidth >= 768;
-      frame.style.maxWidth = `${spread ? pageWidth * 2 : pageWidth}px`;
-      return { pageWidth, pageHeight };
+      const full = document.fullscreenElement === reader;
+      const style = getComputedStyle(reader);
+      const availableWidth = reader.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const controlsHeight = controls.offsetHeight + parseFloat(getComputedStyle(controls).marginTop);
+      // Outside full screen leave room for the header and the title above the book.
+      const availableHeight = full
+        ? window.innerHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom) - controlsHeight
+        : Math.max(320, window.innerHeight - 270 - controlsHeight);
+      spread = availableWidth >= 768 || (full && availableWidth > availableHeight);
+      const pages = spread ? 2 : 1;
+      const pageWidth = Math.floor(Math.min(availableWidth / pages, availableHeight * ratio));
+      frame.style.width = `${pageWidth * pages}px`;
+      frame.style.maxWidth = 'none';
+      book.style.maxWidth = 'none';
+      book.style.minWidth = '0';
+      book.style.minHeight = '0';
     };
-    const { pageWidth, pageHeight } = fit();
-    window.addEventListener('resize', fit);
+    fit();
 
     const flip = new PageFlip(book, {
       width,
       height,
       size: 'stretch',
-      minWidth: 200,
-      maxWidth: pageWidth,
-      minHeight: Math.round((200 * height) / width),
-      maxHeight: pageHeight,
+      minWidth: 100,
+      maxWidth: 4000,
+      minHeight: Math.round(100 / ratio),
+      maxHeight: 4000,
       showCover: true,
       usePortrait: true,
       maxShadowOpacity: 0.35,
       flippingTime: reduceMotion ? 1 : 700,
       mobileScrollSupport: true,
     });
+    // page-flip shows one page when the book is narrower than twice minWidth.
+    const relayout = () => {
+      fit();
+      flip.getSettings().minWidth = spread ? 1 : frame.offsetWidth;
+      flip.update();
+    };
+    window.addEventListener('resize', relayout);
+    document.addEventListener('fullscreenchange', () => requestAnimationFrame(relayout));
 
     const update = (index: number) => {
       loadAround(index);
@@ -141,6 +164,8 @@ const pages = Array.from({ length: manifest.pages }, (_, i) => url(`/voske/pagin
     flip.on('flip', (e) => update(e.data));
     flip.on('changeOrientation', () => update(flip.getCurrentPageIndex()));
     flip.loadFromHTML(pages);
+    controls.hidden = false;
+    relayout();
 
     reader.querySelector('[data-prev]')!.addEventListener('click', () => flip.flipPrev());
     reader.querySelector('[data-next]')!.addEventListener('click', () => flip.flipNext());
@@ -156,6 +181,5 @@ const pages = Array.from({ length: manifest.pages }, (_, i) => url(`/voske/pagin
       if (e.key === 'ArrowRight') flip.flipNext();
       if (e.key === 'ArrowLeft') flip.flipPrev();
     });
-    reader.querySelector<HTMLElement>('[data-controls]')!.hidden = false;
   }
 </script>

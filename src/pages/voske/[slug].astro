@@ -34,7 +34,6 @@ const name = pdf.split('/').pop()!.replace(/\.pdf$/i, '');
         <a class="btn btn-small btn-line" href={url(pdf)} download={`${name}.pdf`}>Download de PDF</a>
       </div>
       <VoskeReader title={voske.data.title} name={name} pdf={pdf} manifest={manifest} />
-      <p class="mt-6 text-center text-sm text-cream-muted">Sleep een hoek, veeg, of gebruik de pijltjestoetsen om te bladeren.</p>
     </div>
   </section>
 </BaseLayout>
