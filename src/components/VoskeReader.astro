@@ -1,0 +1,161 @@
+---
+/**
+ * Flip-book reader for an edition of 't Voske. The pages are images made at
+ * build time (src/integrations/voske-pages.ts); page-flip turns them like a
+ * booklet. Images load only around the open page.
+ */
+import type { VoskeManifest } from '@/integrations/voske-pages';
+import { url } from '@/lib/paths';
+
+interface Props {
+  title: string;
+  /** Name of the page folder, e.g. t-voske-2024. */
+  name: string;
+  pdf: string;
+  manifest: VoskeManifest;
+}
+const { title, name, pdf, manifest } = Astro.props;
+const pages = Array.from({ length: manifest.pages }, (_, i) => url(`/voske/pagina/${name}/${String(i + 1).padStart(3, '0')}.webp`));
+---
+
+<div class="voske-reader" data-voske-reader data-pages={manifest.pages} data-width={manifest.width} data-height={manifest.height}>
+  <div class="mx-auto" data-frame>
+    <div data-book class="voske-book mx-auto" aria-label={`${title}, bladerbaar`} role="region">
+      {
+        pages.map((src, i) => (
+          <div class="voske-page" data-density={i === 0 || i === pages.length - 1 ? 'hard' : 'soft'}>
+            <img data-src={src} alt={`${title}, pagina ${i + 1}`} width={manifest.width} height={manifest.height} decoding="async" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="mt-6 flex flex-wrap items-center justify-center gap-3 text-cream" data-controls hidden>
+    <button type="button" class="btn btn-small btn-line" data-prev>Vorige</button>
+    <p class="min-w-40 text-center font-bold" aria-live="polite" data-status>Pagina 1 van {manifest.pages}</p>
+    <button type="button" class="btn btn-small btn-line" data-next>Volgende</button>
+    <button type="button" class="btn btn-small btn-line" data-fullscreen>Volledig scherm</button>
+  </div>
+
+  <noscript>
+    <p class="text-center text-cream">
+      Bladeren werkt met JavaScript. <a class="underline" href={url(pdf)}>Open de PDF</a>.
+    </p>
+  </noscript>
+</div>
+
+<style>
+  .voske-book {
+    /* Hidden until page-flip has laid out the pages. */
+    visibility: hidden;
+    /* A flat offset, like a booklet lying on the table. */
+    filter: drop-shadow(6px 6px 0 rgb(0 0 0 / 0.35));
+  }
+  .voske-reader.is-ready .voske-book {
+    visibility: visible;
+  }
+  .voske-page {
+    background: #fffdf7;
+  }
+  .voske-page img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .voske-reader:fullscreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--color-forest);
+    overflow: auto;
+  }
+</style>
+
+<script>
+  import { PageFlip } from 'page-flip';
+
+  for (const reader of document.querySelectorAll<HTMLElement>('[data-voske-reader]')) {
+    const book = reader.querySelector<HTMLElement>('[data-book]')!;
+    const pages = [...book.querySelectorAll<HTMLElement>('.voske-page')];
+    const total = pages.length;
+    const width = Number(reader.dataset.width);
+    const height = Number(reader.dataset.height);
+    const status = reader.querySelector<HTMLElement>('[data-status]')!;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Only the pages around the open page are loaded.
+    const loadAround = (index: number) => {
+      for (let i = Math.max(0, index - 2); i <= Math.min(total - 1, index + 5); i++) {
+        const img = pages[i]?.querySelector('img');
+        if (img?.dataset.src) {
+          img.src = img.dataset.src;
+          delete img.dataset.src;
+        }
+      }
+    };
+    loadAround(0);
+
+    // Fit the book in the window: a spread side by side on wide screens, one page on narrow ones.
+    const frame = reader.querySelector<HTMLElement>('[data-frame]')!;
+    const fit = () => {
+      // Room for the header, the title and the buttons below the book.
+      const available = Math.max(320, window.innerHeight - 330);
+      const pageHeight = Math.min(height, available);
+      const pageWidth = Math.round((pageHeight * width) / height);
+      const spread = window.innerWidth >= 768;
+      frame.style.maxWidth = `${spread ? pageWidth * 2 : pageWidth}px`;
+      return { pageWidth, pageHeight };
+    };
+    const { pageWidth, pageHeight } = fit();
+    window.addEventListener('resize', fit);
+
+    const flip = new PageFlip(book, {
+      width,
+      height,
+      size: 'stretch',
+      minWidth: 200,
+      maxWidth: pageWidth,
+      minHeight: Math.round((200 * height) / width),
+      maxHeight: pageHeight,
+      showCover: true,
+      usePortrait: true,
+      maxShadowOpacity: 0.35,
+      flippingTime: reduceMotion ? 1 : 700,
+      mobileScrollSupport: true,
+    });
+
+    const update = (index: number) => {
+      loadAround(index);
+      const spread = flip.getOrientation() === 'landscape' && index > 0 && index < total - 1;
+      const first = index + 1;
+      status.textContent = spread && first + 1 <= total ? `Pagina ${first}-${first + 1} van ${total}` : `Pagina ${first} van ${total}`;
+    };
+
+    flip.on('init', (e) => {
+      reader.classList.add('is-ready');
+      update(e.data.page);
+    });
+    flip.on('flip', (e) => update(e.data));
+    flip.on('changeOrientation', () => update(flip.getCurrentPageIndex()));
+    flip.loadFromHTML(pages);
+
+    reader.querySelector('[data-prev]')!.addEventListener('click', () => flip.flipPrev());
+    reader.querySelector('[data-next]')!.addEventListener('click', () => flip.flipNext());
+    const fullscreen = reader.querySelector<HTMLButtonElement>('[data-fullscreen]')!;
+    if (document.fullscreenEnabled) {
+      fullscreen.addEventListener('click', () => (document.fullscreenElement ? document.exitFullscreen() : reader.requestFullscreen()));
+      document.addEventListener('fullscreenchange', () => (fullscreen.textContent = document.fullscreenElement ? 'Sluit volledig scherm' : 'Volledig scherm'));
+    } else {
+      fullscreen.hidden = true;
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === 'ArrowRight') flip.flipNext();
+      if (e.key === 'ArrowLeft') flip.flipPrev();
+    });
+    reader.querySelector<HTMLElement>('[data-controls]')!.hidden = false;
+  }
+</script>

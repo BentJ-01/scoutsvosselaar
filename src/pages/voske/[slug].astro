@@ -1,0 +1,40 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { join } from 'node:path';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import VoskeReader from '@/components/VoskeReader.astro';
+import { readVoskeManifest, type VoskeManifest } from '@/integrations/voske-pages';
+import { getVoskes } from '@/lib/content';
+import { url } from '@/lib/paths';
+
+// Only editions whose pages were rendered get a reader; the others open the PDF.
+export const getStaticPaths = (async () =>
+  (await getVoskes()).flatMap((voske) => {
+    const manifest = readVoskeManifest(join(process.cwd(), 'public'), voske.data.pdf!);
+    return manifest ? [{ params: { slug: voske.id }, props: { voske, manifest } }] : [];
+  })) satisfies GetStaticPaths;
+
+interface Props {
+  voske: Awaited<ReturnType<typeof getVoskes>>[number];
+  manifest: VoskeManifest;
+}
+const { voske, manifest } = Astro.props;
+const pdf = voske.data.pdf!;
+const name = pdf.split('/').pop()!.replace(/\.pdf$/i, '');
+---
+
+<BaseLayout title={voske.data.title} description={`Blader door ${voske.data.title}, het ledenblad van Scouts Don Bosco Vosselaar.`}>
+  <section class="bg-forest text-cream topo">
+    <div class="wrap pt-8 pb-12 sm:pt-10">
+      <nav aria-label="Kruimelpad" class="text-sm text-cream-muted">
+        <a href={url('/')} class="underline">Home</a> / <a href={url('/voske/')} class="underline">'t Voske</a>
+      </nav>
+      <div class="mt-2 mb-8 flex flex-wrap items-end justify-between gap-4">
+        <h1 class="text-4xl sm:text-5xl">{voske.data.title}</h1>
+        <a class="btn btn-small btn-line" href={url(pdf)} download={`${name}.pdf`}>Download de PDF</a>
+      </div>
+      <VoskeReader title={voske.data.title} name={name} pdf={pdf} manifest={manifest} />
+      <p class="mt-6 text-center text-sm text-cream-muted">Sleep een hoek, veeg, of gebruik de pijltjestoetsen om te bladeren.</p>
+    </div>
+  </section>
+</BaseLayout>

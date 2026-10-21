@@ -3,6 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { deployment } from './deployment.config';
 import sitemap from '@astrojs/sitemap';
 import { sveltiaCms } from './src/cms/integration';
+import { voskePages } from './src/integrations/voske-pages';
 import { redirects } from './src/redirects';
 
 export default defineConfig({
@@ -11,6 +12,6 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   redirects,
-  integrations: [sveltiaCms(deployment), sitemap({ filter: (page) => !page.includes('/admin/') })],
+  integrations: [sveltiaCms(deployment), voskePages(), sitemap({ filter: (page) => !page.includes('/admin/') })],
   vite: { plugins: [tailwindcss()] },
 });

@@ -41,6 +41,16 @@ jobs:
       - name: Unit tests
         run: pnpm test
 
+      - name: PDF-hulpmiddelen installeren
+        run: command -v pdftoppm || (sudo apt-get update && sudo apt-get install -y poppler-utils)
+
+      - name: Pagina's van 't Voske uit de cache halen
+        uses: actions/cache@v5
+        with:
+          path: public/voske/pagina
+          key: voske-pagina-${{ hashFiles('public/voske/*.pdf', 'src/integrations/voske-pages.ts') }}
+          restore-keys: voske-pagina-
+
       - name: Site bouwen
         run: pnpm build
 

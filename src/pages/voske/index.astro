@@ -4,10 +4,15 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageIntro from '@/components/PageIntro.astro';
 import { getVoskes } from '@/lib/content';
 import { monthLabel as monthYear } from '@/lib/events';
+import { join } from 'node:path';
+import { readVoskeManifest } from '@/integrations/voske-pages';
 import { url } from '@/lib/paths';
 
 const [latest, ...older] = await getVoskes();
 const fileName = (pdf: string) => pdf.split('/').pop();
+// The flip-book reader when the pages were rendered, otherwise the PDF itself.
+const readHref = (v: { id: string; data: { pdf?: string | undefined } }) =>
+  readVoskeManifest(join(process.cwd(), 'public'), v.data.pdf!) ? url(`/voske/${v.id}/`) : url(v.data.pdf!);
 ---
 
 <BaseLayout title="'t Voske" description="'t Voske, het ledenblad van Scouts Don Bosco Vosselaar.">
@@ -30,8 +35,8 @@ const fileName = (pdf: string) => pdf.split('/').pop();
             </h2>
             {latest.data.date && <p class="mt-1 text-muted">Verschenen in {monthYear(latest.data.date)}</p>}
             <p class="mt-6 flex flex-wrap gap-3">
-              <a class="btn" href={url(latest.data.pdf!)}>
-                Lezen<span class="sr-only"> (PDF)</span>
+              <a class="btn" href={readHref(latest)}>
+                Lezen
               </a>
               <a class="btn btn-line" href={url(latest.data.pdf!)} download={fileName(latest.data.pdf!)}>
                 Downloaden<span class="sr-only"> (PDF)</span>
@@ -50,8 +55,8 @@ const fileName = (pdf: string) => pdf.split('/').pop();
               <li class="flex flex-wrap items-center justify-between gap-3 py-3">
                 <span class="font-display text-xl font-bold">{v.data.title}</span>
                 <span class="flex gap-5">
-                  <a class="link" href={url(v.data.pdf!)}>
-                    Lezen<span class="sr-only"> {v.data.title} (PDF)</span>
+                  <a class="link" href={readHref(v)}>
+                    Lezen<span class="sr-only"> {v.data.title}</span>
                   </a>
                   <a class="link" href={url(v.data.pdf!)} download={fileName(v.data.pdf!)}>
                     Downloaden<span class="sr-only"> {v.data.title} (PDF)</span>
