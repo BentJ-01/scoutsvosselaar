@@ -233,7 +233,8 @@
     margin-top: 1.4em;
     font-size: 1.3rem;
   }
-  .prose a {
+  /* Buttons inside text keep their own colors. */
+  .prose a:not(.btn) {
     color: var(--color-brand);
     font-weight: 700;
     text-decoration: underline;
