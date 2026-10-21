@@ -1,24 +1,29 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import { join } from 'node:path';
+import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import VoskeReader from '@/components/VoskeReader.astro';
 import { readVoskeManifest, type VoskeManifest } from '@/integrations/voske-pages';
 import { getVoskes } from '@/lib/content';
 import { url } from '@/lib/paths';
+import { voskeReadHref } from '@/lib/voske';
 
 // Only editions whose pages were rendered get a reader; the others open the PDF.
 export const getStaticPaths = (async () =>
-  (await getVoskes()).flatMap((voske) => {
+  (await getVoskes()).flatMap((voske, _, all) => {
     const manifest = readVoskeManifest(join(process.cwd(), 'public'), voske.data.pdf!);
-    return manifest ? [{ params: { slug: voske.id }, props: { voske, manifest } }] : [];
+    // The other editions, newest first, to read on right away.
+    const others = all.filter((v) => v !== voske);
+    return manifest ? [{ params: { slug: voske.id }, props: { voske, manifest, others } }] : [];
   })) satisfies GetStaticPaths;
 
 interface Props {
   voske: Awaited<ReturnType<typeof getVoskes>>[number];
   manifest: VoskeManifest;
+  others: Awaited<ReturnType<typeof getVoskes>>;
 }
-const { voske, manifest } = Astro.props;
+const { voske, manifest, others } = Astro.props;
 const pdf = voske.data.pdf!;
 const name = pdf.split('/').pop()!.replace(/\.pdf$/i, '');
 ---
@@ -36,4 +41,29 @@ const name = pdf.split('/').pop()!.replace(/\.pdf$/i, '');
       <VoskeReader title={voske.data.title} name={name} pdf={pdf} manifest={manifest} />
     </div>
   </section>
+
+  {
+    others.length > 0 && (
+      <section aria-labelledby="andere-edities" class="wrap py-14">
+        <h2 id="andere-edities" class="text-3xl">Andere edities</h2>
+        <ul class="mt-8 grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+          {others.map((v, i) => (
+            <li>
+              <a href={voskeReadHref(v)} class="group block">
+                <div class="polaroid" style={`--tape: ${30 + ((i * 17) % 40)}%; --tilt: ${i % 2 ? 1.5 : -1.5}deg`}>
+                  {v.data.cover ? (
+                    <Image src={v.data.cover} alt="" widths={[200, 400]} sizes="(min-width: 1024px) 12rem, 45vw" class="aspect-[3/4] w-full object-cover" />
+                  ) : (
+                    <div class="grid aspect-[3/4] place-items-center bg-forest font-display text-2xl font-bold text-cream topo">'t Voske</div>
+                  )}
+                </div>
+                <span class="mt-4 block font-display text-xl font-bold group-hover:underline">{v.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-8"><a class="link" href={url('/voske/')}>Alle edities</a></p>
+      </section>
+    )
+  }
 </BaseLayout>
