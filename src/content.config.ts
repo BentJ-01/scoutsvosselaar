@@ -78,6 +78,7 @@ const scoutYears = defineCollection({
     const img = imageHelpers(image, 'scout-years');
     return z.object({
       label: text('label'),
+      theme: optionalText('theme'),
       startDate: localDateTime('startDate'),
       endDate: localDateTime('endDate'),
       groupLeaders: refs('groupLeaders', 'leaders'),

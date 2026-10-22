@@ -1,6 +1,10 @@
 ---
 import { site } from '@/site.config';
 import { url } from '@/lib/paths';
+import { getCurrentYear } from '@/lib/content';
+
+// The yearly theme (jaarthema) is set per werkjaar in the CMS.
+const theme = (await getCurrentYear())?.data.theme;
 ---
 
 <footer class="mt-24 border-t-4 border-brand bg-forest text-cream-muted topo">
@@ -8,7 +12,7 @@ import { url } from '@/lib/paths';
     <div>
       <p class="font-display text-xl font-bold text-cream">{site.name}</p>
       <p class="mt-1">Groep {site.groupNumber}, {site.federation}</p>
-      <p class="mt-4"><span class="label -rotate-2 text-cream">{site.slogan}</span></p>
+      {theme && <p class="mt-4"><span class="label -rotate-2 text-cream">{theme}</span></p>}
     </div>
     <address class="not-italic">
       {site.address.street && <p>{site.address.street}</p>}

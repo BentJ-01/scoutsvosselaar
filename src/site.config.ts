@@ -9,7 +9,6 @@ type Maybe = string | undefined;
 export const site = {
   name: 'Scouts Don Bosco Vosselaar',
   shortName: 'Scouts Vosselaar',
-  slogan: 'Scouting? DAS Goesting!',
   groupNumber: 'A4108G',
   federation: 'Scouts en Gidsen Vlaanderen',
   gouw: 'Gouw Kempen',

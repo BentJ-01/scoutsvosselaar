@@ -6,6 +6,7 @@
 import CMS, { type CmsConfig } from '@sveltia/cms';
 
 declare const __CMS_CONFIG__: CmsConfig;
+declare const __CMS_EDITOR_CSS__: string;
 
 const SAVED_MESSAGE = 'Opgeslagen. Het duurt enkele minuten voor de wijziging online staat.';
 
@@ -41,6 +42,11 @@ const isLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
 if (isLocal && new URLSearchParams(location.search).has('test-repo')) {
   config.backend = { name: 'test-repo' };
 }
+
+// Puts related fields side by side (see buildEditorCss in config.ts).
+const editorStyle = document.createElement('style');
+editorStyle.textContent = __CMS_EDITOR_CSS__;
+document.head.append(editorStyle);
 
 CMS.registerEventListener({ name: 'postSave', handler: () => showSavedNotice() });
 void CMS.init({ config });

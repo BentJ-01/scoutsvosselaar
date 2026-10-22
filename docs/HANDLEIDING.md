@@ -20,3 +20,12 @@ Een PDF wordt groot door de foto's. Exporteer hem opnieuw met kleinere afbeeldin
 - **Al een PDF?** Een gratis programma zoals PDF24 (pdf24.org, werkt ook zonder upload in de desktopversie) kan hem comprimeren. Kies een middelmatige kwaliteit en kijk na of de foto's nog scherp genoeg zijn.
 
 Lukt het niet, vraag het dan aan de webmaster.
+
+## Jaarthema wijzigen
+
+Het jaarthema (bv. "Scouting? DAS Goesting!") staat onderaan elke pagina. Het hoort bij het werkjaar:
+
+1. Open **Werkjaren** en kies het werkjaar.
+2. Vul **Jaarthema** in en klik op **Opslaan**.
+
+De site toont het jaarthema van het werkjaar dat bij **Instellingen** als actief werkjaar staat. Bij een nieuw werkjaar pas je het dus mee aan.

@@ -100,6 +100,8 @@ const sectionsRelation = (hint: string): RelationField => ({
   sort_by: { field: 'order' },
   multiple: true,
   required: false,
+  // Up to this many takken are shown as checkboxes instead of a dropdown.
+  dropdown_threshold: 12,
   hint,
 });
 
@@ -149,7 +151,10 @@ const posts: EntryCollection = {
   ],
   fields: [
     string('title', 'Titel'),
-    date('date', 'Datum', 'Bepaalt de volgorde op de site. Nieuwste bovenaan.'),
+    date('date', 'Datum', 'Nieuwste bovenaan.'),
+    bool('pinned', 'Vastpinnen', 'Bovenaan de homepagina. Bij meerdere telt het nieuwste.'),
+    bool('draft', 'Concept', 'Niet op de site tot je dit uitzet.'),
+    sectionsRelation('Niets aangevinkt: voor iedereen.'),
     {
       name: 'excerpt',
       label: 'Korte samenvatting',
@@ -160,12 +165,9 @@ const posts: EntryCollection = {
     image('coverImage', 'Coverfoto', `Wordt bovenaan en bij het delen getoond. ${IMAGE_RIGHTS_HINT}`),
     richText('body', 'Tekst', true),
     images('gallery', "Foto's", 12),
-    url('videoUrl', 'YouTube-video', 'Plak de link naar een YouTube-video (optioneel).'),
-    url('buttonUrl', 'Link van de knop', 'Bv. een Google Form om in te schrijven of een Facebook-evenement.'),
+    url('buttonUrl', 'Link van de knop', 'Bv. een Google Form of een Facebook-evenement.'),
     optionalString('buttonLabel', 'Tekst op de knop', { hint: 'Bv. "Inschrijven".' }),
-    sectionsRelation('Voor welke takken is dit bericht? Leeg laten als het voor iedereen is.'),
-    bool('pinned', 'Vastpinnen', 'Bovenaan de homepagina tonen. Is er meer dan een bericht vastgepind, dan staat enkel het nieuwste bovenaan.'),
-    bool('draft', 'Concept', 'Een concept staat niet op de site. Zet dit uit om te publiceren.'),
+    url('videoUrl', 'YouTube-video', 'Plak de link naar een YouTube-video.'),
   ],
 };
 
@@ -188,18 +190,18 @@ const events: EntryCollection = {
   ],
   fields: [
     string('title', 'Titel'),
-    dateTime('start', 'Begin', true, 'Belgische tijd.'),
-    dateTime('end', 'Einde', false, 'Optioneel.'),
-    bool('allDay', 'Hele dag', 'Aanzetten als het evenement geen vast uur heeft. Het uur van Begin wordt dan genegeerd.'),
+    dateTime('start', 'Begin'),
+    dateTime('end', 'Einde', false),
+    bool('allDay', 'Hele dag', 'Geen vast uur. Het uur wordt genegeerd.'),
+    bool('forLeaders', 'Voor de leiding', 'Activiteit van of met de leiding.'),
+    bool('cancelled', 'Geannuleerd', 'Blijft zichtbaar, als geannuleerd.'),
+    sectionsRelation('Niets aangevinkt: voor de hele groep.'),
     optionalString('location', 'Locatie', { hint: 'Adres of plaats. "Verrassing" mag ook.' }),
-    sectionsRelation('Voor welke takken? Leeg laten als het voor de hele groep is.'),
-    bool('forLeaders', 'Voor de leiding', 'Aanzetten voor activiteiten van of met de leiding.'),
-    optionalString('price', 'Prijs', { hint: 'Bv. "€35". Leeg laten als het gratis is.' }),
-    image('image', 'Afbeelding'),
+    optionalString('price', 'Prijs', { hint: 'Bv. "€35". Leeg: gratis.' }),
     url('linkUrl', 'Link', 'Bv. een Google Form om in te schrijven.'),
     optionalString('linkLabel', 'Tekst op de knop', { hint: 'Bv. "Inschrijven".' }),
-    bool('cancelled', 'Geannuleerd', 'Het evenement blijft zichtbaar, maar wordt duidelijk als geannuleerd getoond.'),
     { ...richText('body', 'Beschrijving', false), required: false },
+    image('image', 'Afbeelding'),
   ],
 };
 
@@ -209,7 +211,7 @@ const scoutYears: EntryCollection = {
   label_singular: 'Werkjaar',
   icon: 'groups',
   description:
-    'De leiding per tak, de groepsleiding en de groepsfoto\'s per werkjaar. Nieuw werkjaar: dupliceer het vorige, pas het label en de datums aan, wijzig de indeling, maak de groepsfoto\'s leeg en kies het nieuwe werkjaar bij Instellingen.',
+    'De leiding per tak, de groepsleiding en de groepsfoto\'s per werkjaar. Nieuw werkjaar: dupliceer het vorige, pas het label, het jaarthema en de datums aan, wijzig de indeling, maak de groepsfoto\'s leeg en kies het nieuwe werkjaar bij Instellingen.',
   folder: 'src/content/scout-years',
   extension: 'json',
   format: 'json',
@@ -223,6 +225,7 @@ const scoutYears: EntryCollection = {
       hint: 'Bv. "2026-2027".',
       pattern: ['^\\d{4}-\\d{4}$', 'Schrijf het werkjaar als 2026-2027.'],
     }),
+    optionalString('theme', 'Jaarthema', { hint: 'Bv. "Scouting? DAS Goesting!". Staat onderaan elke pagina.' }),
     date('startDate', 'Begint op'),
     date('endDate', 'Eindigt op'),
     leadersRelation('groupLeaders', 'Groepsleiding'),
@@ -243,6 +246,7 @@ const scoutYears: EntryCollection = {
           value_field: '{{slug}}',
           display_fields: ['name'],
           sort_by: { field: 'order' },
+          dropdown_threshold: 12,
         },
         leadersRelation('leaders', 'Leiding'),
         leadersRelation('sectionLeads', 'Takleiding', 'De takleiders (meestal 2 tot 4). Zet hen ook bij Leiding.'),
@@ -272,13 +276,13 @@ const leaders: EntryCollection = {
     string('lastName', 'Achternaam'),
     optionalString('totem', 'Totem'),
     optionalString('voortotem', 'Voortotem'),
-    image('photo', 'Foto', `${PUBLIC_HINT} Liefst een portret.`),
+    optionalString('email', 'E-mail', { type: 'email', hint: PUBLIC_HINT }),
+    optionalString('phone', 'Gsm', { hint: PUBLIC_HINT }),
     optionalString('birthday', 'Verjaardag', {
       hint: `Dag en maand, bv. 24/03. ${PUBLIC_HINT}`,
       pattern: ['^\\d{1,2}/\\d{1,2}$', 'Schrijf de verjaardag als dag/maand, bv. 24/03.'],
     }),
-    optionalString('email', 'E-mail', { type: 'email', hint: PUBLIC_HINT }),
-    optionalString('phone', 'Gsm', { hint: PUBLIC_HINT }),
+    image('photo', 'Foto', `${PUBLIC_HINT} Liefst een portret.`),
     { name: 'bio', label: 'Over mij', widget: 'text', required: false, maxlength: 300, hint: 'Optioneel, max 300 tekens.' },
   ],
 };
@@ -365,8 +369,8 @@ const sections: EntryCollection = {
     optionalString('email', 'Takmail', { type: 'email' }),
     string('leaderLabel', 'Naam voor de leiding', { default: 'Leiding', hint: 'Bv. "Begeleiding" bij de Jin.' }),
     { name: 'color', label: 'Kleur', widget: 'color', allowInput: true },
-    image('image', 'Afbeelding'),
     { name: 'order', label: 'Volgorde', widget: 'number', value_type: 'int', hint: 'Kleinste getal eerst.' },
+    image('image', 'Afbeelding'),
   ],
 };
 
@@ -396,6 +400,47 @@ const settings: Collection = {
     },
   ],
 };
+
+/**
+ * Fields shown next to each other in the editor, per collection. Each inner
+ * list is one row; its fields must follow each other in the collection's
+ * `fields`. Sveltia has no layout option, so this becomes CSS for the admin.
+ */
+const editorRows: Record<string, string[][]> = {
+  posts: [['date', 'pinned', 'draft'], ['buttonUrl', 'buttonLabel']],
+  events: [['start', 'end'], ['allDay', 'forLeaders', 'cancelled'], ['location', 'price'], ['linkUrl', 'linkLabel']],
+  'scout-years': [['label', 'theme'], ['startDate', 'endDate']],
+  leaders: [['firstName', 'lastName'], ['totem', 'voortotem'], ['email', 'phone']],
+  albums: [['title', 'date']],
+  voskes: [['title', 'date']],
+  sections: [['name', 'ageRange'], ['meetingTime', 'email'], ['leaderLabel', 'color', 'order']],
+};
+
+const entryCollections = [posts, events, scoutYears, leaders, albums, voskes, sections];
+
+/** CSS that lays out the editor in a compact grid of six columns. */
+export function buildEditorCss(): string {
+  const form = '.content:has(> section.field)';
+  const names = (c: EntryCollection) => (c.fields ?? []).map((f) => f.name);
+  const rules = [
+    `${form} { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 24px; max-width: 816px; margin-inline: auto; }`,
+    `${form} > * { grid-column: 1 / -1; min-width: 0; }`,
+    `${form} > section.field > * { max-width: none; margin-inline: 0; }`,
+  ];
+  for (const collection of entryCollections) {
+    const rows = editorRows[collection.name] ?? [];
+    // The editor does not say which collection it shows; a field only this collection has does.
+    const marker = names(collection).find((n) => entryCollections.every((c) => c === collection || !names(c).includes(n)));
+    if (!marker) throw new Error(`Geen uniek veld om de editor van "${collection.name}" te herkennen.`);
+    for (const row of rows) {
+      const fields = row.map((f) => `[data-key-path="${f}"]`).join(', ');
+      rules.push(`.content:has(> section.field[data-key-path="${marker}"]) > section.field:is(${fields}) { grid-column: span ${6 / row.length}; }`);
+    }
+  }
+  // One field per row on narrow screens.
+  rules.push(`@media (max-width: 640px) { ${form} > section.field { grid-column: 1 / -1 !important; } }`);
+  return rules.join('\n');
+}
 
 export function buildCmsConfig(deployment: Deployment): CmsConfig {
   const base = deployment.basePath.replace(/\/$/, '');
@@ -436,6 +481,6 @@ export function buildCmsConfig(deployment: Deployment): CmsConfig {
     slug: { encoding: 'ascii', clean_accents: true, timezone: 'local' },
     output: { omit_empty_optional_fields: true, json: { indent_size: 2 } },
     editor: { preview: false },
-    collections: [posts, events, scoutYears, leaders, albums, voskes, sections, settings],
+    collections: [...entryCollections, settings],
   };
 }

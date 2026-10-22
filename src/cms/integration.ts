@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import type { AstroIntegration } from 'astro';
 import { build } from 'vite';
 import type { Deployment } from '../../deployment.config';
-import { buildCmsConfig } from './config';
+import { buildCmsConfig, buildEditorCss } from './config';
 
 export function sveltiaCms(deployment: Deployment): AstroIntegration {
   return {
@@ -30,7 +30,10 @@ export function sveltiaCms(deployment: Deployment): AstroIntegration {
           logLevel: 'warn',
           publicDir: false,
           base: './',
-          define: { __CMS_CONFIG__: JSON.stringify(buildCmsConfig(deployment)) },
+          define: {
+            __CMS_CONFIG__: JSON.stringify(buildCmsConfig(deployment)),
+            __CMS_EDITOR_CSS__: JSON.stringify(buildEditorCss()),
+          },
           build: {
             outDir,
             emptyOutDir: true,
